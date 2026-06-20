@@ -114,14 +114,14 @@
 **의존성:** Phase 3
 
 ### 4-1. 노드 생성
-- [ ] `js/graph.js` — `buildNodes()`: 노드 크기 `val = clamp(√age · k)`
-- [ ] 유광명(번호 1) 노드 `isHub=true`·`fx=fy=fz=0`으로 중심 고정
+- [x] `js/graph.js` — `buildNodes()`: 노드 크기 `val = clamp(√age · k)`
+- [x] 유광명(번호 1) 노드 `isHub=true`·`fx=fy=fz=0`으로 중심 고정
 
 ### 4-2. 엣지 추론 (PRD §7.4)
-- [ ] (A) 허브 엣지 — 유광명과 전원 1차 연결, `weight = 2026 - sinceYear`, `type: "hub"`
-- [ ] (B) 소속 공유 엣지 — `affiliationsOf` = 현직장 ∪ 과거경력(교차 일치 포함), **항상 생성**, `type: "affiliation"`
-- [ ] (C) 관심사 공유 엣지 — 표준 태그 `INTEREST_THRESHOLD = 2` 이상 중첩 시만(헤어볼 방지), `type: "interest"`
-- [ ] `dedupe(links)` — 동일 쌍 다중 엣지는 type별 1개로 정리
+- [x] (A) 허브 엣지 — 유광명과 전원 1차 연결, `weight = 2026 - sinceYear`, `type: "hub"`
+- [x] (B) 소속 공유 엣지 — `affiliationsOf` = 현직장 ∪ 과거경력(교차 일치 포함), **항상 생성**, `type: "affiliation"`
+- [x] (C) 관심사 공유 엣지 — 표준 태그 `INTEREST_THRESHOLD = 2` 이상 중첩 시만(헤어볼 방지), `type: "interest"`
+- [x] `dedupe(links)` — 동일 쌍 다중 엣지는 type별 1개로 정리
 
 **검증:** PRD §7.4 검증용 공유 허브 5군집(지아이비타·마키나락스·PwC·포스코이엔씨·한국전력공사)이 소속 엣지로 나타나는지 콘솔 검사.
 
