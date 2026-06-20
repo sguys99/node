@@ -25,19 +25,19 @@
 **의존성:** 없음
 
 ### 0-1. 보일러플레이트 제거
-- [ ] Next.js 관련 파일 삭제: `package.json`, `package-lock.json`, `next.config.ts`, `tsconfig.json`, `vitest.config.ts`, `postcss.config.mjs`, `eslint.config.mjs`, `components.json`
-- [ ] Docker 관련 파일 삭제: `Dockerfile`, `docker-compose.yaml`, `.dockerignore`
-- [ ] (선택) `configs/`, `img/` 등 미사용 디렉토리 정리 — 사용 계획 없으면 제거
+- [x] Next.js 관련 파일 삭제: `package.json`, `package-lock.json`, `next.config.ts`, `tsconfig.json`, `vitest.config.ts`, `postcss.config.mjs`, `eslint.config.mjs`, `components.json`
+- [x] Docker 관련 파일 삭제: `Dockerfile`, `docker-compose.yaml`, `.dockerignore`
+- [x] (선택) `configs/`, `img/` 등 미사용 디렉토리 정리 — 사용 계획 없으면 제거
 
 ### 0-2. 디렉토리 골격 생성
-- [ ] `css/`, `js/` 디렉토리 생성 (기존 `data/` 디렉토리 활용)
-- [ ] `index.html` 골격 작성 — 헤더(브랜딩·노드 카운트·출처 배지) / 3분할 본문(좌측 상세·중앙 `#graph`·우측 설정) / 푸터 마크업
-- [ ] CDN `<script>` 추가: `3d-force-graph`, `Three.js`, `PapaParse`
-- [ ] `<script type="module" src="js/main.js">` 엔트리 연결
+- [x] `css/`, `js/` 디렉토리 생성 (기존 `data/` 디렉토리 활용)
+- [x] `index.html` 골격 작성 — 헤더(브랜딩·노드 카운트·출처 배지) / 3분할 본문(좌측 상세·중앙 `#graph`·우측 설정) / 푸터 마크업
+- [x] CDN `<script>` 추가: `3d-force-graph`, `Three.js`, `PapaParse`
+- [x] `<script type="module" src="js/main.js">` 엔트리 연결
 
 ### 0-3. 문서 정비
-- [ ] `README.md`를 NODE 프로젝트용으로 갱신(로컬 실행·GitHub Pages 배포·구글시트 갱신 방법)
-- [ ] [DESIGN.md](../DESIGN.md) 참조 경로 확정(PRD는 루트 `DESIGN.md` 가정)
+- [x] `README.md`를 NODE 프로젝트용으로 갱신(로컬 실행·GitHub Pages 배포·구글시트 갱신 방법)
+- [x] [DESIGN.md](../DESIGN.md) 참조 경로 확정(PRD는 루트 `DESIGN.md` 가정)
 
 **검증:** `index.html`을 브라우저로 열어 콘솔 에러 없이 CDN 라이브러리가 로드되는지 확인.
 

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NODE — Network Of Domain Experts</title>
+    <meta
+      name="description"
+      content="운영자 유광명을 허브로 한 AI 도메인 전문가 네트워크를 구형 지식그래프로 시각화하는 제로빌드 정적 대시보드"
+    />
+
+    <!-- 디자인 토큰 → CSS 변수 매핑 (Phase 1) -->
+    <link rel="stylesheet" href="css/tokens.css" />
+    <!-- 레이아웃·패널·반응형 (Phase 1) -->
+    <link rel="stylesheet" href="css/styles.css" />
+
+    <!-- CDN 라이브러리 (제로빌드) -->
+    <!-- Three.js (UMD 전역 THREE) — 반투명 와이어프레임 글로브 연출용 -->
+    <script src="https://unpkg.com/three@0.155.0/build/three.min.js"></script>
+    <!-- 3d-force-graph (UMD 전역 ForceGraph3D) -->
+    <script src="https://unpkg.com/3d-force-graph@1.73.4/dist/3d-force-graph.min.js"></script>
+    <!-- PapaParse (UMD 전역 Papa) — gviz CSV 파싱 -->
+    <script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
+  </head>
+
+  <body>
+    <!-- ============ HEADER ============ -->
+    <header class="app-header">
+      <div class="brand">
+        <span class="brand-dot" aria-hidden="true"></span>
+        <span class="brand-name">NODE</span>
+        <span class="brand-tagline">Network Of Domain Experts</span>
+      </div>
+      <div class="header-meta">
+        <span id="node-count" class="node-count">— nodes</span>
+        <span id="data-source-badge" class="source-badge" data-source="">…</span>
+      </div>
+    </header>
+
+    <!-- ============ MAIN (3분할) ============ -->
+    <main class="app-main">
+      <!-- 좌측: 인력 상세 패널 (Phase 6) -->
+      <aside id="detail-panel" class="panel panel-left" aria-label="인력 상세">
+        <p class="panel-eyebrow">상세</p>
+        <p id="detail-placeholder" class="panel-placeholder">
+          노드를 선택하면 상세 정보가 표시됩니다
+        </p>
+        <div id="detail-content" class="detail-content" hidden></div>
+      </aside>
+
+      <!-- 중앙: 구형 지식그래프 캔버스 (Phase 5) -->
+      <section class="graph-wrap" aria-label="지식그래프">
+        <div id="graph" class="graph-canvas"></div>
+        <!-- 폴백 실패 시 에러 안내 UI (Phase 2) -->
+        <div id="error-ui" class="error-ui" hidden>
+          <p class="error-msg">데이터를 불러오지 못했습니다.</p>
+          <button id="retry-btn" type="button" class="retry-btn">다시 시도</button>
+        </div>
+      </section>
+
+      <!-- 우측: 시각화 설정 패널 (Phase 6) -->
+      <aside id="settings-panel" class="panel panel-right" aria-label="시각화 설정">
+        <p class="panel-eyebrow">설정</p>
+
+        <fieldset class="settings-group">
+          <legend>라벨 표시</legend>
+          <label><input type="checkbox" name="label" value="name" checked /> 이름</label>
+          <label><input type="checkbox" name="label" value="age" /> 나이</label>
+          <label><input type="checkbox" name="label" value="nickname" /> 닉네임</label>
+          <label><input type="checkbox" name="label" value="interest" /> 관심사</label>
+        </fieldset>
+
+        <fieldset class="settings-group">
+          <legend>엣지 유형</legend>
+          <label><input type="checkbox" name="edge" value="hub" checked /> 허브</label>
+          <label><input type="checkbox" name="edge" value="affiliation" checked /> 소속</label>
+          <label><input type="checkbox" name="edge" value="interest" checked /> 관심사</label>
+        </fieldset>
+
+        <fieldset class="settings-group">
+          <legend>카메라</legend>
+          <label><input type="checkbox" id="rotate-toggle" checked /> 자동 회전</label>
+          <button id="zoom-reset" type="button" class="ctrl-btn">줌 리셋</button>
+        </fieldset>
+      </aside>
+    </main>
+
+    <!-- ============ FOOTER ============ -->
+    <footer class="app-footer">
+      <span>출처: Google Sheet</span>
+      <span>운영자: 유광명</span>
+      <span>갱신: 2026-06</span>
+    </footer>
+
+    <!-- 엔트리 (Phase 5: load → normalize → buildGraph → render 오케스트레이션) -->
+    <script type="module" src="js/main.js"></script>
+  </body>
+</html>
