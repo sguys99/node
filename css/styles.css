@@ -1,5 +1,369 @@
 /*
- * styles.css — 헤더/푸터·3분할 그리드·패널·반응형 레이아웃.
- * Phase 1에서 구현한다.
- * (Phase 0: 골격 확보용 플레이스홀더 — 404 방지)
+ * styles.css — 헤더/푸터 · 3분할 그리드 · 패널 · 배지/칩/버튼 · 반응형 (Phase 1).
+ * 모든 색/치수는 tokens.css 변수 참조 (신규 인라인 hex/px 금지).
+ * 드롭섀도 없음 — 하어라인 보더 + 글로우만 사용.
  */
+
+/* ============ 리셋 · 베이스 ============ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  /* 헤더 / 메인 / 푸터 세로 3단 — 메인이 남은 높이를 차지해 그래프 가변 높이 확보 */
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  height: 100dvh;
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: var(--text-body-sm-size);
+  line-height: var(--text-body-sm-line);
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+/* hidden 속성은 display 규칙보다 우선 (error-ui·detail-content 기본 숨김 유지) */
+[hidden] {
+  display: none !important;
+}
+
+/* ============ 헤더 ============ */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-lg);
+  padding: var(--space-md) var(--space-3xl);
+  border-bottom: var(--border-hairline);
+  background: var(--color-canvas);
+}
+
+.brand {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-sm);
+}
+
+.brand-dot {
+  align-self: center;
+  width: var(--space-md);
+  height: var(--space-md);
+  border-radius: var(--radius-full);
+  background: var(--color-primary); /* 액센트 — 로고 점 */
+}
+
+.brand-name {
+  font-size: var(--text-display-md-size);
+  font-weight: var(--text-display-md-weight);
+  line-height: var(--text-display-md-line);
+  letter-spacing: var(--text-display-md-tracking);
+  color: var(--color-ink-strong);
+}
+
+.brand-tagline {
+  font-size: var(--text-body-sm-size);
+  color: var(--color-mute);
+}
+
+.header-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.node-count {
+  font-family: var(--font-mono);
+  font-size: var(--text-body-sm-size);
+  color: var(--color-body);
+}
+
+/* ============ 메인 3분할 ============ */
+.app-main {
+  display: grid;
+  grid-template-columns: var(--panel-width) 1fr var(--panel-width);
+  min-height: 0; /* 자식 스크롤 허용 */
+}
+
+/* ============ 패널 (좌측 상세 / 우측 설정) ============ */
+.panel {
+  background: var(--color-canvas-soft);
+  padding: var(--space-2xl);
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.panel-left {
+  border-right: var(--border-hairline);
+}
+
+.panel-right {
+  border-left: var(--border-hairline);
+}
+
+.panel-eyebrow {
+  margin: 0 0 var(--space-lg);
+  font-size: var(--text-eyebrow-size);
+  font-weight: var(--text-eyebrow-weight);
+  line-height: var(--text-eyebrow-line);
+  letter-spacing: var(--text-eyebrow-tracking);
+  text-transform: uppercase;
+  color: var(--color-mute);
+}
+
+.panel-placeholder {
+  margin: 0;
+  font-size: var(--text-body-sm-size);
+  color: var(--color-mute);
+}
+
+/* 우측 설정 그룹 (fieldset) */
+.settings-group {
+  margin: 0 0 var(--space-xl);
+  padding: 0 0 var(--space-xl);
+  border: 0;
+  border-bottom: var(--border-hairline);
+}
+
+.settings-group:last-of-type {
+  border-bottom: 0;
+}
+
+.settings-group legend {
+  padding: 0;
+  margin-bottom: var(--space-md);
+  font-size: var(--text-eyebrow-size);
+  font-weight: var(--text-eyebrow-weight);
+  letter-spacing: var(--text-eyebrow-tracking);
+  text-transform: uppercase;
+  color: var(--color-body);
+}
+
+.settings-group label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xs) 0;
+  font-size: var(--text-body-sm-size);
+  color: var(--color-ink);
+}
+
+.settings-group input[type="checkbox"] {
+  accent-color: var(--color-primary);
+  width: var(--space-lg);
+  height: var(--space-lg);
+}
+
+/* ============ 중앙 그래프 ============ */
+.graph-wrap {
+  position: relative;
+  min-height: 0;
+  background: var(--color-canvas);
+}
+
+.graph-canvas {
+  width: 100%;
+  height: 100%;
+}
+
+/* 폴백 실패 시 에러 안내 카드 (Phase 2에서 노출 토글) */
+.error-ui {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-lg);
+  padding: var(--space-3xl);
+  background: var(--color-canvas-soft);
+  border: var(--border-hairline);
+  border-radius: var(--radius-md);
+  box-shadow: var(--glow-hover);
+  text-align: center;
+}
+
+.error-msg {
+  margin: 0;
+  font-size: var(--text-body-md-size);
+  color: var(--color-body);
+}
+
+/* ============ 푸터 ============ */
+.app-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-lg);
+  padding: var(--space-md) var(--space-3xl);
+  border-top: var(--border-hairline);
+  background: var(--color-canvas);
+  font-size: var(--text-caption-size);
+  line-height: var(--text-caption-line);
+  color: var(--color-mute);
+}
+
+/* ============ 컴포넌트: 배지 · 칩 · 버튼 ============ */
+
+/* 데이터 출처 배지 (pill) — 값 주입은 Phase 2, 스타일만 정의 */
+.source-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-md);
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  border: var(--border-hairline);
+  border-radius: var(--radius-pill);
+  font-size: var(--text-body-sm-size);
+  font-weight: var(--text-body-sm-strong-weight);
+}
+
+.source-badge[data-source="live"] {
+  color: var(--color-primary); /* 액센트 강조 */
+  border-color: var(--color-primary);
+}
+
+.source-badge[data-source="snapshot"] {
+  color: var(--color-mute);
+}
+
+/* 태그 칩 (pill) — Phase 6 상세 패널 하는일/관심사/희망사항에서 재사용 */
+.tag-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-xs) var(--space-md);
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  border: var(--border-hairline);
+  border-radius: var(--radius-pill);
+  font-size: var(--text-body-sm-size);
+  font-weight: var(--text-body-sm-strong-weight);
+}
+
+/* 버튼: 아웃라인 기본 (줌 리셋 등) */
+.ctrl-btn {
+  padding: var(--space-md) var(--space-lg);
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  border: var(--border-hairline);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-body-sm-size);
+  font-weight: var(--text-body-sm-strong-weight);
+}
+
+.ctrl-btn:hover {
+  box-shadow: var(--glow-hover);
+}
+
+/* 버튼: primary (재시도) */
+.retry-btn {
+  padding: var(--space-md) var(--space-lg);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  border: 0;
+  border-radius: var(--radius-sm);
+  font-size: var(--text-body-sm-size);
+  font-weight: var(--text-body-sm-strong-weight);
+}
+
+.retry-btn:hover {
+  box-shadow: var(--glow-hover);
+}
+
+/* ============ 반응형 (PRD §9.3) — CSS 레이아웃만, 토글 JS는 Phase 6 ============ */
+
+/* 640–1023px: 그래프 메인 · 좌측 드로어 · 우측 상단 접이식 바 */
+@media (max-width: 1023px) {
+  .app-main {
+    grid-template-columns: 1fr;
+    position: relative;
+  }
+
+  /* 좌측 상세: 화면 밖 드로어 (JS가 .is-open 부여 시 슬라이드인 — Phase 6) */
+  .panel-left {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 20;
+    width: min(var(--panel-width), 80vw);
+    transform: translateX(-100%);
+    transition: transform 0.2s ease;
+    border-right: var(--border-hairline);
+  }
+
+  .panel-left.is-open {
+    transform: translateX(0);
+  }
+
+  /* 우측 설정: 그래프 위 상단 접이식 바 (가로 배치) */
+  .panel-right {
+    grid-row: 1;
+    border-left: 0;
+    border-bottom: var(--border-hairline);
+    max-height: 40vh;
+  }
+
+  .panel-right .settings-group {
+    display: inline-block;
+    margin-right: var(--space-2xl);
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+}
+
+/* <640px: 그래프 전체 폭 · 패널 하단 시트 스택 */
+@media (max-width: 639px) {
+  .panel-right {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 20;
+    max-height: 50vh;
+    grid-row: auto;
+    border-bottom: 0;
+    border-top: var(--border-hairline);
+    transform: translateY(100%);
+    transition: transform 0.2s ease;
+  }
+
+  .panel-right.is-open {
+    transform: translateY(0);
+  }
+
+  .panel-right .settings-group {
+    display: block;
+    margin-right: 0;
+  }
+
+  .panel-left {
+    width: 100vw;
+  }
+
+  .app-header {
+    padding: var(--space-md) var(--space-lg);
+  }
+
+  .brand-tagline {
+    display: none;
+  }
+
+  .app-footer {
+    padding: var(--space-md) var(--space-lg);
+  }
+}

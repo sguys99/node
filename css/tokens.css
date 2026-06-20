@@ -1,8 +1,88 @@
 /*
- * tokens.css — DESIGN.md 디자인 토큰을 CSS 변수로 매핑.
- * Phase 1에서 색/타이포/스페이싱/라운딩을 채운다.
- * (Phase 0: 골격 확보용 플레이스홀더 — 404 방지)
+ * tokens.css — DESIGN.md 디자인 토큰을 CSS 변수로 매핑 (Phase 1).
+ * 모든 색/타이포/스페이싱/라운딩의 단일 출처. styles.css·index.html은
+ * 신규 인라인 hex/px를 도입하지 않고 여기 변수를 참조한다.
+ * 규칙: 라이트 모드 없음 · 드롭섀도 없음(하어라인+글로우) · 본문 그린 금지(액센트 전용).
  */
 :root {
-  /* Phase 1: DESIGN.md 토큰 매핑 예정 */
+  /* ===== 색상 ===== */
+  /* 브랜드 / 액센트 (로고 점·Live·허브 노드 전용) */
+  --color-primary: #00d992;
+  --color-primary-soft: #2fd6a1;
+  --color-primary-deep: #10b981;
+  --color-on-primary: #101010; /* primary 배경 위 텍스트 */
+
+  /* 표면 / 배경 */
+  --color-canvas: #101010; /* 페이지 배경 (유일 표면 모드) */
+  --color-canvas-soft: #1a1a1a; /* 패널·입력 표면 */
+
+  /* 보더 / 구분선 (그림자 대용) */
+  --color-hairline: #3d3a39;
+  --color-hairline-soft: #b8b3b0;
+
+  /* 텍스트 */
+  --color-ink: #f2f2f2; /* 기본 텍스트 */
+  --color-ink-strong: #ffffff; /* 고강조 헤드라인 */
+  --color-body: #bdbdbd; /* 보조 본문 */
+  --color-mute: #8b949e; /* 캡션·푸터 등 최저 우선순위 */
+
+  /* ===== 타이포 ===== */
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono: "SF Mono", SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", monospace;
+
+  /* 위계 — size / weight / line-height / letter-spacing */
+  --text-display-md-size: 24px;
+  --text-display-md-weight: 700;
+  --text-display-md-line: 32px;
+  --text-display-md-tracking: -0.6px;
+
+  --text-display-sm-size: 20px;
+  --text-display-sm-weight: 600;
+  --text-display-sm-line: 28px;
+
+  --text-eyebrow-size: 14px;
+  --text-eyebrow-weight: 600;
+  --text-eyebrow-line: 20px;
+  --text-eyebrow-tracking: 2.52px;
+
+  --text-body-md-size: 16px;
+  --text-body-md-weight: 400;
+  --text-body-md-line: 26px;
+
+  --text-body-sm-size: 14px;
+  --text-body-sm-weight: 400;
+  --text-body-sm-line: 20px;
+  --text-body-sm-strong-weight: 600;
+
+  --text-caption-size: 12px;
+  --text-caption-weight: 400;
+  --text-caption-line: 16px;
+
+  /* ===== 스페이싱 (4px 베이스) ===== */
+  --space-xxs: 2px;
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 20px;
+  --space-2xl: 24px;
+  --space-3xl: 32px;
+  --space-4xl: 40px;
+  --space-5xl: 48px;
+  --space-6xl: 64px;
+
+  /* ===== 라운딩 ===== */
+  --radius-xs: 4px;
+  --radius-sm: 6px; /* 버튼·입력 기본 */
+  --radius-md: 8px; /* 카드·패널 크롬 */
+  --radius-pill: 9999px; /* 상태 태그·칩 */
+  --radius-full: 9999px; /* 원형 아이콘 컨테이너 */
+
+  /* ===== 엘리베이션 (드롭섀도 금지 — 하어라인 + 글로우만) ===== */
+  --border-hairline: 1px solid var(--color-hairline);
+  --glow-hover: 0 0 15px rgba(92, 88, 85, 0.2); /* Level 2 호버 글로우 */
+
+  /* ===== 레이아웃 ===== */
+  --panel-width: 280px;
 }
