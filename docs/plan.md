@@ -94,15 +94,15 @@
 **의존성:** Phase 2
 
 ### 3-1. 동의어 통합
-- [ ] `js/normalize.js` — `SYNONYM_MAP`(PRD §7.2, 확장 가능 객체로 분리)
-- [ ] `toCanonicalTags(cell)` — 콤마 분리 → trim → 소문자 비교 → 표준 태그 매핑(미정의는 원형 유지)
+- [x] `js/normalize.js` — `SYNONYM_MAP`(PRD §7.2, 확장 가능 객체로 분리)
+- [x] `toCanonicalTags(cell)` — 콤마 분리 → trim → 소문자 비교 → 표준 태그 매핑(미정의는 원형 유지)
 
 ### 3-2. 정규화 함수
-- [ ] `normalize(rawRows)` — 10컬럼 → `NormalizedMember`(`id`/`name`/`nickname`/`sinceYear`/`age`/`company`/`pastOrgs`/`doingTags`/`interestTags`/`wishTags`)
+- [x] `normalize(rawRows)` — 10컬럼 → `NormalizedMember`(`id`/`name`/`nickname`/`sinceYear`/`age`/`company`/`pastOrgs`/`doingTags`/`interestTags`/`wishTags`)
 
 ### 3-3. 결측치 규칙 (PRD §7.3)
-- [ ] 닉네임·과거경력 공란 허용 → 라벨/관계 산정에서 제외하되 **노드는 항상 생성**
-- [ ] 숫자 컬럼(`협업시점`, `나이`) 파싱 실패 시 안전 기본값(나이=중앙값, 협업시점=2026) 대체 + 로그
+- [x] 닉네임·과거경력 공란 허용 → 라벨/관계 산정에서 제외하되 **노드는 항상 생성**
+- [x] 숫자 컬럼(`협업시점`, `나이`) 파싱 실패 시 안전 기본값(나이=중앙값, 협업시점=2026) 대체 + 로그
 
 **검증:** 콘솔에서 정규화 결과 33건, 표준 태그 집합, 결측치 대체 로그 확인.
 

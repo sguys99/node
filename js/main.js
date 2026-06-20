@@ -5,6 +5,7 @@
 // Phase 5: 이 흐름을 normalize → buildGraph → render 로 확장한다.
 
 import { loadData } from "./data.js";
+import { normalize } from "./normalize.js";
 
 // ============ Phase 0: CDN 라이브러리 스모크 체크 ============
 const libs = {
@@ -55,7 +56,11 @@ async function bootstrap() {
   countEl.textContent = `${rows.length} nodes`;
   console.info(`[NODE] 데이터 로드 완료: source=${source}, rows=${rows.length}`);
 
-  // Phase 5 확장 지점: normalize(rows) → buildGraph(...) → render(...)
+  // Phase 3: 정규화 — 동의어 통합 + 결측치 대체 → NormalizedMember[]
+  const members = normalize(rows);
+  console.info("[NODE] 정규화 샘플:", members[0], `(총 ${members.length}건)`);
+
+  // Phase 5 확장 지점: buildGraph(members) → render(...)
 }
 
 retryBtn.addEventListener("click", bootstrap);
