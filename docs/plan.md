@@ -72,17 +72,17 @@
 **의존성:** Phase 0
 
 ### 2-1. 스냅샷 확보
-- [ ] PRD §3.1 시트 URL에서 CSV를 직접 fetch해 `data/snapshot.csv` 생성·커밋(33명 실데이터, 동일 스키마)
+- [x] PRD §3.1 시트 URL에서 CSV를 직접 fetch해 `data/snapshot.csv` 생성·커밋(33명 실데이터, 동일 스키마)
 
 ### 2-2. 데이터 로더
-- [ ] `js/data.js` — `SHEET_CSV_URL` 상수 정의(PRD §8.5)
-- [ ] `loadData()` — `try { fetch(SHEET_CSV_URL) } catch { fetch('data/snapshot.csv') }` 폴백 구조
-- [ ] `parseCsv()` — PapaParse(`header: true, skipEmptyLines: true`)
-- [ ] 반환 객체 `{ rows, source }` 및 `loadError`(폴백까지 실패 시) 처리
+- [x] `js/data.js` — `SHEET_CSV_URL` 상수 정의(PRD §8.5)
+- [x] `loadData()` — `try { fetch(SHEET_CSV_URL) } catch { fetch('data/snapshot.csv') }` 폴백 구조(AbortController 타임아웃 5초 보강)
+- [x] `parseCsv()` — PapaParse(`header: true, skipEmptyLines: true`)
+- [x] 반환 객체 `{ rows, source }` 및 `loadError`(폴백까지 실패 시) 처리
 
 ### 2-3. 출처 표시
-- [ ] 헤더/푸터 배지에 `dataSource`("live" | "snapshot") 반영
-- [ ] 폴백까지 실패 시 에러 안내 UI(재시도 버튼) 노출
+- [x] 헤더/푸터 배지에 `dataSource`("live" | "snapshot") 반영
+- [x] 폴백까지 실패 시 에러 안내 UI(재시도 버튼) 노출
 
 **검증:** 정상 시 "Live" 배지, DevTools offline으로 시트 차단 시 "Snapshot" 배지 + 그래프 렌더, 둘 다 실패 시 에러 UI 표시.
 
