@@ -124,6 +124,36 @@ button {
   color: var(--color-mute);
 }
 
+/* 모바일 설정 시트 핸들 — 기본은 숨김, <640px에서만 노출(반응형 블록) */
+.panel-handle {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  width: 100%;
+  min-height: var(--handle-height);
+  padding: var(--space-sm) var(--space-2xl);
+  background: var(--color-canvas-soft);
+  border: 0;
+  border-bottom: var(--border-hairline);
+  cursor: pointer;
+}
+
+.panel-handle-grip {
+  width: 32px;
+  height: 4px;
+  border-radius: var(--radius-pill);
+  background: var(--color-mute);
+}
+
+.panel-handle-label {
+  font-size: var(--text-eyebrow-size);
+  font-weight: var(--text-eyebrow-weight);
+  letter-spacing: var(--text-eyebrow-tracking);
+  text-transform: uppercase;
+  color: var(--color-mute);
+}
+
 .panel-placeholder {
   margin: 0;
   font-size: var(--text-body-sm-size);
@@ -551,6 +581,13 @@ button {
 
 /* <640px: 그래프 전체 폭 · 패널 하단 시트 스택 */
 @media (max-width: 639px) {
+  /* 중앙 그래프 라벨 축소 (웹/태블릿은 15px 유지) */
+  .graph-label .main,
+  .graph-label .sub,
+  .graph-label.is-hub .main {
+    font-size: 13px;
+  }
+
   .panel-right {
     position: fixed;
     left: 0;
@@ -558,15 +595,30 @@ button {
     bottom: 0;
     z-index: 20;
     max-height: 50vh;
+    overflow-y: auto;
     grid-row: auto;
+    padding-top: 0; /* 핸들이 상단 패딩 역할 — peek 높이를 핸들 높이에 정렬 */
     border-bottom: 0;
     border-top: var(--border-hairline);
-    transform: translateY(100%);
+    /* 완전 숨김 대신 핸들 높이만 남기고 내려둠 → 하단에 항상 핸들 노출 */
+    transform: translateY(calc(100% - var(--handle-height)));
     transition: transform 0.2s ease;
   }
 
   .panel-right.is-open {
     transform: translateY(0);
+  }
+
+  /* 핸들 노출 + 상단 고정(시트 스크롤 시에도 유지) + eyebrow 중복 제거 */
+  .panel-handle {
+    display: flex;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+
+  .panel-right .panel-eyebrow {
+    display: none;
   }
 
   .panel-right .settings-group {

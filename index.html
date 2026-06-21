@@ -97,6 +97,12 @@
 
       <!-- 우측: 시각화 설정 패널 (Phase 6) -->
       <aside id="settings-panel" class="panel panel-right" aria-label="Visualization settings">
+        <!-- 모바일 전용 하단 핸들 바(peek) — 탭하면 시트 펼침. 데스크톱/태블릿은 CSS로 숨김 -->
+        <button id="settings-handle" type="button" class="panel-handle"
+                aria-controls="settings-panel" aria-expanded="false">
+          <span class="panel-handle-grip" aria-hidden="true"></span>
+          <span class="panel-handle-label">Settings</span>
+        </button>
         <p class="panel-eyebrow">Settings</p>
 
         <fieldset class="settings-group">

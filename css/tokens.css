@@ -79,6 +79,7 @@
   --space-4xl: 40px;
   --space-5xl: 48px;
   --space-6xl: 64px;
+  --handle-height: 44px; /* 모바일 설정 시트 하단 핸들 바 높이(peek) */
 
   /* ===== 라운딩 ===== */
   --radius-xs: 4px;

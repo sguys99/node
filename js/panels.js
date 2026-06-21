@@ -169,4 +169,11 @@ export function initPanels(controller, graph) {
   document
     .getElementById("zoom-reset")
     .addEventListener("click", () => controller.resetView());
+
+  // 모바일 하단 핸들: 설정 시트 펼치기/접기(좌측 패널과 동일한 .is-open 토글 패턴).
+  const handle = document.getElementById("settings-handle");
+  handle?.addEventListener("click", () => {
+    const open = settings.classList.toggle("is-open");
+    handle.setAttribute("aria-expanded", String(open));
+  });
 }
