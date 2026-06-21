@@ -22,12 +22,12 @@
     <!-- 레이아웃·패널·반응형 (Phase 1) -->
     <link rel="stylesheet" href="css/styles.css" />
 
-    <!-- CDN 라이브러리 (제로빌드) -->
-    <!-- Three.js (UMD 전역 THREE) — 반투명 와이어프레임 글로브 연출용 -->
-    <script src="https://unpkg.com/three@0.155.0/build/three.min.js"></script>
-    <!-- 3d-force-graph (UMD 전역 ForceGraph3D) -->
-    <script src="https://unpkg.com/3d-force-graph@1.73.4/dist/3d-force-graph.min.js"></script>
-    <!-- PapaParse (UMD 전역 Papa) — gviz CSV 파싱 -->
+    <!-- CDN 라이브러리 (제로빌드, ES Modules) -->
+    <!-- three·3d-force-graph·UnrealBloomPass는 render.js에서 esm.sh로 ESM import한다.
+         3d-force-graph는 ?deps=three@0.170.0 으로 내부 three를 동일 버전으로 고정 →
+         UnrealBloomPass와 단일 three 인스턴스 공유(UMD 이중 로드 시 발생하던
+         "Multiple instances of Three.js" 색 관리 충돌·배경 회색 들뜸 방지). -->
+    <!-- PapaParse (UMD 전역 Papa) — gviz CSV 파싱(독립 라이브러리) -->
     <script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
   </head>
 

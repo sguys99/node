@@ -7,22 +7,18 @@
 import { loadData } from "./data.js";
 import { normalize } from "./normalize.js";
 import { buildGraph, HUB_ID } from "./graph.js";
+import { render } from "./render.js";
+
+// Phase 5+: render()가 반환한 controller(그래프 제어 핸들)를 보관 — Phase 6 패널이 사용.
+let controller = null;
 
 // ============ Phase 0: CDN 라이브러리 스모크 체크 ============
-const libs = {
-  THREE: typeof window.THREE !== "undefined",
-  ForceGraph3D: typeof window.ForceGraph3D !== "undefined",
-  Papa: typeof window.Papa !== "undefined",
-};
-
-const missing = Object.entries(libs)
-  .filter(([, ok]) => !ok)
-  .map(([name]) => name);
-
-if (missing.length === 0) {
-  console.info("[NODE] CDN 라이브러리 로드 완료:", Object.keys(libs).join(", "));
+// three·ForceGraph3D는 import map 기반 ES module(render.js에서 import)로 이동 →
+// 전역 스모크 체크 대상은 UMD 전역인 PapaParse만 남는다.
+if (typeof window.Papa !== "undefined") {
+  console.info("[NODE] PapaParse(UMD) 로드 완료. three·ForceGraph3D는 ESM import.");
 } else {
-  console.error("[NODE] CDN 라이브러리 로드 실패:", missing.join(", "));
+  console.error("[NODE] PapaParse 로드 실패");
 }
 
 // ============ Phase 2: 데이터 로드 + 출처 표시 ============
@@ -68,9 +64,10 @@ async function bootstrap() {
     `[NODE] 그래프 생성: 노드 ${graph.nodes.length}, 엣지 ${graph.links.length}` +
       `(hub/aff/interest=${count("hub")}/${count("affiliation")}/${count("interest")})`
   );
-  verifyClusters(graph, members); // Phase 4 검증(임시) — Phase 5 render 연동 시 제거
+  verifyClusters(graph, members); // Phase 4 검증(임시)
 
-  // Phase 5 확장 지점: render(graph) 로 교체
+  // Phase 5: 구형 지식그래프 렌더 + 인터랙션. controller는 Phase 6 패널 제어에 사용.
+  controller = render(graph, { container: "#graph" });
 }
 
 // ============ Phase 4 검증(임시) ============

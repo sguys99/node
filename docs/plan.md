@@ -133,16 +133,18 @@
 **의존성:** Phase 1 + Phase 4
 
 ### 5-1. 부트스트랩
-- [ ] `js/main.js` — 오케스트레이션(load → normalize → buildGraph → render), 배지·에러 UI 연동
+- [x] `js/main.js` — 오케스트레이션(load → normalize → buildGraph → render), 배지·에러 UI 연동
 
 ### 5-2. 렌더링
-- [ ] `js/render.js` — `ForceGraph3D` 설정(`nodeVal`·`nodeColor`·`linkWidth`·`linkColor` `EDGE_COLORS`)
-- [ ] 유광명 노드 중심 고정, 반투명 와이어프레임 글로브 배경 연출
-- [ ] 자동 회전(기본 on, `Graph.scene().rotation.y += 0.001`)
+- [x] `js/render.js` — `ForceGraph3D` 설정(`nodeVal`·`nodeColor`·`linkWidth`·`linkColor` `EDGE_COLORS`)
+- [x] 유광명 노드 중심 고정, 반투명 와이어프레임 글로브 배경 연출
+- [x] 자동 회전(기본 on, `Graph.scene().rotation.y += 0.0016`)
+- [x] (추가) 모던 연출 — UnrealBloomPass 은은한 글로우 + 모노크롬 실버 노드/그린 허브, near-black 색관리 정합
+- [x] (추가) three 단일 인스턴스화 — `?deps=three@0.180.0`로 ForceGraph3D·UnrealBloomPass·글로브 three 통일(이중 로드 색충돌 방지)
 
 ### 5-3. 인터랙션
-- [ ] 호버 시 이름 표시, 노드 드래그/줌
-- [ ] `onNodeClick(selectNode)` — `selectedNodeId` 공유 + 해당 노드/엣지 하이라이트
+- [x] 호버 시 이름 표시, 노드 드래그/줌
+- [x] `onNodeClick(selectNode)` — `selectedNodeId` 공유 + 해당 노드/이웃 하이라이트(나머지 dim), 빈 공간 클릭 시 해제
 
 **검증(Playwright MCP):** 캔버스 렌더·노드 카운트 33·회전/줌 동작·노드 클릭 시 `selectedNodeId` 변화 확인, 초기 렌더 3초 이내.
 
