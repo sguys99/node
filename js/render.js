@@ -1,39 +1,40 @@
 // render.js — 인터랙티브 3D 지식그래프 렌더링 + 인터랙션 (3d-force-graph / Three.js)
 //
 // 흐름: buildGraph() → { nodes, links } ──render()──▶ 3D 렌더 + controller 반환
-//   - 노드: 입체 구체(씬 라이트 음영 + 은은한 bloom). 크기 = 경력(√career), 허브=앰버·최대.
-//   - 라벨: 씬 안 SpriteText(항상 카메라 향함). 우측 Labels 토글로 구성. 허브 이름 기본 노출.
+//   - 노드: 입체 구체(씬 라이트 음영 + 은은한 bloom). 크기 = 경력(√career), 허브=그린·최대.
+//   - 라벨: CSS2D HTML 오버레이(항상 일정 px·선명). 우측 Labels 토글로 구성. 허브 이름 기본 노출.
 //   - 엣지: type별 색/굵기 + 허브·소속 엣지에 느린 방향성 파티클(flow 연출, 과하지 않게).
 //   - 인터랙션: 드래그로 회전(trackball + damping 관성 → 잡고 돌리면 미끄러지듯). 자동 회전 없음.
 //   - 선택: 노드 클릭 → 연결만 강조·나머지 dim + 좌측 상세 패널 통지.
 //
-// 디자인: 그래프 레이어 색은 css/tokens.css의 --graph-* 변수에서 read(그래프 한정 비구속, 비녹색).
-// THREE 정합: three·ForceGraph3D·UnrealBloomPass·three-spritetext 모두 esm.sh three@0.180.0
+// 디자인: 그래프 색은 DESIGN.md 토큰(css/tokens.css --color-*)을 그대로 준용(허브=그린, 노드=그레이).
+// THREE 정합: three·ForceGraph3D·UnrealBloomPass·CSS2DRenderer 모두 esm.sh three@0.180.0
 //   인스턴스를 공유(?deps=three@0.180.0) → 단일 모듈 dedupe로 색관리/타입 충돌 방지.
 
 import * as THREE from "https://esm.sh/three@0.180.0";
 import ForceGraph3D from "https://esm.sh/3d-force-graph@1.73.4?deps=three@0.180.0";
-import SpriteText from "https://esm.sh/three-spritetext@1.9.6?deps=three@0.180.0";
+import { CSS2DRenderer, CSS2DObject } from "https://esm.sh/three@0.180.0/examples/jsm/renderers/CSS2DRenderer.js";
 import { UnrealBloomPass } from "https://esm.sh/three@0.180.0/examples/jsm/postprocessing/UnrealBloomPass.js";
 import { OutputPass } from "https://esm.sh/three@0.180.0/examples/jsm/postprocessing/OutputPass.js";
 import { BASE_YEAR } from "./normalize.js";
 
-// ── 디자인 토큰 read (한 번만 캐시) ──
+// ── 디자인 토큰 read (한 번만 캐시) — DESIGN.md 색 준용(원복) ──
 const css = (name) =>
   getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 
 const COLOR = {
-  bg: css("--graph-bg"),
-  node: css("--graph-node"),
-  hub: css("--graph-hub"),
-  dim: css("--graph-dim"),
-  label: css("--graph-label"),
-  labelSub: css("--graph-label-sub"),
+  bg: css("--color-canvas"),
+  node: css("--color-body"), // 일반 노드 = 그레이
+  hub: css("--color-primary"), // 허브 = 그린 액센트
+  dim: css("--color-hairline"), // 비활성 dim
+  label: css("--color-ink"),
+  labelSub: css("--color-mute"),
 };
+// 엣지 색 의미: 잘 아는 허브 관계는 가는 흰색 점선으로 물러나게, 잘 모르는 노드-노드 관계를 녹색으로 강조.
 const EDGE_COLORS = {
-  hub: css("--graph-edge-hub"),
-  affiliation: css("--graph-edge-aff"),
-  interest: css("--graph-edge-int"),
+  hub: css("--color-ink"), // 허브 엣지 = 밝은 흰색(가는 점선 — 은은한 가이드)
+  affiliation: css("--color-primary"), // 소속 엣지 = 진한 녹색(덜 알려진 관계 강조)
+  interest: css("--color-primary-soft"), // 관심사 엣지 = 연한 녹색(소속과 톤 구분)
 };
 
 // ── 렌더 튜닝 상수 ──
@@ -45,8 +46,8 @@ const LINK_OPACITY = 0.3;
 const PARTICLE_SPEED = 0.004; // 엣지 flow 속도(느리게 — 과하지 않게)
 const PARTICLE_WIDTH = 1.2;
 const DAMPING = 0.12; // trackball dynamicDampingFactor(낮을수록 관성↑)
-// bloom 은은하게(near-black 인디고 위 소프트 글로우) — 과한 발광 회피.
-const BLOOM = { strength: 0.6, radius: 0.45, threshold: 0.2 };
+// bloom 매우 은은하게(near-black 위 소프트 글로우) — 과한 발광/촌스러움 회피.
+const BLOOM = { strength: 0.35, radius: 0.4, threshold: 0.25 };
 const LABEL_INTEREST_MAX = 2;
 
 /** link.source/target는 엔진이 노드 객체로 치환 → 항상 raw id로 환원. */
@@ -67,9 +68,13 @@ export function render(graph, opts = {}) {
       ? document.querySelector(opts.container)
       : opts.container || document.getElementById("graph");
 
-  // ── 하이라이트용 이웃 인접 맵(raw id 기준) ──
+  // ── 하이라이트용 이웃 인접 맵(raw id 기준) + id→node 참조 ──
   const neighbors = new Map();
-  graph.nodes.forEach((n) => neighbors.set(n.id, new Set()));
+  const nodeById = new Map();
+  graph.nodes.forEach((n) => {
+    neighbors.set(n.id, new Set());
+    nodeById.set(n.id, n);
+  });
   for (const l of graph.links) {
     const s = rawId(l.source);
     const t = rawId(l.target);
@@ -80,8 +85,8 @@ export function render(graph, opts = {}) {
   // ── 런타임 상태(controller가 변경) ──
   let selectedId = null;
   const linkVisible = { hub: true, affiliation: true, interest: true };
-  const labelFields = { name: true, career: false, nickname: false, interest: false };
-  const labelSprites = new Map(); // id -> SpriteText(라벨 dim 제어)
+  const labelFields = { name: true, career: false, nickname: false, interest: false, affiliation: false };
+  const labelDivs = new Map(); // id -> CSS2D 라벨 div(dim 제어)
 
   const isActive = (id) =>
     selectedId == null || id === selectedId || neighbors.get(selectedId)?.has(id);
@@ -94,49 +99,76 @@ export function render(graph, opts = {}) {
     return n.isHub ? COLOR.hub : COLOR.node;
   };
 
-  // ── 라벨(씬 안 SpriteText, billboard) ──
+  // ── 라벨(CSS2D HTML 오버레이 — 줌/거리와 무관하게 항상 일정 px) ──
   const labelLines = (n) => {
     const m = n.member || {};
     const lines = [];
-    if (labelFields.name || n.isHub) lines.push(m.name ?? n.name);
-    if (labelFields.career && Number.isFinite(m.career)) lines.push(`${m.career}년차`);
-    if (labelFields.nickname && m.nickname) lines.push(m.nickname);
+    if (labelFields.name || n.isHub) lines.push({ field: "name", text: m.name ?? n.name });
+    if (labelFields.career && Number.isFinite(m.career)) lines.push({ field: "career", text: `${m.career}년` });
+    if (labelFields.nickname && m.nickname) lines.push({ field: "nickname", text: m.nickname });
     if (labelFields.interest && m.interestTags?.length)
-      lines.push(m.interestTags.slice(0, LABEL_INTEREST_MAX).join(" · "));
+      lines.push({ field: "interest", text: m.interestTags.slice(0, LABEL_INTEREST_MAX).join(" · ") });
+    if (labelFields.affiliation) {
+      const org = m.company || m.pastOrgs?.[0];
+      if (org) lines.push({ field: "affiliation", text: org });
+    }
     return lines;
   };
 
-  const buildLabelObject = (n) => {
-    labelSprites.delete(n.id);
+  // 기존 div의 자식만 교체(내용 in-place 갱신) — 라벨 DOM 생성/파괴 없음 → 잔상 방지.
+  const renderLabelContent = (n, div) => {
+    div.replaceChildren();
     const lines = labelLines(n);
-    if (!lines.length) return null;
-    const sprite = new SpriteText(lines.join("\n"));
-    sprite.color = n.isHub ? COLOR.hub : COLOR.label;
-    sprite.textHeight = n.isHub ? 8 : 5.5;
-    sprite.fontFace = '"Noto Sans KR", "Inter", sans-serif';
-    sprite.fontWeight = n.isHub ? "700" : "500";
-    sprite.backgroundColor = false;
-    sprite.material.transparent = true;
-    sprite.material.depthWrite = false;
-    sprite.material.opacity = isActive(n.id) ? 1 : 0.12;
-    sprite.position.set(0, nodeRadius(n) + 3, 0); // 노드 위로 살짝 띄움
-    labelSprites.set(n.id, sprite);
-    return sprite;
+    if (!lines.length) {
+      div.style.display = "none";
+      return;
+    }
+    div.style.display = "";
+    lines.forEach((line, i) => {
+      const span = document.createElement("span");
+      span.className = `${i === 0 ? "main" : "sub"} lf-${line.field}`;
+      span.textContent = line.text; // textContent → XSS 안전
+      div.appendChild(span);
+    });
+  };
+
+  // 노드당 라벨 객체를 "최초 1회만" 생성(빈 라벨도 div를 만들어 display:none).
+  // 이후 토글은 renderLabelContent로 내용만 갱신 → nodeThreeObject 재호출 불필요(잔상 원천 제거).
+  const buildLabelObject = (n) => {
+    const div = document.createElement("div");
+    div.className = n.isHub ? "graph-label is-hub" : "graph-label";
+    renderLabelContent(n, div);
+    div.style.opacity = isActive(n.id) ? "1" : "0.12";
+    const obj = new CSS2DObject(div);
+    obj.position.set(0, nodeRadius(n) + 4, 0); // 노드 위로 살짝 띄움(앵커만 월드 좌표)
+    labelDivs.set(n.id, div);
+    return obj;
   };
 
   // ── 엣지 스타일 ──
   const linkColor = (l) => {
+    if (l.type === "hub") return EDGE_COLORS.hub; // 허브는 항상 동일(점선 가이드 — dim 안 함, 공유 머티리얼 보호)
     const s = rawId(l.source);
     const t = rawId(l.target);
     const incident = selectedId == null || s === selectedId || t === selectedId;
     return incident ? EDGE_COLORS[l.type] : COLOR.dim;
   };
-  // 굵기 = 허브 weight(알게 된 연차). 소속/관심사는 가늘게.
+  // 굵기: 허브=0(가는 1px 라인, 점선 가능) · 노드-노드는 튜브로 더 두드러지게.
   const linkWidth = (l) =>
-    l.type === "hub" ? clamp(0.4 + l.weight * 0.18, 0.6, 5) : l.type === "affiliation" ? 0.6 : 0.4;
-  // flow 파티클 — 허브·소속 엣지에만(과하지 않게), 가시 상태일 때.
+    l.type === "hub" ? 0 : l.type === "affiliation" ? 0.8 : 0.5;
+  // flow 파티클 — 강조 대상인 소속(녹색) 엣지에만(허브는 거슬려서 제거).
   const particleCount = (l) =>
-    linkVisible[l.type] && (l.type === "hub" || l.type === "affiliation") ? 2 : 0;
+    linkVisible[l.type] && l.type === "affiliation" ? 2 : 0;
+
+  // 허브 엣지 점선 머티리얼(가는 흰색) — width=0 라인에만 적용. computeLineDistances 필요(onEngineStop).
+  const hubDashMaterial = new THREE.LineDashedMaterial({
+    color: new THREE.Color(EDGE_COLORS.hub),
+    transparent: true,
+    opacity: 0.45,
+    dashSize: 2.5,
+    gapSize: 2,
+  });
+  const linkMaterial = (l) => (l.type === "hub" ? hubDashMaterial : undefined);
 
   // 허브 엣지 거리 = 협업 연차 역매핑(오래 알수록 중심에 가깝게). 소속/관심사는 짧게(군집).
   const hubLinkDistance = (weight) => {
@@ -144,8 +176,12 @@ export function render(graph, opts = {}) {
     return 220 - ((w - 1) / 29) * (220 - 70); // weight↑ → distance↓
   };
 
+  // ── CSS2D 라벨 렌더러(HTML 오버레이) — 드래그 방해 없도록 pointer-events 차단 ──
+  const labelRenderer = new CSS2DRenderer();
+  labelRenderer.domElement.style.pointerEvents = "none";
+
   // ── ForceGraph3D 인스턴스 ──
-  const graph3d = ForceGraph3D()(el)
+  const graph3d = ForceGraph3D({ extraRenderers: [labelRenderer] })(el)
     .backgroundColor(COLOR.bg)
     .graphData(graph)
     .nodeRelSize(NODE_REL_SIZE)
@@ -157,6 +193,7 @@ export function render(graph, opts = {}) {
     .nodeThreeObject(buildLabelObject)
     .linkColor(linkColor)
     .linkWidth(linkWidth)
+    .linkMaterial(linkMaterial) // 허브만 점선 머티리얼(나머지는 기본=녹색 튜브)
     .linkOpacity(LINK_OPACITY)
     .linkVisibility((l) => linkVisible[l.type])
     .linkDirectionalParticles(particleCount)
@@ -191,15 +228,12 @@ export function render(graph, opts = {}) {
   controls.dynamicDampingFactor = DAMPING;
   controls.rotateSpeed = 1.1;
 
-  // ── 상태 반영 ──
+  // ── 상태 반영 ── (선택에 따라 색/라벨만 갱신. linkWidth 재적용 금지 — 허브 라인
+  //    geometry 재생성 시 점선 lineDistances가 사라지므로 색만 갱신한다.)
   const refresh = () => {
-    graph3d
-      .nodeColor(nodeColor)
-      .linkColor(linkColor)
-      .linkWidth(linkWidth)
-      .linkDirectionalParticles(particleCount);
-    for (const [id, sprite] of labelSprites) {
-      sprite.material.opacity = isActive(id) ? 1 : 0.12;
+    graph3d.nodeColor(nodeColor).linkColor(linkColor);
+    for (const [id, div] of labelDivs) {
+      div.style.opacity = isActive(id) ? "1" : "0.12";
     }
   };
 
@@ -226,9 +260,17 @@ export function render(graph, opts = {}) {
   });
   ro.observe(el);
 
-  // 초기 전체 맞춤(엔진 안정화 후 1회).
+  // 초기 전체 맞춤(엔진 안정화 후 1회) + 허브 점선 거리 계산.
+  // LineDashedMaterial는 lineDistances가 있어야 dash를 그린다. computeLineDistances는
+  // THREE.Line 객체의 메서드 → 씬을 순회해 허브 점선 머티리얼을 쓰는 Line에 1회 계산.
+  const computeHubDashes = () => {
+    graph3d.scene().traverse((obj) => {
+      if (obj.isLine && obj.material === hubDashMaterial) obj.computeLineDistances();
+    });
+  };
   let fitted = false;
   graph3d.onEngineStop(() => {
+    computeHubDashes();
     if (fitted) return;
     fitted = true;
     graph3d.zoomToFit(600, 60);
@@ -240,7 +282,9 @@ export function render(graph, opts = {}) {
     setLabelFields(field, on) {
       if (!(field in labelFields)) return;
       labelFields[field] = !!on;
-      graph3d.nodeThreeObject(buildLabelObject); // 라벨 sprite 재생성
+      // 기존 div 내용만 in-place 갱신(재생성 안 함 → 잔상 방지).
+      for (const [id, div] of labelDivs) renderLabelContent(nodeById.get(id), div);
+      refresh(); // opacity(dim) 재적용
     },
     /** 엣지 유형 표시 토글 (hub/affiliation/interest). */
     setLinkTypeVisibility(type, visible) {

@@ -317,12 +317,12 @@ button {
 }
 
 /* ============ 중앙 그래프 (인터랙티브 3D — 3d-force-graph) ============ */
-/* 3d-force-graph가 #graph 안에 WebGL <canvas>를 생성한다. 라벨은 씬 안 SpriteText. */
+/* 3d-force-graph가 #graph 안에 WebGL <canvas>를 생성한다. 라벨은 CSS2D HTML 오버레이. */
 .graph-wrap {
   position: relative;
   min-width: 0; /* 1fr 트랙이 캔버스 고정폭 아래로 수축 허용(우측 패널 오버플로 방지) */
   min-height: 0;
-  background: var(--graph-bg);
+  background: var(--color-canvas);
 }
 
 .graph-canvas {
@@ -333,6 +333,57 @@ button {
 
 .graph-canvas:active {
   cursor: grabbing;
+}
+
+/* CSS2D 노드 라벨 — 줌/거리 무관 일정 px 크기. 드래그 회전 방해 금지 */
+.graph-label {
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  font-family: var(--font-sans);
+  text-align: center;
+  white-space: nowrap;
+  transition: opacity 0.12s ease;
+  /* 다크 배경 위 가독 — 드롭섀도 대신 텍스트 외곽 그림자(미세) */
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+}
+
+.graph-label .main {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.graph-label .sub {
+  font-size: 24px;
+  font-weight: 400;
+  color: var(--color-mute);
+}
+
+/* 라벨 종류별 식별색 — .main/.sub는 크기·굵기, 색은 필드 클래스가 담당(뒤쪽 규칙이 덮음).
+   허브 이름(.is-hub .main)은 특이도가 더 높아 그린(--color-primary) 유지. */
+.graph-label .lf-name {
+  color: var(--color-ink);
+}
+.graph-label .lf-career {
+  color: var(--label-career);
+}
+.graph-label .lf-nickname {
+  color: var(--label-nickname);
+}
+.graph-label .lf-interest {
+  color: var(--label-interest);
+}
+.graph-label .lf-affiliation {
+  color: var(--label-affiliation);
+}
+
+.graph-label.is-hub .main {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-primary); /* 허브 = 그린 액센트 */
 }
 
 /* 폴백 실패 시 에러 안내 카드 (Phase 2에서 노출 토글) */
