@@ -9,6 +9,9 @@
 // 기준 연도 — 허브 엣지 굵기(2026 - 협업시점) 및 협업시점 결측 기본값.
 export const BASE_YEAR = 2026;
 
+// 경력 추정 기준 — 사회 진출 연령(25세) 가정. career = max(0, 나이 - 25).
+export const CAREER_BASE = 25;
+
 /**
  * 동의어 통합 맵. 키는 **소문자·trim 후 비교용**, 값은 표준(canonical) 표기.
  * PRD §7.2 예시 + data/snapshot.csv 실데이터 관찰 변형을 포괄한다.
@@ -106,7 +109,8 @@ function median(nums) {
  * @property {string} name            이름
  * @property {string} nickname        닉네임 (공란 가능 → "")
  * @property {number} sinceYear       협업 시점(연도)
- * @property {number} age             나이(경력) 대용값
+ * @property {number} age             나이(원본 컬럼값, 내부 계산용)
+ * @property {number} career          경력(년) = max(0, 나이 - CAREER_BASE) — 노드 크기·라벨·상세 표기에 사용
  * @property {string} company         현직장 (표시용 원형)
  * @property {string[]} pastOrgs      과거 경력 (표시용 원형, 콤마 분리)
  * @property {string[]} affiliationKeys  현직장∪과거경력의 orgKey 집합(매칭용)
@@ -171,6 +175,7 @@ export function normalize(rawRows) {
       nickname: (row["닉네임"] ?? "").trim(),
       sinceYear,
       age,
+      career: Math.max(0, age - CAREER_BASE),
       company,
       pastOrgs,
       affiliationKeys,

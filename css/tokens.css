@@ -27,7 +27,8 @@
   --color-mute: #8b949e; /* 캡션·푸터 등 최저 우선순위 */
 
   /* ===== 타이포 ===== */
-  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  /* Latin은 Inter, 한글은 Noto Sans KR로 폴스루(Inter엔 한글 글리프 없음). */
+  --font-sans: "Inter", "Noto Sans KR", system-ui, -apple-system, sans-serif;
   --font-mono: "SF Mono", SFMono-Regular, Menlo, Monaco, Consolas,
     "Liberation Mono", monospace;
 
@@ -85,4 +86,22 @@
 
   /* ===== 레이아웃 ===== */
   --panel-width: 280px;
+
+  /* ===== 그래프 시각화 (인터랙티브 3D — 3d-force-graph) =====
+   * 이 블록은 중앙 그래프 레이어 전용 토큰이다. 사용자 요청에 따라 그래프 내부는
+   * DESIGN.md 색 제약(그린 전용 등)에 구속되지 않는다 — 단 페이지 크롬
+   * (헤더/패널/푸터/버튼/칩)은 위 토큰을 그대로 준수한다.
+   * 팔레트: 딥 인디고 배경 + 앰버 허브 액센트 + 쿨 페리윙클 노드 + 인디고/틸 엣지(비녹색). */
+  --graph-bg: #0a0b14;            /* 그래프 캔버스(딥 인디고 near-black) */
+
+  --graph-node: #aeb6e0;          /* 일반 노드(쿨 페리윙클) */
+  --graph-hub: #f4a93c;           /* 허브(유광명) — 앰버 액센트 */
+  --graph-dim: #2a2c3d;           /* 비활성(dim) 톤 */
+
+  --graph-label: #eef0fa;         /* 라벨 주 텍스트(이름) */
+  --graph-label-sub: #9a9fc4;     /* 라벨 보조(경력/닉네임/관심사) */
+
+  --graph-edge-hub: #f4a93c;      /* 허브 엣지(앰버) */
+  --graph-edge-aff: #6f74c4;      /* 소속 엣지(인디고-바이올렛) */
+  --graph-edge-int: #4aa6c9;      /* 관심사 엣지(틸) */
 }

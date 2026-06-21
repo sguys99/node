@@ -4,7 +4,7 @@
 
 ## 프로젝트 개요
 
-**NODE (Network Of Domain Experts)** — AI 도메인 전문가 33명(확장 가능)의 소셜 네트워크를, 운영자 **유광명**을 중심 허브로 한 **구형(지구본) 지식그래프**로 시각화하는 **제로빌드 정적 웹 대시보드**.
+**NODE (Network Of Domain Experts)** — AI 도메인 전문가 33명(확장 가능)의 소셜 네트워크를, 운영자 **유광명**을 중심 허브로 한 **인터랙티브 3D 지식그래프(3d-force-graph/Three.js)**로 시각화하는 **제로빌드 정적 웹 대시보드**.
 
 - 운영자가 구글시트만 수정하면 런타임 CSV fetch로 대시보드에 즉시 반영된다.
 - 빌드 도구·백엔드·DB 없이 `index.html`을 리포 루트에서 GitHub Pages로 서빙한다.
@@ -16,6 +16,8 @@
 - **백엔드/DB 없음**: 모든 처리는 클라이언트에서. API 키·시크릿 없음. 모든 리소스 HTTPS.
 - **단일 진실 원천(SSOT)**: 데이터는 공개 구글시트. 폴백은 `data/snapshot.csv`(동일 스키마, 수동 갱신).
 - **디자인 토큰만 사용**: 색/타이포/스페이싱은 [DESIGN.md](DESIGN.md) 토큰을 `css/tokens.css`의 CSS 변수로 매핑해 참조. **인라인 hex/px 신규 도입 금지, 라이트 모드 없음, 드롭섀도 금지(하어라인+글로우만), 본문에 그린(`--color-primary`) 사용 금지**(액센트=로고/Live 배지/허브 노드에만).
+  - **예외 — 중앙 3D 그래프 레이어**: 그래프 내부(노드/엣지/라벨)는 `--graph-*` 전용 토큰(`css/tokens.css`, 비녹색 — 딥 인디고+앰버)을 쓰며 위 색 제약에 구속되지 않는다(사용자 요청). 단 헤더/패널/푸터/버튼/칩 등 **페이지 크롬은 위 규칙을 100% 준수**한다.
+  - **폰트**: 한글은 **Noto Sans KR**, Latin은 Inter(`--font-sans`가 폴스루). 우측 설정 패널 항목은 영어 표기.
 
 ## 파일 구조 (리포 루트 배포)
 
@@ -29,14 +31,14 @@ js/
   data.js           # fetchSheet(), 스냅샷 폴백, PapaParse 파싱
   normalize.js      # SYNONYM_MAP, normalize(), 결측치 처리
   graph.js          # buildGraph(): 노드/엣지 모델 + 추론 알고리즘
-  render.js         # 3d-force-graph 설정·인터랙션
+  render.js         # 3d-force-graph 3D 렌더·드래그 회전·SpriteText 라벨·엣지 flow·선택
   panels.js         # 좌측 상세 / 우측 설정 패널 바인딩
 data/
   snapshot.csv      # fetch 실패 시 폴백(수동 갱신)
-DESIGN.md           # 디자인 시스템(토큰)
+DESIGN.md           # 디자인 시스템(토큰) — 페이지 크롬 한정(그래프 레이어는 비구속)
 ```
 
-> 현재 구현 상태: Phase 0(보일러플레이트 제거·정적 골격) 완료. `js/`에는 `main.js`만 존재하며 `data.js`/`normalize.js`/`graph.js`/`render.js`/`panels.js`는 Phase 2~6에서 생성한다.
+> 구현 상태: Phase 0~7 완료. 중앙 시각화는 **인터랙티브 3D(3d-force-graph)**로 구현됨. (변천: 초기 3D 구형 → 2D D3 방사형 → 현재 인터랙티브 3D 방사형. 드래그 회전+관성·씬 안 라벨·엣지 flow·비녹색 팔레트.)
 
 ## 데이터 파이프라인
 
@@ -50,7 +52,7 @@ fetch(SHEET_CSV_URL) ──실패──▶ fetch(data/snapshot.csv)
         ▼
   buildGraph() → { nodes, links }     # 노드 크기·허브 고정·엣지 추론
         ▼
-  3d-force-graph 렌더 ⇄ 우측 설정 패널 / 좌측 상세 패널(selectedNodeId)
+  3d-force-graph 3D 렌더 ⇄ 우측 설정 패널 / 좌측 상세 패널(selectedNodeId)
 ```
 
 - 시트 URL: gviz CSV 엔드포인트(PRD §8.5). 파서는 **PapaParse**(`header: true, skipEmptyLines: true`) — gviz CSV의 따옴표/콤마/줄바꿈 처리 때문에 직접 split 금지.
@@ -60,17 +62,23 @@ fetch(SHEET_CSV_URL) ──실패──▶ fetch(data/snapshot.csv)
 
 `번호, 이름, 닉네임, 협업 시점, 나이(경력), 현직장, 과거 경력, 하는일, 관심사, 희망사항`
 
-- `번호` 1 = 유광명(중심 노드). `협업 시점` = 유광명과 알게 된 **연도**(생년 아님). `나이(경력)` = 경력 대용값. `과거 경력` = 콤마로 여러 소속 나열(관계 추론용).
+- `번호` 1 = 유광명(중심 노드). `협업 시점` = 유광명과 알게 된 **연도**(생년 아님). `나이(경력)` = 나이값. `과거 경력` = 콤마로 여러 소속 나열(관계 추론용).
+- **경력 파생**: `normalize.js`가 `career = max(0, 나이 - CAREER_BASE(25))`를 계산. UI(노드 크기·라벨·상세)는 **나이 대신 경력(년차)** 만 표기.
 
 ### 그래프 모델 규칙
 
-- **노드 크기**: `val = clamp(√age · k)`(제곱근 스케일).
-- **중심 허브**: 유광명 노드 `isHub=true`, `fx=fy=fz=0`으로 고정.
+- **노드 크기**: `val = clamp(√career · k)`(제곱근 스케일). 경력에 비례.
+- **중심 허브**: 유광명 노드 `isHub=true`, `fx=fy=fz=0`으로 3D 정중앙 고정.
 - **엣지 추론**(`js/graph.js`, PRD §7.4):
   - (A) `hub`: 유광명↔전원, `weight = 2026 - 협업시점`.
-  - (B) `affiliation`: 소속 공유(현직장 ∪ 과거경력, 교차 일치 포함) — **항상 생성**.
+  - (B) `affiliation`: 소속 공유(현직장 ∪ 과거경력, 교차 일치 포함) — **항상 생성**(노드-노드 간).
   - (C) `interest`: 표준 태그 `INTEREST_THRESHOLD = 2` 이상 중첩 시만(헤어볼 방지).
   - `dedupe(links)`로 동일 쌍은 type별 1개로 정리.
+- **3D 인터랙티브 렌더**(`js/render.js`):
+  - 허브 엣지 거리 = 협업 연차 역매핑 — **오래 알수록 중심에 가깝게**(방사 구조). 소속/관심사 링크는 짧게(군집).
+  - 드래그 회전 + 관성(trackball damping). **자동 회전 없음**(과한 애니메이션 회피).
+  - 입체 구체 노드(라이팅 음영 + 은은한 bloom), 씬 안 `SpriteText` 라벨(우측 토글), 허브 이름 기본 노출.
+- **엣지 시각**: 굵기 = 허브 weight(알게 된 연차). 허브·소속 엣지에 느린 방향성 파티클(flow). 노드 선택 시 incident만 강조·나머지 dim. 우측 `Edges` 토글로 type별 표시.
 - **확장성**: `SYNONYM_MAP`·관계 추론 임계값·기준 연도(2026)는 상수/객체로 분리해 갱신 가능하게 유지.
 - **관계 검증 군집**(소속 엣지로 나타나야 함): 지아이비타 · 마키나락스 · PwC · 포스코이엔씨 · 한국전력공사.
 
@@ -82,8 +90,8 @@ fetch(SHEET_CSV_URL) ──실패──▶ fetch(data/snapshot.csv)
 ## 검증 / 실행
 
 - **로컬 실행**: 정적 서버로 루트를 서빙(예: `python3 -m http.server`) 후 브라우저로 `index.html` 확인. `file://` 직접 열기는 ES Module/fetch에서 CORS 문제가 날 수 있음.
-- **수동 검증**: 콘솔 에러 없이 CDN 로드, 33노드 렌더, 허브 중심 고정, 출처 배지, 토글 반영.
-- **E2E**: Playwright(MCP)로 로드 → 렌더 → 회전 → 노드 클릭 → 상세 → 토글 플로우 확인.
+- **수동 검증**: 콘솔 에러 없이 CDN 로드, 33노드 3D 렌더, 허브 중심 고정, 출처 배지, 라벨/엣지 토글 반영.
+- **E2E**: Playwright(MCP)로 로드 → 렌더 → 드래그 회전 → 노드 클릭 → 상세(경력) → 라벨/엣지 토글 → Reset view 플로우 확인. (헤드리스 WebGL은 `--use-angle=swiftshader` 플래그 필요.)
 - **성능 목표**: 인터랙션 60fps, 초기 렌더(폴백 포함) 3초 이내.
 
 ## 배포

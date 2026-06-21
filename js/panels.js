@@ -3,7 +3,7 @@
 // 흐름: render()의 controller + buildGraph()의 graph를 받아
 //   - 좌측: controller.onSelect 구독 → 선택 노드의 member를 문서형 정보 리스트로 표시.
 //   - 우측: 기존 마크업 체크박스/버튼을 controller 메서드(setLabelFields·
-//           setLinkTypeVisibility·setRotation·resetCamera)에 바인딩.
+//           setLinkTypeVisibility·resetView)에 바인딩.
 //
 // 디자인: 모든 색/타이포/스페이싱은 css 토큰(.detail-* 클래스)에서 read.
 //   인라인 hex/px 신규 0건·드롭섀도 금지(하어라인 리듬+모노 숫자) — DESIGN.md 정합.
@@ -84,8 +84,8 @@ function detailHtml(member, conn) {
 
     <dl class="detail-stats">
       <div class="detail-stat">
-        <dt class="detail-stat-label">나이 / 경력</dt>
-        <dd class="detail-stat-value">${esc(member.age)}</dd>
+        <dt class="detail-stat-label">경력</dt>
+        <dd class="detail-stat-value">${esc(member.career)}년차</dd>
       </div>
       <div class="detail-stat">
         <dt class="detail-stat-label">협업 since</dt>
@@ -165,13 +165,8 @@ export function initPanels(controller, graph) {
     );
   });
 
-  // 자동 회전(기본 on) / 줌 리셋.
-  const rotateToggle = document.getElementById("rotate-toggle");
-  rotateToggle.addEventListener("change", () =>
-    controller.setRotation(rotateToggle.checked)
-  );
-
+  // 줌/팬 초기화(Reset view).
   document
     .getElementById("zoom-reset")
-    .addEventListener("click", () => controller.resetCamera());
+    .addEventListener("click", () => controller.resetView());
 }

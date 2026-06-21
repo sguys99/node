@@ -13,11 +13,11 @@ import { initPanels } from "./panels.js";
 // Phase 5+: render()가 반환한 controller(그래프 제어 핸들)를 보관 — Phase 6 패널이 사용.
 let controller = null;
 
-// ============ Phase 0: CDN 라이브러리 스모크 체크 ============
-// three·ForceGraph3D는 import map 기반 ES module(render.js에서 import)로 이동 →
-// 전역 스모크 체크 대상은 UMD 전역인 PapaParse만 남는다.
+// ============ CDN 라이브러리 스모크 체크 ============
+// three·3d-force-graph는 ES module(render.js에서 import)로 로드 → 전역 스모크
+// 체크 대상은 UMD 전역인 PapaParse만 남는다.
 if (typeof window.Papa !== "undefined") {
-  console.info("[NODE] PapaParse(UMD) 로드 완료. three·ForceGraph3D는 ESM import.");
+  console.info("[NODE] PapaParse(UMD) 로드 완료. three·3d-force-graph는 ESM import.");
 } else {
   console.error("[NODE] PapaParse 로드 실패");
 }
@@ -66,10 +66,10 @@ async function bootstrap() {
       `(hub/aff/interest=${count("hub")}/${count("affiliation")}/${count("interest")})`
   );
 
-  // Phase 5: 구형 지식그래프 렌더 + 인터랙션. controller는 Phase 6 패널 제어에 사용.
+  // 인터랙티브 3D 지식그래프 렌더 + 인터랙션. controller는 좌/우 패널 제어에 사용.
   controller = render(graph, { container: "#graph" });
 
-  // Phase 6: 좌측 상세 / 우측 설정 패널 연결.
+  // 좌측 상세 / 우측 설정 패널 연결.
   initPanels(controller, graph);
 }
 

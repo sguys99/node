@@ -6,14 +6,14 @@
     <title>NODE — Network Of Domain Experts</title>
     <meta
       name="description"
-      content="운영자 유광명을 허브로 한 AI 도메인 전문가 네트워크를 구형 지식그래프로 시각화하는 제로빌드 정적 대시보드"
+      content="운영자 유광명을 허브로 한 AI 도메인 전문가 네트워크를 인터랙티브 3D 지식그래프로 시각화하는 제로빌드 정적 대시보드"
     />
 
-    <!-- Inter 웹폰트 (DESIGN.md 핵심 브랜드 — 교체 금지) -->
+    <!-- 웹폰트: Inter(Latin) + Noto Sans KR(한글) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap"
       rel="stylesheet"
     />
 
@@ -23,10 +23,8 @@
     <link rel="stylesheet" href="css/styles.css" />
 
     <!-- CDN 라이브러리 (제로빌드, ES Modules) -->
-    <!-- three·3d-force-graph·UnrealBloomPass는 render.js에서 esm.sh로 ESM import한다.
-         3d-force-graph는 ?deps=three@0.170.0 으로 내부 three를 동일 버전으로 고정 →
-         UnrealBloomPass와 단일 three 인스턴스 공유(UMD 이중 로드 시 발생하던
-         "Multiple instances of Three.js" 색 관리 충돌·배경 회색 들뜸 방지). -->
+    <!-- three·3d-force-graph·three-spritetext·UnrealBloomPass는 render.js에서 esm.sh로
+         ESM import한다(?deps=three@0.180.0 으로 단일 three 인스턴스 공유). -->
     <!-- PapaParse (UMD 전역 Papa) — gviz CSV 파싱(독립 라이브러리) -->
     <script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
   </head>
@@ -56,7 +54,7 @@
         <div id="detail-content" class="detail-content" hidden></div>
       </aside>
 
-      <!-- 중앙: 구형 지식그래프 캔버스 (Phase 5) -->
+      <!-- 중앙: 인터랙티브 3D 지식그래프 캔버스 -->
       <section class="graph-wrap" aria-label="지식그래프">
         <div id="graph" class="graph-canvas"></div>
         <!-- 폴백 실패 시 에러 안내 UI (Phase 2) -->
@@ -67,28 +65,27 @@
       </section>
 
       <!-- 우측: 시각화 설정 패널 (Phase 6) -->
-      <aside id="settings-panel" class="panel panel-right" aria-label="시각화 설정">
-        <p class="panel-eyebrow">설정</p>
+      <aside id="settings-panel" class="panel panel-right" aria-label="Visualization settings">
+        <p class="panel-eyebrow">Settings</p>
 
         <fieldset class="settings-group">
-          <legend>라벨 표시</legend>
-          <label><input type="checkbox" name="label" value="name" checked /> 이름</label>
-          <label><input type="checkbox" name="label" value="age" /> 나이</label>
-          <label><input type="checkbox" name="label" value="nickname" /> 닉네임</label>
-          <label><input type="checkbox" name="label" value="interest" /> 관심사</label>
+          <legend>Labels</legend>
+          <label><input type="checkbox" name="label" value="name" checked /> Name</label>
+          <label><input type="checkbox" name="label" value="career" /> Career</label>
+          <label><input type="checkbox" name="label" value="nickname" /> Nickname</label>
+          <label><input type="checkbox" name="label" value="interest" /> Interests</label>
         </fieldset>
 
         <fieldset class="settings-group">
-          <legend>엣지 유형</legend>
-          <label><input type="checkbox" name="edge" value="hub" checked /> 허브</label>
-          <label><input type="checkbox" name="edge" value="affiliation" checked /> 소속</label>
-          <label><input type="checkbox" name="edge" value="interest" checked /> 관심사</label>
+          <legend>Edges</legend>
+          <label><input type="checkbox" name="edge" value="hub" checked /> Hub</label>
+          <label><input type="checkbox" name="edge" value="affiliation" checked /> Affiliation</label>
+          <label><input type="checkbox" name="edge" value="interest" checked /> Interest</label>
         </fieldset>
 
         <fieldset class="settings-group">
-          <legend>카메라</legend>
-          <label><input type="checkbox" id="rotate-toggle" checked /> 자동 회전</label>
-          <button id="zoom-reset" type="button" class="ctrl-btn">줌 리셋</button>
+          <legend>View</legend>
+          <button id="zoom-reset" type="button" class="ctrl-btn">Reset view</button>
         </fieldset>
       </aside>
     </main>

@@ -1,7 +1,7 @@
-// graph.js — 정규화 레코드 → 3d-force-graph 모델 { nodes, links } (Phase 4, PRD §3.3·§7.4)
+// graph.js — 정규화 레코드 → 그래프 모델 { nodes, links } (렌더러 독립, PRD §3.3·§7.4)
 //
 // 흐름: NormalizedMember[] ──buildGraph()──▶ { nodes, links }
-//   - buildNodes(): 노드 크기 val = clamp(√age · k), 유광명(번호 1) 중심 고정
+//   - buildNodes(): 노드 크기 val = clamp(√career · k), 유광명(번호 1) 중심 고정
 //   - buildLinks(): (A)허브 (B)소속공유 (C)관심사공유 엣지 추론 → dedupe
 //   - 소속 매칭은 normalize 단계에서 만든 affiliationKeys(현직장∪과거경력, 교차 포함) 사용
 //   - 기준 연도(BASE_YEAR)는 normalize.js를 SSOT로 재사용
@@ -12,7 +12,7 @@ import { BASE_YEAR } from "./normalize.js";
  * @typedef {Object} GraphNode
  * @property {number} id          번호(= member.id)
  * @property {string} name        라벨(이름)
- * @property {number} val         노드 크기 = clamp(√age · k)
+ * @property {number} val         노드 크기 = clamp(√career · k)
  * @property {boolean} isHub       true → 유광명(중심 고정)
  * @property {number=} fx          허브일 때 0(중심 고정)
  * @property {number=} fy          허브일 때 0
@@ -32,20 +32,20 @@ import { BASE_YEAR } from "./normalize.js";
 // ── 상수(갱신 가능하게 분리) ──
 export const HUB_ID = 1; // 유광명(중심 노드)
 export const INTEREST_THRESHOLD = 2; // 관심사 엣지 최소 중첩(헤어볼 방지, PRD §7.4)
-export const NODE_SIZE_K = 1.6; // √age 배율
-export const NODE_VAL_MIN = 3; // clamp 하한(age 결측/이상치도 최소 구슬)
+export const NODE_SIZE_K = 1.6; // √career 배율
+export const NODE_VAL_MIN = 3; // clamp 하한(career 0/이상치도 최소 구슬)
 export const NODE_VAL_MAX = 14; // clamp 상한(일반 노드 비대화 방지)
 
 const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
 
 /**
- * 노드 크기 = clamp(√age · k). age 비유효(NaN/≤0)면 하한 반환(NaN 반경 방지).
- * @param {number} age
+ * 노드 크기 = clamp(√career · k). career 비유효(NaN/≤0)면 하한 반환(NaN 반경 방지).
+ * @param {number} career
  * @returns {number}
  */
-export function nodeVal(age) {
-  if (!Number.isFinite(age) || age <= 0) return NODE_VAL_MIN;
-  return clamp(Math.sqrt(age) * NODE_SIZE_K, NODE_VAL_MIN, NODE_VAL_MAX);
+export function nodeVal(career) {
+  if (!Number.isFinite(career) || career <= 0) return NODE_VAL_MIN;
+  return clamp(Math.sqrt(career) * NODE_SIZE_K, NODE_VAL_MIN, NODE_VAL_MAX);
 }
 
 /**
@@ -57,7 +57,7 @@ export function buildNodes(members) {
   return members.map((m) => {
     const isHub = m.id === HUB_ID;
     /** @type {GraphNode} */
-    const node = { id: m.id, name: m.name, val: nodeVal(m.age), isHub, member: m };
+    const node = { id: m.id, name: m.name, val: nodeVal(m.career), isHub, member: m };
     if (isHub) {
       node.fx = 0;
       node.fy = 0;

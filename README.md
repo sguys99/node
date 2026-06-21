@@ -1,6 +1,6 @@
 # NODE — Network Of Domain Experts
 
-운영자 **유광명**을 중심 허브로 한 33명(확장 가능) AI 도메인 전문가 네트워크를, 경력·소속·관심사 기반 관계로 추론해 **구형(지구본) 지식그래프**로 탐색하는 **제로빌드 정적 웹 대시보드**입니다.
+운영자 **유광명**을 중심 허브로 한 33명(확장 가능) AI 도메인 전문가 네트워크를, 경력·소속·관심사 기반 관계로 추론해 **인터랙티브 3D 지식그래프**로 탐색하는 **제로빌드 정적 웹 대시보드**입니다.
 
 빌드 도구·백엔드·DB 없이 `index.html` + CSS + 바닐라 JS(ES Modules) + CDN 라이브러리로만 동작하며, 데이터는 공개 Google Sheets에서 런타임에 CSV로 fetch합니다. fetch 실패 시 저장소에 동봉한 스냅샷으로 자동 폴백합니다.
 
@@ -14,7 +14,7 @@
 |---|---|
 | 마크업/스타일 | HTML5, CSS (DESIGN.md 토큰을 CSS 변수로 매핑) |
 | 로직 | 바닐라 JavaScript (ES Modules), 프레임워크·빌드 없음 |
-| 그래프 | [3d-force-graph](https://github.com/vasturiano/3d-force-graph) + [Three.js](https://threejs.org/) (CDN) |
+| 그래프 | [3d-force-graph](https://github.com/vasturiano/3d-force-graph) + [Three.js](https://threejs.org/) + three-spritetext — 인터랙티브 3D 렌더·드래그 회전·엣지 flow (CDN ESM) |
 | CSV 파싱 | [PapaParse](https://www.papaparse.com/) (CDN) |
 | 데이터 | Google Sheets 런타임 CSV fetch → 실패 시 `data/snapshot.csv` 폴백 |
 | 배포 | 리포 루트 정적 파일 → GitHub Pages (빌드 없음) |
@@ -32,14 +32,12 @@
 │   ├── data.js         # CSV fetch·폴백·PapaParse 파싱
 │   ├── normalize.js    # 동의어 맵·정규화·결측치 처리
 │   ├── graph.js        # buildGraph(): 노드/엣지 모델 + 추론
-│   ├── render.js       # 3d-force-graph 설정·인터랙션
+│   ├── render.js       # 3d-force-graph 3D 렌더·드래그 회전·SpriteText 라벨·엣지 flow·선택
 │   └── panels.js       # 좌측 상세 / 우측 설정 패널
 ├── data/
 │   └── snapshot.csv    # fetch 실패 시 폴백 스냅샷 (수동 갱신)
-└── DESIGN.md           # 디자인 시스템(토큰)
+└── DESIGN.md           # 디자인 시스템(토큰) — 페이지 크롬 한정(그래프 레이어는 비구속)
 ```
-
-> Phase 진행에 따라 `js/` 모듈이 순차적으로 추가됩니다. 현재는 `js/main.js`(엔트리)만 존재합니다.
 
 ## 로컬 실행
 
