@@ -1,8 +1,8 @@
 # NODE — Network Of Domain Experts
 
-운영자 **유광명**을 중심 허브로 한 33명(확장 가능) AI 도메인 전문가 네트워크를, 경력·소속·관심사 기반 관계로 추론해 **인터랙티브 3D 지식그래프**로 탐색하는 **제로빌드 정적 웹 대시보드**입니다.
+운영자 **유광명**을 중심 허브로 한 AI 도메인 전문가 33명(확장 가능)의 네트워크를 **인터랙티브 3D 지식그래프**로 탐색하는 **제로빌드 정적 웹 대시보드**입니다. 경력·소속·관심사를 바탕으로 전문가 사이의 관계를 추론해 시각화합니다.
 
-빌드 도구·백엔드·DB 없이 `index.html` + CSS + 바닐라 JS(ES Modules) + CDN 라이브러리로만 동작하며, 데이터는 공개 Google Sheets에서 런타임에 CSV로 fetch합니다. fetch 실패 시 저장소에 동봉한 스냅샷으로 자동 폴백합니다.
+빌드 도구·백엔드·DB 없이 `index.html`과 CSS, 바닐라 JS(ES Modules), CDN 라이브러리만으로 동작합니다. 데이터는 공개 Google Sheets에서 런타임에 CSV로 가져오며, 가져오기에 실패하면 저장소에 동봉한 스냅샷으로 자동 전환됩니다.
 
 - 요구사항 원천: [docs/PRD.md](docs/PRD.md)
 - 개발 계획서: [docs/plan.md](docs/plan.md)
@@ -38,20 +38,6 @@
 │   └── snapshot.csv    # fetch 실패 시 폴백 스냅샷 (수동 갱신)
 └── DESIGN.md           # 디자인 시스템(토큰) — 페이지 크롬 한정(그래프 레이어는 비구속)
 ```
-
-## 로컬 실행
-
-빌드 과정이 없으므로 정적 파일을 서빙할 수 있는 아무 로컬 서버면 됩니다. `file://`로 직접 열면 CSV fetch·ES Module이 CORS로 막히므로 **반드시 HTTP 서버로 실행**하세요.
-
-```bash
-# Python 3
-python3 -m http.server 8000
-
-# 또는 Node (npx)
-npx serve .
-```
-
-브라우저에서 <http://localhost:8000> 접속.
 
 ## 데이터 갱신 (Google Sheet)
 
