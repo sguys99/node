@@ -57,7 +57,7 @@ const rawId = (endpoint) =>
  * 구형 지식그래프 렌더 + 인터랙션.
  * @param {{nodes: Object[], links: Object[]}} graph buildGraph() 출력
  * @param {{container: string|HTMLElement}} [opts]
- * @returns {Object} controller (graph3d, setRotation, resetCamera, setLinkTypeVisibility, highlightNode, onSelect)
+ * @returns {Object} controller (graph3d, setRotation, resetCamera, setLabelFields, setLinkTypeVisibility, highlightNode, onSelect)
  */
 export function render(graph, opts = {}) {
   const el =
@@ -79,6 +79,21 @@ export function render(graph, opts = {}) {
   let selectedId = null;
   let rotating = true;
   const linkVisible = { hub: true, affiliation: true, interest: true };
+  // 호버 툴팁 구성(우측 설정 패널 "라벨 표시"가 제어 — 상시 라벨 아닌 호버 조합).
+  const labelFields = { name: true, age: false, nickname: false, interest: false };
+  const LABEL_INTEREST_MAX = 3; // 관심사 라벨 시 표시할 상위 태그 수
+
+  // labelFields에 켜진 항목만 member에서 뽑아 호버 HTML 라벨로 조합.
+  const buildLabel = (n) => {
+    const m = n.member || {};
+    const lines = [];
+    if (labelFields.name) lines.push(m.name ?? n.name);
+    if (labelFields.age && Number.isFinite(m.age)) lines.push(`나이 ${m.age}`);
+    if (labelFields.nickname && m.nickname) lines.push(m.nickname);
+    if (labelFields.interest && m.interestTags?.length)
+      lines.push(m.interestTags.slice(0, LABEL_INTEREST_MAX).join(" · "));
+    return lines.length ? lines.join("\n") : (m.name ?? n.name); // 전부 꺼져도 이름은 표시
+  };
 
   const isActive = (id) =>
     selectedId == null || id === selectedId || neighbors.get(selectedId)?.has(id);
@@ -107,7 +122,7 @@ export function render(graph, opts = {}) {
     .nodeVal((n) => n.val)
     .nodeOpacity(NODE_OPACITY)
     .nodeColor(nodeColor)
-    .nodeLabel((n) => n.name) // 호버 HTML 툴팁(3D 씬 밖 → 블룸 영향 없음)
+    .nodeLabel(buildLabel) // 호버 HTML 툴팁(3D 씬 밖 → 블룸 영향 없음), 구성은 labelFields가 제어
     .linkVisibility((l) => linkVisible[l.type])
     .linkColor(linkColor)
     .linkWidth(linkWidth)
@@ -194,6 +209,12 @@ export function render(graph, opts = {}) {
     /** 카메라 줌 리셋 — 전체 그래프가 보이도록 맞춤. */
     resetCamera() {
       graph3d.zoomToFit(800, 80);
+    },
+    /** 호버 툴팁 라벨 구성 토글 (name/age/nickname/interest). */
+    setLabelFields(field, on) {
+      if (!(field in labelFields)) return;
+      labelFields[field] = !!on;
+      graph3d.nodeLabel(buildLabel);
     },
     /** 엣지 유형 표시 토글 (hub/affiliation/interest). */
     setLinkTypeVisibility(type, visible) {
