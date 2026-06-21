@@ -41,6 +41,9 @@ assets/
     node-horizontal.svg # 가로 락업(아이콘+워드마크+태그라인)
     node-stack.svg      # 세로 스택 락업
     favicon.svg         # 파비콘(16/32px 단순화)
+  og/               # 링크 공유 미리보기(Open Graph)
+    og-image.png        # 공유 카드 썸네일(1200×630, 서빙용)
+    og-image.html       # og-image.png 렌더 소스(chromium 캡처로 재생성)
 DESIGN.md           # 디자인 시스템(토큰) — 페이지 크롬 한정(그래프 레이어는 비구속)
 ```
 

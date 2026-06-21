@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<!--
+  og-image.html — OG 공유 카드(1200×630)의 렌더 소스.
+  서빙 대상은 og-image.png(이 파일을 chromium으로 캡처). 재생성:
+    npx playwright screenshot --browser chromium --viewport-size 1200,630 \
+      --wait-for-timeout 2500 file://<abs>/assets/og/og-image.html assets/og/og-image.png
+  색은 css/tokens.css 토큰 값과 동일(#101010 / #00d992 / #8b949e / #bdbdbd / #ffffff).
+-->
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+KR:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1200px; height: 630px; }
+      body {
+        background: #101010;
+        font-family: "Inter", "Noto Sans KR", system-ui, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 40px;
+        position: relative;
+        overflow: hidden;
+      }
+      /* 은은한 외곽 하어라인 프레임 (드롭섀도 대신) */
+      .frame {
+        position: absolute;
+        inset: 32px;
+        border: 1px solid #3d3a39;
+        border-radius: 24px;
+      }
+      .mark { width: 200px; height: 200px; display: block; }
+      .wordmark {
+        font-size: 132px;
+        font-weight: 700;
+        letter-spacing: -3px;
+        color: #ffffff;
+        line-height: 1;
+      }
+      .tagline {
+        font-size: 34px;
+        font-weight: 400;
+        letter-spacing: 6px;
+        text-transform: uppercase;
+        color: #8b949e;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="frame"></div>
+    <svg class="mark" viewBox="0 0 48 48">
+      <circle cx="24" cy="24" r="15" fill="none" stroke="#8b949e" stroke-width="2" />
+      <circle cx="34.6" cy="13.4" r="3" fill="#bdbdbd" />
+      <circle cx="24" cy="24" r="5" fill="#00d992" />
+    </svg>
+    <div class="wordmark">NODE</div>
+    <div class="tagline">Network Of Domain Experts</div>
+  </body>
+</html>
