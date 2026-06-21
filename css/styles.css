@@ -58,12 +58,12 @@ button {
   gap: var(--space-sm);
 }
 
-.brand-dot {
+.brand-mark {
   align-self: center;
-  width: var(--space-md);
-  height: var(--space-md);
-  border-radius: var(--radius-full);
-  background: var(--color-primary); /* 액센트 — 로고 점 */
+  width: var(--space-2xl);
+  height: var(--space-2xl);
+  flex-shrink: 0;
+  display: block;
 }
 
 .brand-name {
@@ -370,6 +370,22 @@ button {
   font-size: var(--text-caption-size);
   line-height: var(--text-caption-line);
   color: var(--color-mute);
+}
+
+/* 푸터 브랜드 마크 — 좌측 배치 후 메타 정보를 우측으로 밀어냄 */
+.footer-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-inline-end: auto;
+  color: var(--color-body);
+}
+
+.footer-mark {
+  width: var(--space-lg);
+  height: var(--space-lg);
+  flex-shrink: 0;
+  display: block;
 }
 
 /* ============ 컴포넌트: 배지 · 칩 · 버튼 ============ */

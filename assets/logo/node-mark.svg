@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" role="img" aria-labelledby="node-mark-title">
+  <title id="node-mark-title">NODE</title>
+  <!-- 궤도 링 (뮤트) -->
+  <circle cx="24" cy="24" r="15" fill="none" stroke="#8b949e" stroke-width="2"/>
+  <!-- 위성 노드 (뮤트, 궤도 위) -->
+  <circle cx="34.6" cy="13.4" r="3" fill="#bdbdbd"/>
+  <!-- 중심 허브 (액센트 그린) -->
+  <circle cx="24" cy="24" r="5" fill="#00d992"/>
+</svg>

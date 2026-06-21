@@ -35,6 +35,12 @@ js/
   panels.js         # 좌측 상세 / 우측 설정 패널 바인딩
 data/
   snapshot.csv      # fetch 실패 시 폴백(수동 갱신)
+assets/
+  logo/             # 브랜드 SVG 자산(오빗 단일노드 컨셉)
+    node-mark.svg       # 아이콘 단독
+    node-horizontal.svg # 가로 락업(아이콘+워드마크+태그라인)
+    node-stack.svg      # 세로 스택 락업
+    favicon.svg         # 파비콘(16/32px 단순화)
 DESIGN.md           # 디자인 시스템(토큰) — 페이지 크롬 한정(그래프 레이어는 비구속)
 ```
 
