@@ -4,7 +4,7 @@
 
 이 문서는 [docs/PRD.md](PRD.md)(v1.0)를 기반으로, **운영자 유광명을 중심 허브로 한 33명 AI 도메인 전문가 네트워크를 지식그래프로 시각화하는 제로빌드 정적 웹 대시보드**를 단계별로 구현하기 위한 작업 계획서입니다. 각 작업에는 진행 현황을 기록할 수 있는 체크박스(`- [ ]`)가 포함되어 있습니다.
 
-> **개정 노트 (Phase 0~7 완료 후, 2026-06):** Phase 5의 중앙 시각화는 여러 차례 개편되었습니다(초기 3D 구형 → 2D D3 방사형 → **현재 인터랙티브 3D 방사형, 3d-force-graph/Three.js**). 아래 Phase 5 항목의 "구형 글로브/자동 회전" 등 일부 서술은 레거시이며, 현재 구현은 `js/render.js`(드래그 회전+관성·씬 안 SpriteText 라벨·엣지 flow·노드-노드 엣지·**경력 표기**·비녹색 팔레트)와 [CLAUDE.md](../CLAUDE.md)를 따릅니다.
+> **개정 노트 (Phase 0~7 완료 후, 2026-06):** Phase 5의 중앙 시각화는 여러 차례 개편되었습니다(초기 3D 구형 → 2D D3 방사형 → **현재 인터랙티브 3D 방사형, 3d-force-graph/Three.js**). 아래 Phase 5 항목의 "구형 글로브/자동 회전" 등 일부 서술은 레거시이며, 현재 구현은 `js/render.js`(드래그 회전+관성·CSS2D 고정크기 라벨·엣지 flow·노드-노드 엣지·**경력 표기**·DESIGN.md 색 준용)와 [CLAUDE.md](../CLAUDE.md)를 따릅니다.
 
 **현재 구현 상태:** 사실상 백지 상태. 저장소에는 Next.js 보일러플레이트(`package.json`, `next.config.ts`, `Dockerfile` 등)만 존재하며 PRD가 미사용을 명시함. `index.html`·`css/`·`js/`·실제 데이터(`data/snapshot.csv`)는 모두 부재. [DESIGN.md](../DESIGN.md)(디자인 토큰)와 [docs/PRD.md](PRD.md)는 완성되어 구현 준비 완료.
 

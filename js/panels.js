@@ -85,7 +85,7 @@ function detailHtml(member, conn) {
     <dl class="detail-stats">
       <div class="detail-stat">
         <dt class="detail-stat-label">경력</dt>
-        <dd class="detail-stat-value">${esc(member.career)}년차</dd>
+        <dd class="detail-stat-value">${Number.isFinite(member.career) ? `${member.career}년` : "—"}</dd>
       </div>
       <div class="detail-stat">
         <dt class="detail-stat-label">협업 since</dt>

@@ -14,7 +14,7 @@
 |---|---|
 | 마크업/스타일 | HTML5, CSS (DESIGN.md 토큰을 CSS 변수로 매핑) |
 | 로직 | 바닐라 JavaScript (ES Modules), 프레임워크·빌드 없음 |
-| 그래프 | [3d-force-graph](https://github.com/vasturiano/3d-force-graph) + [Three.js](https://threejs.org/) + three-spritetext — 인터랙티브 3D 렌더·드래그 회전·엣지 flow (CDN ESM) |
+| 그래프 | [3d-force-graph](https://github.com/vasturiano/3d-force-graph) + [Three.js](https://threejs.org/) + CSS2DRenderer — 인터랙티브 3D 렌더·드래그 회전·엣지 flow·고정크기 라벨 (CDN ESM) |
 | CSV 파싱 | [PapaParse](https://www.papaparse.com/) (CDN) |
 | 데이터 | Google Sheets 런타임 CSV fetch → 실패 시 `data/snapshot.csv` 폴백 |
 | 배포 | 리포 루트 정적 파일 → GitHub Pages (빌드 없음) |
@@ -32,7 +32,7 @@
 │   ├── data.js         # CSV fetch·폴백·PapaParse 파싱
 │   ├── normalize.js    # 동의어 맵·정규화·결측치 처리
 │   ├── graph.js        # buildGraph(): 노드/엣지 모델 + 추론
-│   ├── render.js       # 3d-force-graph 3D 렌더·드래그 회전·SpriteText 라벨·엣지 flow·선택
+│   ├── render.js       # 3d-force-graph 3D 렌더·드래그 회전·CSS2D 고정크기 라벨·엣지 flow·선택
 │   └── panels.js       # 좌측 상세 / 우측 설정 패널
 ├── data/
 │   └── snapshot.csv    # fetch 실패 시 폴백 스냅샷 (수동 갱신)

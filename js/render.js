@@ -153,20 +153,20 @@ export function render(graph, opts = {}) {
     const incident = selectedId == null || s === selectedId || t === selectedId;
     return incident ? EDGE_COLORS[l.type] : COLOR.dim;
   };
-  // 굵기: 허브=0(가는 1px 라인, 점선 가능) · 노드-노드는 튜브로 더 두드러지게.
+  // 굵기: 허브=0(가는 1px 점선 라인) · 노드-노드는 튜브로 더 두드러지게(약간 더 굵게).
   const linkWidth = (l) =>
-    l.type === "hub" ? 0 : l.type === "affiliation" ? 0.8 : 0.5;
-  // flow 파티클 — 강조 대상인 소속(녹색) 엣지에만(허브는 거슬려서 제거).
+    l.type === "hub" ? 0 : l.type === "affiliation" ? 1.1 : 0.8;
+  // flow 파티클 — 허브(흰색)·소속(녹색) 엣지에 흐름. 관심사는 정적.
   const particleCount = (l) =>
-    linkVisible[l.type] && l.type === "affiliation" ? 2 : 0;
+    linkVisible[l.type] && (l.type === "hub" || l.type === "affiliation") ? 2 : 0;
 
   // 허브 엣지 점선 머티리얼(가는 흰색) — width=0 라인에만 적용. computeLineDistances 필요(onEngineStop).
   const hubDashMaterial = new THREE.LineDashedMaterial({
     color: new THREE.Color(EDGE_COLORS.hub),
     transparent: true,
-    opacity: 0.45,
-    dashSize: 2.5,
-    gapSize: 2,
+    opacity: 0.38, // 조금 더 가늘고 옅게(거슬리지 않게)
+    dashSize: 2.2,
+    gapSize: 2.2,
   });
   const linkMaterial = (l) => (l.type === "hub" ? hubDashMaterial : undefined);
 
