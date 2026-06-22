@@ -33,6 +33,11 @@
   --label-interest: #6fb6d6; /* 뮤트 스카이 */
   --label-affiliation: #ccab74; /* 뮤트 샌드 */
 
+  /* 그래프 협업 엣지 — 노드간 과거 협력 관계 강조용 황금색(그래프 레이어 한정).
+   * 녹색(소속/관심사)과 의도적으로 대비되는 따뜻한 골드 계열로 협업 관계를 즉시 식별.
+   * (오렌지 #ff9f45는 bloom 가산광에서 붉게 보여 황금색으로 조정.) */
+  --graph-collaboration: #ffe07a;
+
   /* ===== 타이포 ===== */
   /* Latin은 Inter, 한글은 Noto Sans KR로 폴스루(Inter엔 한글 글리프 없음). */
   --font-sans: "Inter", "Noto Sans KR", system-ui, -apple-system, sans-serif;

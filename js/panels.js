@@ -13,7 +13,7 @@ function buildConnCounts(graph) {
   const rawId = (e) => (typeof e === "object" && e !== null ? e.id : e);
   const counts = new Map();
   for (const n of graph.nodes) {
-    counts.set(n.id, { hub: 0, affiliation: 0, interest: 0 });
+    counts.set(n.id, { hub: 0, affiliation: 0, interest: 0, collaboration: 0 });
   }
   for (const l of graph.links) {
     const s = rawId(l.source);
@@ -75,7 +75,7 @@ function detailHtml(member, conn) {
     chipSectionHtml("희망사항", member.wishTags),
   ].filter(Boolean).join("");
 
-  const c = conn || { hub: 0, affiliation: 0, interest: 0 };
+  const c = conn || { hub: 0, affiliation: 0, interest: 0, collaboration: 0 };
 
   return `<div class="detail-header">
       <h2 class="detail-name">${esc(member.name)}${nick}</h2>
@@ -102,6 +102,7 @@ function detailHtml(member, conn) {
         <span class="detail-conn-item">허브 <b>${c.hub}</b></span>
         <span class="detail-conn-item">소속 <b>${c.affiliation}</b></span>
         <span class="detail-conn-item">관심사 <b>${c.interest}</b></span>
+        <span class="detail-conn-item">협업 <b>${c.collaboration}</b></span>
       </div>
     </div>`;
 }

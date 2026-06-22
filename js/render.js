@@ -35,6 +35,7 @@ const EDGE_COLORS = {
   hub: css("--color-ink"), // 허브 엣지 = 밝은 흰색(가는 점선 — 은은한 가이드)
   affiliation: css("--color-primary"), // 소속 엣지 = 진한 녹색(덜 알려진 관계 강조)
   interest: css("--color-primary-soft"), // 관심사 엣지 = 연한 녹색(소속과 톤 구분)
+  collaboration: css("--graph-collaboration"), // 협업 엣지 = 밝은 오렌지(과거 협력 관계 강조)
 };
 
 // ── 렌더 튜닝 상수 ──
@@ -84,7 +85,7 @@ export function render(graph, opts = {}) {
 
   // ── 런타임 상태(controller가 변경) ──
   let selectedId = null;
-  const linkVisible = { hub: true, affiliation: true, interest: true };
+  const linkVisible = { hub: true, affiliation: true, interest: true, collaboration: true };
   const labelFields = { name: true, career: false, nickname: false, interest: false, affiliation: false };
   const labelDivs = new Map(); // id -> CSS2D 라벨 div(dim 제어)
 
@@ -153,12 +154,21 @@ export function render(graph, opts = {}) {
     const incident = selectedId == null || s === selectedId || t === selectedId;
     return incident ? EDGE_COLORS[l.type] : COLOR.dim;
   };
-  // 굵기: 허브=0(가는 1px 점선 라인) · 노드-노드는 튜브로 더 두드러지게(약간 더 굵게).
+  // 굵기: 허브=0(가는 1px 점선 라인) · 노드-노드는 튜브로 더 두드러지게(협업 엣지를 가장 굵게 강조).
   const linkWidth = (l) =>
-    l.type === "hub" ? 0 : l.type === "affiliation" ? 1.1 : 0.8;
-  // flow 파티클 — 허브(흰색)·소속(녹색) 엣지에 흐름. 관심사는 정적.
+    l.type === "hub"
+      ? 0
+      : l.type === "collaboration"
+        ? 1.4
+        : l.type === "affiliation"
+          ? 1.1
+          : 0.8;
+  // flow 파티클 — 허브(흰색)·소속(녹색)·협업(오렌지) 엣지에 흐름. 관심사는 정적.
   const particleCount = (l) =>
-    linkVisible[l.type] && (l.type === "hub" || l.type === "affiliation") ? 2 : 0;
+    linkVisible[l.type] &&
+    (l.type === "hub" || l.type === "affiliation" || l.type === "collaboration")
+      ? 2
+      : 0;
 
   // 허브 엣지 점선 머티리얼(가는 흰색) — width=0 라인에만 적용. computeLineDistances 필요(onEngineStop).
   const hubDashMaterial = new THREE.LineDashedMaterial({

@@ -24,8 +24,8 @@ import { BASE_YEAR } from "./normalize.js";
  * @typedef {Object} GraphLink
  * @property {number} source       노드 id
  * @property {number} target       노드 id
- * @property {"hub"|"affiliation"|"interest"} type
- * @property {number} weight       hub: max(1, 2026-협업시점) / 그 외: 공유 키 개수
+ * @property {"hub"|"affiliation"|"interest"|"collaboration"} type
+ * @property {number} weight       hub: max(1, 2026-협업시점) / 그 외: 공유 키(또는 협업) 개수
  * @property {string[]=} shared    공유 소속 또는 공유 태그
  */
 
@@ -111,7 +111,38 @@ function hubLinks(members) {
 }
 
 /**
- * 엣지 추론 (PRD §7.4): (A)허브 + (B)소속공유 + (C)관심사공유 → dedupe.
+ * (D) 협업 엣지 — 협업 컬럼에 기록된 이름을 노드 id로 매칭해 노드-노드 연결.
+ * 방향 무시(무방향) + 자기참조/미매칭 이름은 건너뛴다. 같은 이름이 여러 명이면 첫 매칭만.
+ * @param {Object[]} members NormalizedMember[]
+ * @returns {GraphLink[]}
+ */
+function collaborationLinks(members) {
+  // 이름 → id 매칭 맵(동명이인 방어: 최초 1회만 등록).
+  const idByName = new Map();
+  for (const m of members) {
+    const key = (m.name ?? "").trim();
+    if (key && !idByName.has(key)) idByName.set(key, m.id);
+  }
+
+  const links = [];
+  for (const m of members) {
+    for (const rawName of m.collaborators ?? []) {
+      const targetId = idByName.get(rawName.trim());
+      if (targetId == null || targetId === m.id) continue; // 미매칭/자기참조 제외
+      links.push({
+        source: m.id,
+        target: targetId,
+        type: "collaboration",
+        shared: [rawName.trim()],
+        weight: 1,
+      });
+    }
+  }
+  return links;
+}
+
+/**
+ * 엣지 추론 (PRD §7.4): (A)허브 + (B)소속공유 + (C)관심사공유 + (D)협업 → dedupe.
  * @param {Object[]} members NormalizedMember[]
  * @returns {GraphLink[]}
  */
@@ -155,6 +186,9 @@ export function buildLinks(members) {
       });
     }
   });
+
+  // (D) 협업 — 협업 컬럼 기록 이름을 노드-노드 엣지로(전체 멤버 대상).
+  links.push(...collaborationLinks(members));
 
   return dedupe(links);
 }

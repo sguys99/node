@@ -91,6 +91,18 @@ button {
   color: var(--color-body);
 }
 
+.repo-link {
+  display: inline-flex;
+  align-items: center;
+  color: var(--color-body);
+  transition: color 0.15s ease;
+}
+
+.repo-link:hover,
+.repo-link:focus-visible {
+  color: var(--color-ink);
+}
+
 /* ============ 메인 3분할 ============ */
 .app-main {
   display: grid;

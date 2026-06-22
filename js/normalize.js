@@ -117,6 +117,7 @@ function median(nums) {
  * @property {string[]} doingTags     하는일 표준 태그
  * @property {string[]} interestTags  관심사 표준 태그
  * @property {string[]} wishTags      희망사항 표준 태그
+ * @property {string[]} collaborators 협업 컬럼 — 과거 협력한 사람 이름(콤마 분리, 관계 추론용)
  */
 
 /**
@@ -182,6 +183,8 @@ export function normalize(rawRows) {
       doingTags: toCanonicalTags(row["하는일"]),
       interestTags: toCanonicalTags(row["관심사"]),
       wishTags: toCanonicalTags(row["희망사항"]),
+      // 협업: 과거 협력한 사람 이름 목록(콤마 분리). 동의어 통합 없이 trim만 — graph.js에서 이름→id 매칭.
+      collaborators: splitOrgs(row["협업"]),
     };
   });
 

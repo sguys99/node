@@ -63,7 +63,7 @@ async function bootstrap() {
   const count = (t) => graph.links.filter((l) => l.type === t).length;
   console.info(
     `[NODE] 그래프 생성: 노드 ${graph.nodes.length}, 엣지 ${graph.links.length}` +
-      `(hub/aff/interest=${count("hub")}/${count("affiliation")}/${count("interest")})`
+      `(hub/aff/interest/collab=${count("hub")}/${count("affiliation")}/${count("interest")}/${count("collaboration")})`
   );
 
   // 인터랙티브 3D 지식그래프 렌더 + 인터랙션. controller는 좌/우 패널 제어에 사용.
