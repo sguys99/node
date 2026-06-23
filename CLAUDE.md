@@ -4,7 +4,7 @@
 
 ## 프로젝트 개요
 
-**NODE (Network Of Domain Experts)** — AI 도메인 전문가 36명(확장 가능)의 소셜 네트워크를, 운영자 **유광명**을 중심 허브로 한 **인터랙티브 3D 지식그래프(3d-force-graph/Three.js)**로 시각화하는 **제로빌드 정적 웹 대시보드**.
+**NODE (Network Of Domain Experts)** — AI 도메인 전문가 43명(확장 가능)의 소셜 네트워크를, 운영자 **유광명**을 중심 허브로 한 **인터랙티브 3D 지식그래프(3d-force-graph/Three.js)**로 시각화하는 **제로빌드 정적 웹 대시보드**.
 
 - 운영자가 구글시트만 수정하면 런타임 CSV fetch로 대시보드에 즉시 반영된다.
 - 빌드 도구·백엔드·DB 없이 `index.html`을 리포 루트에서 GitHub Pages로 서빙한다.
@@ -99,7 +99,7 @@ fetch(SHEET_CSV_URL) ──실패──▶ fetch(data/snapshot.csv)
 ## 검증 / 실행
 
 - **로컬 실행**: 정적 서버로 루트를 서빙(예: `python3 -m http.server`) 후 브라우저로 `index.html` 확인. `file://` 직접 열기는 ES Module/fetch에서 CORS 문제가 날 수 있음.
-- **수동 검증**: 콘솔 에러 없이 CDN 로드, 36노드 3D 렌더, 허브 중심 고정, 출처 배지, 라벨/엣지 토글 반영.
+- **수동 검증**: 콘솔 에러 없이 CDN 로드, 44노드 3D 렌더, 허브 중심 고정, 출처 배지, 라벨/엣지 토글 반영.
 - **E2E**: Playwright(MCP)로 로드 → 렌더 → 드래그 회전 → 노드 클릭 → 상세(경력) → 라벨/엣지 토글 → Reset view 플로우 확인. (헤드리스 WebGL은 `--use-angle=swiftshader` 플래그 필요.)
 - **성능 목표**: 인터랙션 60fps, 초기 렌더(폴백 포함) 3초 이내.
 
