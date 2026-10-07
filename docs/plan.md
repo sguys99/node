@@ -191,6 +191,33 @@
 
 ---
 
+## Phase 8: Command HUD 리디자인
+
+**목표:** 화면·그래프를 관제(HUD) 감성으로 개편 + 검색·연결 탐색·인트로·OG 갱신 ([스펙](superpowers/specs/2026-10-07-hud-redesign-design.md) · [구현 계획](superpowers/plans/2026-10-07-hud-redesign.md))
+**의존성:** Phase 7
+
+### 8-1. 시안·설계
+- [x] 시안 3종(Orbit·Aurora·Command HUD) 프로토타입 비교 → C 선택, 노드 발광 피드백으로 Blip 노드 확정
+- [x] 설계 스펙·구현 계획 작성
+
+### 8-2. 순수 로직(`node --test`)
+- [x] `layout.js`(연차 반경) · `findClusters` · `stats.js` · `labels.js`(문구·충돌 배치) · `search.js`(매칭) — 단위 테스트 22건
+
+### 8-3. 크롬·그래프·인터랙션
+- [x] 풀블리드 그래프 + HUD 패널·KPI·상태줄·로딩 HUD, HUD 토큰
+- [x] 레이더 원반 레이아웃·Blip 노드·허브 오빗·라벨 충돌 정리·선택 레티클·fly-to
+- [x] 검색(⌘K)·연결 목록 탐색·인트로(reduced-motion 대응)·WebGL 실패 안내
+- [x] 색관리 버그 수정(outputColorSpace sRGB), Collaboration 토글 IA 수정
+
+### 8-4. 검증·산출물
+- [x] E2E(데스크톱 12항목·모바일 5항목) 통과, 콘솔 에러 0
+- [x] 반응형(1440/820/390px) 확인
+- [x] OG 이미지 HUD 디자인으로 재생성
+
+**검증:** `node --test` 통과, E2E 플로우 통과, styles.css 인라인 hex 0건.
+
+---
+
 ## Phase 의존성 다이어그램
 
 ```
@@ -209,6 +236,8 @@ Phase 0 (정리·골격)
                                   └── Phase 6 (좌/우 패널)
                                             │
                                             └── Phase 7 (통합 검증·배포)
+                                                      │
+                                                      └── Phase 8 (Command HUD 리디자인)
 ```
 
 ---
@@ -239,7 +268,9 @@ Phase 0 (정리·골격)
 - `js/data.js` — fetch·폴백·PapaParse 파싱 (Phase 2)
 - `js/normalize.js` — 동의어 맵·정규화·결측치 (Phase 3)
 - `js/graph.js` — `buildGraph()`·엣지 추론 (Phase 4)
-- `js/render.js` — 3d-force-graph 설정·인터랙션 (Phase 5)
-- `js/panels.js` — 좌측 상세·우측 설정 패널 (Phase 6)
+- `js/render.js` — 3d-force-graph 설정·인터랙션 (Phase 5, Phase 8 재작성)
+- `js/scene.js` · `js/nodes.js` · `js/camera.js` — HUD 무대·노드·카메라 (Phase 8)
+- `js/layout.js` · `js/stats.js` · `js/labels.js` · `js/search.js` — 순수 로직 (Phase 8, `tests/`)
+- `js/panels.js` — KPI·요약/상세·설정·검색 연결 (Phase 6, Phase 8 재작성)
 - `js/main.js` — 부트스트랩 오케스트레이션 (Phase 5)
 - `data/snapshot.csv` — fetch 실패 시 폴백 스냅샷 (Phase 2)

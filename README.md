@@ -14,7 +14,8 @@
 |---|---|
 | 마크업/스타일 | HTML5, CSS (DESIGN.md 토큰을 CSS 변수로 매핑) |
 | 로직 | 바닐라 JavaScript (ES Modules), 프레임워크·빌드 없음 |
-| 그래프 | [3d-force-graph](https://github.com/vasturiano/3d-force-graph) + [Three.js](https://threejs.org/) + CSS2DRenderer — 인터랙티브 3D 렌더·드래그 회전·엣지 flow·고정크기 라벨 (CDN ESM) |
+| 그래프 | [3d-force-graph](https://github.com/vasturiano/3d-force-graph) + [Three.js](https://threejs.org/) + CSS2DRenderer + d3-force-3d — Command HUD 레이더 원반 레이아웃·Blip 노드·라벨 충돌 정리·fly-to (CDN ESM) |
+| 테스트 | Node 22 내장 테스트 러너(`node --test`) — 순수 로직 단위 테스트, 설치·설정 없음 |
 | CSV 파싱 | [PapaParse](https://www.papaparse.com/) (CDN) |
 | 데이터 | Google Sheets 런타임 CSV fetch → 실패 시 `data/snapshot.csv` 폴백 |
 | 배포 | 리포 루트 정적 파일 → GitHub Pages (빌드 없음) |
@@ -23,20 +24,36 @@
 
 ```
 / (repo root, GitHub Pages 루트)
-├── index.html          # 헤더 / 3분할 본문 / 푸터, CDN <script>
+├── index.html          # 풀블리드 그래프 + HUD(헤더 검색·KPI·좌우 패널·상태줄), CDN <script>
 ├── css/
-│   ├── tokens.css      # DESIGN.md 토큰 → CSS 변수 매핑
-│   └── styles.css      # 레이아웃·패널·반응형
+│   ├── tokens.css      # DESIGN.md 토큰(+HUD 확장) → CSS 변수 매핑
+│   └── styles.css      # HUD 레이아웃·패널·반응형
 ├── js/
 │   ├── main.js         # 부트스트랩 오케스트레이션 (엔트리)
 │   ├── data.js         # CSV fetch·폴백·PapaParse 파싱
 │   ├── normalize.js    # 동의어 맵·정규화·결측치 처리
-│   ├── graph.js        # buildGraph(): 노드/엣지 모델 + 추론
-│   ├── render.js       # 3d-force-graph 3D 렌더·드래그 회전·CSS2D 고정크기 라벨·엣지 flow·선택
-│   └── panels.js       # 좌측 상세 / 우측 설정 패널
+│   ├── graph.js        # buildGraph(): 노드/엣지 모델 + 추론, findClusters()
+│   ├── layout.js       # 원반 레이아웃 반경(인연 기간 → 궤도)
+│   ├── stats.js        # KPI·네트워크 요약 통계
+│   ├── labels.js       # 라벨 문구·충돌 배치
+│   ├── search.js       # 검색 매칭·입력 바인딩
+│   ├── render.js       # 3d-force-graph 구성·선택·fly-to·controller
+│   ├── scene.js        # 배경·레이더 그리드·연차 링·스윕·블룸
+│   ├── nodes.js        # Blip/허브 노드·라벨·선택 레티클
+│   ├── camera.js       # 홈 시점·fly-to·인트로
+│   └── panels.js       # KPI·좌측 요약/상세·우측 설정·상태줄
+├── tests/              # node --test 단위 테스트
 ├── data/
 │   └── snapshot.csv    # fetch 실패 시 폴백 스냅샷 (수동 갱신)
-└── DESIGN.md           # 디자인 시스템(토큰) — 페이지 크롬 한정(그래프 레이어는 비구속)
+└── DESIGN.md           # 디자인 시스템(토큰) + Command HUD 확장
+```
+
+## 테스트
+
+순수 로직(레이아웃 반경·클러스터·통계·라벨 배치·검색)은 Node 22 내장 테스트 러너로 검증합니다. 설치나 설정 파일은 필요 없습니다.
+
+```bash
+node --test
 ```
 
 ## 데이터 갱신 (Google Sheet)

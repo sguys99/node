@@ -519,3 +519,30 @@ Code-editor mockups render as image-like cards with copy-to-clipboard affordance
 - Don't drop a soft drop-shadow on cards. The brand uses hairlines + occasional glow, never material shadows.
 - Don't render the hero headline in heavy weight (700+). The brand's display is intentionally calm at weight 400.
 - Don't replace Inter or SF Mono with a different family — both faces are part of the brand's voice and pairing.
+
+
+## NODE Command HUD 확장 (2026-10)
+
+NODE 대시보드는 위 디자인 언어를 기반으로 **관제(HUD) 확장**을 적용한다. 토큰은 `css/tokens.css`의 `--hud-*` 블록이 단일 출처다. 위 Do's/Don'ts와 다른 점만 적는다.
+
+### 색
+- `--hud-canvas` `#070a09` — 그래프·페이지 배경(그린 기운의 near-black). `--hud-canvas-glow` `#0f1a14` — 중심부 글로우.
+- `--hud-ink` `#d7f5e8` — 수치·이름(민트 화이트). `--hud-dim` `#4f8f74` — 라벨·eyebrow. `--hud-faint` `#2f5c49` — 힌트.
+- `--hud-grid` `#1f6b4f` / `--hud-grid-soft` `#123d2e` — 레이더 그리드. `--hud-blip` `#5fcf9f` — 일반 노드.
+- `--hud-frame` — 패널 프레임 선(primary 22%). `--graph-collaboration` `#ffd65a` — 협업 엣지.
+- **본문 그린 규칙 완화:** 액센트 `{colors.primary}`는 여전히 본문 금지(로고·Live·허브·활성 토글·코너 브래킷 전용). 저채도 녹회색 HUD 잉크(`--hud-ink`·`--hud-dim`)는 본문 허용.
+
+### 타이포
+- UI 크롬(eyebrow·KPI·버튼·토글·라벨 보조 줄·숫자)은 **JetBrains Mono**(`--font-hud`), 한글은 Noto Sans KR로 폴스루.
+- 이름·조직명·상세 본문 등 한글 위주 텍스트는 `--font-sans`(Inter → Noto Sans KR).
+- 한글 eyebrow에 넓은 자간을 쓰지 않는다 — eyebrow는 영문 대문자(`// NETWORK`).
+
+### 형태·깊이
+- HUD 패널·버튼·칩은 `--radius-hud` 2px(각진 형태). pill은 쓰지 않는다.
+- 패널: 반투명 배경 + 블러 + 1px 프레임 + 좌상·우하 코너 브래킷(primary). 드롭섀도 금지는 유지.
+- 전체 화면에 미세 스캔라인(`--hud-scan`).
+
+### 그래프
+- 노드는 발광하지 않는다: 일반 = Blip(링+점 평면 마커), 허브 = 그린 구체 + 로고 오빗 모티프. 블룸은 허브 후광에만.
+- 엣지: 소속 = primary, 협업 = `--graph-collaboration`, 관심사 = primary-soft, 허브 = `--hud-dim` 옅은 점선. 가산 혼합 없음.
+- flow 파티클은 선택 노드의 소속·협업 엣지에만. 애니메이션은 레이더 스윕·허브 위성·인트로뿐이며 `prefers-reduced-motion`에서 모두 생략.
