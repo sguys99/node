@@ -1,10 +1,14 @@
 <!DOCTYPE html>
 <!--
-  og-image.html — OG 공유 카드(1200×630)의 렌더 소스.
+  og-image.html — OG 공유 카드(1200×630)의 렌더 소스(Command HUD 디자인).
   서빙 대상은 og-image.png(이 파일을 chromium으로 캡처). 재생성:
     npx playwright screenshot --browser chromium --viewport-size 1200,630 \
       --wait-for-timeout 2500 file://<abs>/assets/og/og-image.html assets/og/og-image.png
-  색은 css/tokens.css 토큰 값과 동일(#101010 / #00d992 / #8b949e / #bdbdbd / #ffffff).
+  색은 css/tokens.css 토큰 값과 동일:
+    --hud-canvas #070a09 / --hud-canvas-glow #0f1a14 / --hud-grid #1f6b4f / --hud-grid-soft #123d2e
+    --hud-ink #d7f5e8 / --hud-dim #4f8f74 / --hud-blip #5fcf9f / --color-primary #00d992
+    --graph-collaboration #ffd65a / --color-mute #8b949e / --color-body #bdbdbd
+  인원수 등 변하는 수치는 넣지 않는다(공유 카드가 낡지 않도록).
 -->
 <html lang="ko">
   <head>
@@ -12,55 +16,194 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+KR:wght@400;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap"
       rel="stylesheet"
     />
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
       html, body { width: 1200px; height: 630px; }
       body {
-        background: #101010;
-        font-family: "Inter", "Noto Sans KR", system-ui, sans-serif;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 40px;
         position: relative;
         overflow: hidden;
+        background: radial-gradient(circle at 70% 52%, #0f1a14 0%, #070a09 62%);
+        font-family: "JetBrains Mono", ui-monospace, monospace;
+        color: #d7f5e8;
       }
-      /* 은은한 외곽 하어라인 프레임 (드롭섀도 대신) */
+      /* 스캔라인 */
+      body::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 0 1px, transparent 1px 3px);
+      }
+      /* HUD 프레임 + 코너 브래킷 */
       .frame {
         position: absolute;
         inset: 32px;
-        border: 1px solid #3d3a39;
-        border-radius: 24px;
+        border: 1px solid rgba(0, 217, 146, 0.22);
+        border-radius: 2px;
       }
-      .mark { width: 200px; height: 200px; display: block; }
+      .frame::before,
+      .frame::after {
+        content: "";
+        position: absolute;
+        width: 28px;
+        height: 28px;
+        border: 3px solid #00d992;
+      }
+      .frame::before { top: -2px; left: -2px; border-right: 0; border-bottom: 0; }
+      .frame::after { bottom: -2px; right: -2px; border-left: 0; border-top: 0; }
+
+      .radar { position: absolute; inset: 0; }
+
+      .copy {
+        position: absolute;
+        left: 88px;
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        flex-direction: column;
+        gap: 22px;
+      }
+      .eyebrow {
+        font-size: 18px;
+        letter-spacing: 0.32em;
+        text-transform: uppercase;
+        color: #4f8f74;
+      }
+      .eyebrow b { color: #00d992; font-weight: 500; }
+      .lockup { display: flex; align-items: center; gap: 28px; }
+      .mark { width: 112px; height: 112px; display: block; }
       .wordmark {
-        font-size: 132px;
+        font-size: 112px;
         font-weight: 700;
-        letter-spacing: -3px;
-        color: #ffffff;
+        letter-spacing: 0.16em;
         line-height: 1;
+        color: #ffffff;
       }
       .tagline {
-        font-size: 34px;
-        font-weight: 400;
-        letter-spacing: 6px;
+        font-size: 24px;
+        letter-spacing: 0.3em;
         text-transform: uppercase;
-        color: #8b949e;
+        color: #d7f5e8;
+      }
+      .status {
+        display: flex;
+        gap: 12px;
+        margin-top: 6px;
+      }
+      .chip {
+        padding: 8px 14px;
+        border: 1px solid rgba(0, 217, 146, 0.35);
+        border-radius: 2px;
+        font-size: 16px;
+        letter-spacing: 0.08em;
+        color: #4f8f74;
+        background: rgba(5, 10, 8, 0.8);
+      }
+      .chip.live { color: #00d992; }
+      .chip.live::before {
+        content: "";
+        display: inline-block;
+        width: 9px;
+        height: 9px;
+        margin-right: 10px;
+        border-radius: 50%;
+        background: #00d992;
+        vertical-align: 1px;
       }
     </style>
   </head>
   <body>
+    <svg class="radar" viewBox="0 0 1200 630" aria-hidden="true"></svg>
     <div class="frame"></div>
-    <svg class="mark" viewBox="0 0 48 48">
-      <circle cx="24" cy="24" r="15" fill="none" stroke="#8b949e" stroke-width="2" />
-      <circle cx="34.6" cy="13.4" r="3" fill="#bdbdbd" />
-      <circle cx="24" cy="24" r="5" fill="#00d992" />
-    </svg>
-    <div class="wordmark">NODE</div>
-    <div class="tagline">Network Of Domain Experts</div>
+
+    <div class="copy">
+      <p class="eyebrow"><b>//</b> Interactive 3D map</p>
+      <div class="lockup">
+        <svg class="mark" viewBox="0 0 48 48">
+          <circle cx="24" cy="24" r="15" fill="none" stroke="#8b949e" stroke-width="2" />
+          <circle cx="34.6" cy="13.4" r="3" fill="#bdbdbd" />
+          <circle cx="24" cy="24" r="5" fill="#00d992" />
+        </svg>
+        <div class="wordmark">NODE</div>
+      </div>
+      <p class="tagline">Network Of Domain Experts</p>
+      <div class="status">
+        <span class="chip live">Live</span>
+        <span class="chip">Knowledge Graph</span>
+        <span class="chip">AI Experts</span>
+      </div>
+    </div>
+
+    <script>
+      // 기울어진 레이더 원반(타원) + Blip 노드 + 허브 오빗. 시드 고정 난수로 항상 같은 그림.
+      const NS = "http://www.w3.org/2000/svg";
+      const svg = document.querySelector(".radar");
+      const el = (tag, attrs) => {
+        const e = document.createElementNS(NS, tag);
+        for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
+        svg.appendChild(e);
+        return e;
+      };
+      let seed = 7;
+      const rand = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+
+      const C = { x: 905, y: 318, rx: 270, ry: 122 };
+      const at = (r, a) => [C.x + r * C.rx * Math.cos(a), C.y + r * C.ry * Math.sin(a)];
+
+      // 방사선 12섹터 + 연차 링
+      for (let i = 0; i < 12; i++) {
+        const [x, y] = at(1, (i / 12) * Math.PI * 2);
+        el("line", { x1: C.x, y1: C.y, x2: x, y2: y, stroke: "#123d2e", "stroke-width": 1 });
+      }
+      [0.24, 0.47, 0.74, 1].forEach((r, i) => {
+        el("ellipse", { cx: C.x, cy: C.y, rx: r * C.rx, ry: r * C.ry, fill: "none",
+          stroke: i === 3 ? "#123d2e" : "#1f6b4f", "stroke-width": 1.2, "stroke-dasharray": i === 3 ? "" : "3 5" });
+      });
+      // 스윕
+      const a0 = -Math.PI * 0.62, a1 = a0 + Math.PI / 7;
+      const [sx0, sy0] = at(1, a0), [sx1, sy1] = at(1, a1);
+      el("path", { d: `M${C.x},${C.y} L${sx0},${sy0} A${C.rx},${C.ry} 0 0 1 ${sx1},${sy1} Z`, fill: "rgba(0,217,146,0.08)" });
+
+      // Blip 노드(군집 3개 + 흩어진 노드)
+      const nodes = [];
+      const cluster = (r, a, n, spread) => {
+        for (let i = 0; i < n; i++) nodes.push([r + (rand() - 0.5) * spread, a + (rand() - 0.5) * spread * 2.2]);
+      };
+      cluster(0.5, -2.2, 7, 0.22);
+      cluster(0.8, 0.6, 8, 0.2);
+      cluster(0.66, -0.8, 6, 0.18);
+      for (let i = 0; i < 12; i++) nodes.push([0.3 + rand() * 0.68, rand() * Math.PI * 2]);
+      const pts = nodes.map(([r, a]) => at(r, a));
+
+      // 엣지: 같은 군집 내부(소속=그린, 일부 협업=골드)
+      const links = [[0, 1], [1, 2], [2, 3], [3, 4], [1, 5], [7, 8], [8, 9], [9, 10], [10, 12], [8, 13], [15, 16], [16, 17], [17, 19], [15, 18]];
+      links.forEach(([s, t], i) => {
+        el("line", { x1: pts[s][0], y1: pts[s][1], x2: pts[t][0], y2: pts[t][1],
+          stroke: i % 4 === 1 ? "#ffd65a" : "#00d992", "stroke-opacity": 0.6, "stroke-width": i % 4 === 1 ? 2.2 : 1.6 });
+      });
+      // 허브 점선 가이드(일부)
+      pts.forEach(([x, y], i) => {
+        if (i % 3 === 0) el("line", { x1: C.x, y1: C.y, x2: x, y2: y, stroke: "#4f8f74", "stroke-opacity": 0.45, "stroke-dasharray": "2 4" });
+      });
+      // Blip = 링 + 중심 점
+      pts.forEach(([x, y]) => {
+        const r = 6 + rand() * 5;
+        el("circle", { cx: x, cy: y, r, fill: "rgba(95,207,159,0.10)", stroke: "#5fcf9f", "stroke-width": 2 });
+        el("circle", { cx: x, cy: y, r: 2.4, fill: "#5fcf9f" });
+      });
+      // 허브 + 오빗 + 위성
+      el("circle", { cx: C.x, cy: C.y, r: 34, fill: "rgba(0,217,146,0.12)" });
+      el("circle", { cx: C.x, cy: C.y, r: 16, fill: "#00d992" });
+      el("ellipse", { cx: C.x, cy: C.y, rx: 38, ry: 16, fill: "none", stroke: "#00d992", "stroke-width": 1.5 });
+      el("circle", { cx: C.x + 34, cy: C.y - 7, r: 4, fill: "#bdbdbd" });
+      // 연차 눈금
+      [["26Y", 0.24], ["16Y", 0.47], ["06Y", 0.74], ["02Y", 1]].forEach(([t, r]) => {
+        const [x, y] = at(r, Math.PI * 0.42);
+        const tx = el("text", { x: x + 6, y: y + 4, fill: "#4f8f74", "font-size": 14, "font-family": "JetBrains Mono, monospace", "letter-spacing": 1 });
+        tx.textContent = t;
+      });
+    </script>
   </body>
 </html>
