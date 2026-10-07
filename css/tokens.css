@@ -33,10 +33,55 @@
   --label-interest: #6fb6d6; /* 뮤트 스카이 */
   --label-affiliation: #ccab74; /* 뮤트 샌드 */
 
-  /* 그래프 협업 엣지 — 노드간 과거 협력 관계 강조용 황금색(그래프 레이어 한정).
-   * 녹색(소속/관심사)과 의도적으로 대비되는 따뜻한 골드 계열로 협업 관계를 즉시 식별.
-   * (오렌지 #ff9f45는 bloom 가산광에서 붉게 보여 황금색으로 조정.) */
-  --graph-collaboration: #ffe07a;
+  /* 그래프 협업 엣지 — 노드간 과거 협력 관계 강조용 골드(그래프 레이어 한정).
+   * 녹색(소속/관심사)과 의도적으로 대비되는 따뜻한 골드 계열로 협업 관계를 즉시 식별. */
+  --graph-collaboration: #ffd65a;
+
+  /* ===== Command HUD (2026-10 리디자인) =====
+   * 규칙: 액센트 그린(--color-primary)은 본문 금지 그대로. 저채도 녹회색 HUD 잉크
+   * (--hud-ink 수치·이름, --hud-dim 라벨·eyebrow)는 본문 허용. 드롭섀도 금지 유지. */
+  --hud-canvas: #070a09; /* 그래프 배경(그린 기운의 near-black) */
+  --hud-canvas-glow: #0f1a14; /* 중심부 은은한 글로우 */
+  --hud-grid: #1f6b4f; /* 레이더 그리드 주선 */
+  --hud-grid-soft: #123d2e; /* 레이더 그리드 보조선 */
+  --hud-ink: #d7f5e8; /* 민트 화이트 — 수치·이름 */
+  --hud-dim: #4f8f74; /* 녹회색 — 라벨·eyebrow·보조 */
+  --hud-faint: #2f5c49; /* 최저 우선순위 힌트 */
+  --hud-blip: #5fcf9f; /* 일반 노드(Blip) */
+  --hud-frame: rgba(0, 217, 146, 0.22); /* 패널 프레임 선 */
+  --hud-frame-strong: rgba(0, 217, 146, 0.45); /* 활성 프레임·포커스 */
+  --hud-panel: rgba(5, 10, 8, 0.72); /* 반투명 패널 배경 */
+  --hud-cell: rgba(5, 10, 8, 0.95); /* KPI·스탯 셀 */
+  --hud-fill: rgba(0, 217, 146, 0.06); /* 호버·활성 채움 */
+  --hud-veil: rgba(7, 10, 9, 0.92); /* 헤더 그라디언트·로딩 오버레이 */
+  --hud-scan: rgba(255, 255, 255, 0.018); /* 스캔라인 */
+  --hud-label-shadow: 0 0 6px rgba(0, 0, 0, 0.95), 0 0 2px #000; /* 그래프 라벨 가독(텍스트 외곽) */
+  --hud-blur: blur(10px);
+  --radius-hud: 2px; /* HUD 패널·버튼 각진 라운딩 */
+  --font-hud: "JetBrains Mono", "Noto Sans KR", ui-monospace, monospace;
+
+  /* HUD 타이포 */
+  --text-hud-micro: 9px; /* KPI 키 */
+  --text-hud-mini: 10px; /* 링 눈금·상태줄 */
+  --text-hud-label: 11px; /* eyebrow·라벨 보조 */
+  --text-hud-body: 12px; /* 패널 본문 */
+  --text-hud-kpi: 18px; /* KPI 값 */
+  --text-hud-hero: 56px; /* 요약 패널 대표 수치 */
+  --tracking-hud: 0.2em;
+  --tracking-hud-wide: 0.3em;
+  --text-graph-main: 13px; /* 그래프 라벨 이름 */
+  --text-graph-sub: 11px; /* 그래프 라벨 보조 줄 */
+  --text-graph-hub: 15px; /* 허브 이름 */
+
+  /* HUD 치수 */
+  --hud-header-h: 64px;
+  --hud-gutter: 20px;
+  --hud-kpi-top: 64px;
+  --hud-panel-top: 140px;
+  --hud-status-h: 32px;
+  --hud-bracket: 12px; /* 패널 코너 브래킷 길이 */
+  --hud-search-w: 420px;
+  --panel-width-right: 260px;
 
   /* ===== 타이포 ===== */
   /* Latin은 Inter, 한글은 Noto Sans KR로 폴스루(Inter엔 한글 글리프 없음). */
@@ -98,11 +143,12 @@
   --glow-hover: 0 0 15px rgba(92, 88, 85, 0.2); /* Level 2 호버 글로우 */
 
   /* ===== 레이아웃 ===== */
-  --panel-width: 280px;
+  --panel-width: 300px;
 
-  /* ===== 그래프 시각화 (인터랙티브 3D — 3d-force-graph) =====
-   * 그래프 색은 DESIGN.md 토큰(--color-*)을 그대로 준용한다(원복):
-   *   허브 노드/엣지 = --color-primary(그린), 일반 노드 = --color-body(그레이),
-   *   소속 엣지 = --color-body, 관심사 엣지 = --color-mute, 배경 = --color-canvas.
-   * (render.js가 위 --color-* 를 직접 read.) */
+  /* ===== 그래프 시각화 (Command HUD — 3d-force-graph) =====
+   * render 계열 모듈(render/scene/nodes)이 아래 변수를 read 한다(JS 하드코딩 hex 금지):
+   *   배경 = --hud-canvas(+--hud-canvas-glow), 레이더 = --hud-grid/--hud-grid-soft,
+   *   허브 노드 = --color-primary, 일반 노드 = --hud-blip(Blip 마커, 무발광),
+   *   소속 엣지 = --color-primary, 관심사 = --color-primary-soft,
+   *   협업 = --graph-collaboration, 허브 엣지 = --hud-dim 옅은 점선. */
 }

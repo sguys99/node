@@ -36,30 +36,33 @@
     />
     <meta name="twitter:image" content="https://sguys99.github.io/node/assets/og/og-image.png" />
 
-    <!-- 웹폰트: Inter(Latin) + Noto Sans KR(한글) -->
+    <!-- 웹폰트: JetBrains Mono(HUD 크롬) + Inter(Latin) + Noto Sans KR(한글) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap"
       rel="stylesheet"
     />
 
-    <!-- 디자인 토큰 → CSS 변수 매핑 (Phase 1) -->
+    <!-- 디자인 토큰 → CSS 변수 매핑 -->
     <link rel="stylesheet" href="css/tokens.css" />
-    <!-- 레이아웃·패널·반응형 (Phase 1) -->
+    <!-- Command HUD 레이아웃·패널·반응형 -->
     <link rel="stylesheet" href="css/styles.css" />
 
     <!-- CDN 라이브러리 (제로빌드, ES Modules) -->
-    <!-- three·3d-force-graph·three-spritetext·UnrealBloomPass는 render.js에서 esm.sh로
+    <!-- three·3d-force-graph·d3-force-3d·UnrealBloomPass는 render/scene/nodes.js에서 esm.sh로
          ESM import한다(?deps=three@0.180.0 으로 단일 three 인스턴스 공유). -->
     <!-- PapaParse (UMD 전역 Papa) — gviz CSV 파싱(독립 라이브러리) -->
     <script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
   </head>
 
   <body>
+    <!-- ============ 그래프 (풀블리드 — 모든 크롬은 그 위 오버레이) ============ -->
+    <div id="graph" class="graph-canvas" role="img" aria-label="전문가 네트워크 3D 지식그래프"></div>
+
     <!-- ============ HEADER ============ -->
-    <header class="app-header">
-      <div class="brand">
+    <header class="hud-header">
+      <a class="brand" href="./" aria-label="NODE 홈">
         <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
           <circle cx="24" cy="24" r="15" fill="none" stroke="var(--color-mute)" stroke-width="2" />
           <circle cx="34.6" cy="13.4" r="3" fill="var(--color-body)" />
@@ -67,10 +70,40 @@
         </svg>
         <span class="brand-name">NODE</span>
         <span class="brand-tagline">Network Of Domain Experts</span>
+      </a>
+
+      <div class="search" role="search">
+        <button id="search-toggle" type="button" class="search-toggle" aria-label="검색 열기">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2" />
+            <path d="M20 20l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          </svg>
+        </button>
+        <label class="search-box">
+          <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2" />
+            <path d="M20 20l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          </svg>
+          <span class="visually-hidden">전문가·조직 검색</span>
+          <input
+            id="search-input"
+            type="search"
+            placeholder="Search experts or organizations"
+            role="combobox"
+            aria-autocomplete="list"
+            aria-expanded="false"
+            aria-controls="search-list"
+            autocomplete="off"
+            spellcheck="false"
+          />
+          <kbd class="search-kbd">⌘K</kbd>
+        </label>
+        <ul id="search-list" class="search-list" role="listbox" aria-label="검색 결과" hidden></ul>
       </div>
+
       <div class="header-meta">
-        <span id="node-count" class="node-count">— nodes</span>
         <span id="data-source-badge" class="source-badge" data-source="">…</span>
+        <span id="node-count" class="node-count">— nodes</span>
         <a
           class="repo-link"
           href="https://github.com/sguys99/node"
@@ -79,7 +112,7 @@
           aria-label="GitHub 저장소 열기"
           title="GitHub 저장소"
         >
-          <svg viewBox="0 0 16 16" width="20" height="20" aria-hidden="true" focusable="false">
+          <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
             <path
               fill="currentColor"
               d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"
@@ -89,78 +122,84 @@
       </div>
     </header>
 
-    <!-- ============ MAIN (3분할) ============ -->
-    <main class="app-main">
-      <!-- 좌측: 인력 상세 패널 (Phase 6) -->
-      <aside id="detail-panel" class="panel panel-left" aria-label="인력 상세">
-        <p class="panel-eyebrow">상세</p>
-        <p id="detail-placeholder" class="panel-placeholder">
-          노드를 선택하면 상세 정보가 표시됩니다
-        </p>
-        <div id="detail-content" class="detail-content" hidden></div>
-      </aside>
+    <!-- ============ KPI 스트립 (panels.js가 채움) ============ -->
+    <section id="kpis" class="kpis" aria-label="네트워크 지표"></section>
 
-      <!-- 중앙: 인터랙티브 3D 지식그래프 캔버스 -->
-      <section class="graph-wrap" aria-label="지식그래프">
-        <div id="graph" class="graph-canvas"></div>
-        <!-- 폴백 실패 시 에러 안내 UI (Phase 2) -->
-        <div id="error-ui" class="error-ui" hidden>
-          <p class="error-msg">데이터를 불러오지 못했습니다.</p>
-          <button id="retry-btn" type="button" class="retry-btn">다시 시도</button>
+    <!-- ============ 좌측: 네트워크 요약 / 인력 상세 ============ -->
+    <aside id="detail-panel" class="hud-panel panel-left" aria-label="Network detail">
+      <div id="detail-body" class="detail-body"></div>
+    </aside>
+
+    <!-- ============ 우측: 표시 설정 ============ -->
+    <aside id="settings-panel" class="hud-panel panel-right" aria-label="Display settings">
+      <!-- 태블릿 = 상단 접이식 / 모바일 = 하단 시트 핸들. 데스크톱은 CSS로 숨김 -->
+      <button id="settings-handle" type="button" class="panel-handle"
+              aria-controls="settings-panel" aria-expanded="false">
+        <span class="panel-handle-grip" aria-hidden="true"></span>
+        <span class="panel-handle-label">Display</span>
+      </button>
+
+      <div class="settings-body">
+        <p class="hud-eyebrow">Display</p>
+
+        <div class="settings-group">
+          <p class="hud-label">Labels</p>
+          <div class="seg" role="group" aria-label="Labels">
+            <button type="button" class="seg-btn" data-label="name" aria-pressed="true">Name</button>
+            <button type="button" class="seg-btn" data-label="affiliation" aria-pressed="true">Org</button>
+            <button type="button" class="seg-btn" data-label="career" aria-pressed="false">Career</button>
+            <button type="button" class="seg-btn" data-label="nickname" aria-pressed="false">Nick</button>
+            <button type="button" class="seg-btn" data-label="interest" aria-pressed="false">Interests</button>
+          </div>
         </div>
-      </section>
 
-      <!-- 우측: 시각화 설정 패널 (Phase 6) -->
-      <aside id="settings-panel" class="panel panel-right" aria-label="Visualization settings">
-        <!-- 모바일 전용 하단 핸들 바(peek) — 탭하면 시트 펼침. 데스크톱/태블릿은 CSS로 숨김 -->
-        <button id="settings-handle" type="button" class="panel-handle"
-                aria-controls="settings-panel" aria-expanded="false">
-          <span class="panel-handle-grip" aria-hidden="true"></span>
-          <span class="panel-handle-label">Settings</span>
-        </button>
-        <p class="panel-eyebrow">Settings</p>
+        <div class="settings-group">
+          <p class="hud-label">Relations</p>
+          <div class="rel-list" role="group" aria-label="Relations">
+            <button type="button" class="rel" data-edge="affiliation" aria-pressed="true">
+              <span class="sw sw-affiliation" aria-hidden="true"></span>Affiliation<em data-count>—</em>
+            </button>
+            <button type="button" class="rel" data-edge="collaboration" aria-pressed="true">
+              <span class="sw sw-collaboration" aria-hidden="true"></span>Collaboration<em data-count>—</em>
+            </button>
+            <button type="button" class="rel" data-edge="interest" aria-pressed="false">
+              <span class="sw sw-interest" aria-hidden="true"></span>Interest<em data-count>—</em>
+            </button>
+            <button type="button" class="rel" data-edge="hub" aria-pressed="true">
+              <span class="sw sw-hub" aria-hidden="true"></span>Hub<em data-count>—</em>
+            </button>
+          </div>
+        </div>
 
-        <fieldset class="settings-group">
-          <legend>Labels</legend>
-          <label><input type="checkbox" name="label" value="name" checked /> Name</label>
-          <label><input type="checkbox" name="label" value="career" /> Career</label>
-          <label><input type="checkbox" name="label" value="nickname" /> Nickname</label>
-          <label><input type="checkbox" name="label" value="interest" /> Interests</label>
-          <label><input type="checkbox" name="label" value="affiliation" checked /> Affiliation</label>
-          <!-- 협업 엣지 표시 토글 — 노드간 밝은 오렌지 협력 관계(name="edge"로 엣지 가시성 제어). 디폴트 체크. -->
-          <label><input type="checkbox" name="edge" value="collaboration" checked /> Collaboration</label>
-        </fieldset>
+        <div class="settings-group">
+          <button id="zoom-reset" type="button" class="hud-btn">Reset view</button>
+        </div>
+      </div>
+    </aside>
 
-        <fieldset class="settings-group">
-          <legend>Edges</legend>
-          <label><input type="checkbox" name="edge" value="hub" checked /> Hub</label>
-          <label><input type="checkbox" name="edge" value="affiliation" checked /> Affiliation</label>
-          <label><input type="checkbox" name="edge" value="interest" /> Interest</label>
-        </fieldset>
-
-        <fieldset class="settings-group">
-          <legend>View</legend>
-          <button id="zoom-reset" type="button" class="ctrl-btn">Reset view</button>
-        </fieldset>
-      </aside>
-    </main>
-
-    <!-- ============ FOOTER ============ -->
-    <footer class="app-footer">
-      <span class="footer-brand">
-        <svg class="footer-mark" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
-          <circle cx="24" cy="24" r="15" fill="none" stroke="var(--color-mute)" stroke-width="2" />
-          <circle cx="34.6" cy="13.4" r="3" fill="var(--color-body)" />
-          <circle cx="24" cy="24" r="5" fill="var(--color-primary)" />
-        </svg>
-        NODE
-      </span>
-      <span>Source: Google Sheet</span>
-      <span>Owner: Kwang Myung Yu</span>
-      <span>Update: 2026-06</span>
+    <!-- ============ 하단 상태줄 ============ -->
+    <footer class="status-bar">
+      <span class="status-item">SRC <b id="status-src">—</b></span>
+      <span class="status-item">OWNER <b>Kwang Myung Yu</b></span>
+      <span class="status-item">SYNC <b id="status-sync">—</b></span>
+      <span class="status-hint">Drag to rotate · Scroll to zoom · Click a node</span>
     </footer>
 
-    <!-- 엔트리 (Phase 5: load → normalize → buildGraph → render 오케스트레이션) -->
+    <!-- ============ 로딩 HUD (main.js가 토글) ============ -->
+    <div id="loading-hud" class="loading-hud" role="status" aria-live="polite">
+      <p class="loading-title">// Linking sheet</p>
+      <div class="loading-bar" aria-hidden="true"><i></i></div>
+      <p id="loading-sub" class="loading-sub">Fetching Google Sheet…</p>
+    </div>
+
+    <!-- ============ 에러 UI (로드·WebGL 실패) ============ -->
+    <div id="error-ui" class="hud-panel error-ui" role="alert" hidden>
+      <p class="hud-eyebrow">Error</p>
+      <p id="error-msg" class="error-msg">데이터를 불러오지 못했습니다.</p>
+      <button id="retry-btn" type="button" class="hud-btn is-primary">다시 시도</button>
+    </div>
+
+    <!-- 엔트리: load → normalize → buildGraph → render → panels → intro -->
     <script type="module" src="js/main.js"></script>
   </body>
 </html>
