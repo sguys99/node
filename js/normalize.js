@@ -63,6 +63,12 @@ export function toCanonicalTags(cell) {
 }
 
 /**
+ * 소속 매칭에서 제외할 값(orgKey 기준). 특정 조직이 아닌 고용 형태라 공유해도 관계가 아니다.
+ * 표시값(현직장)은 그대로 두고 affiliationKeys에서만 뺀다. 새 값은 orgKey 형태로 추가.
+ */
+export const NON_ORG_KEYS = new Set(["자영업", "프리랜서"]);
+
+/**
  * 소속 매칭 키 정규화 — 내부/양끝 공백 제거 + 소문자.
  * `LG 전자`·`LG전자` → 동일 키(`lg전자`). 표시값은 바꾸지 않고 매칭에만 쓴다.
  * @param {string=} name
@@ -165,9 +171,13 @@ export function normalize(rawRows) {
     const company = (row["현직장"] ?? "").trim();
     const pastOrgs = splitOrgs(row["과거 경력"]);
 
-    // 소속 매칭 키: 현직장 ∪ 과거경력 → orgKey → dedupe + 공란 제거
+    // 소속 매칭 키: 현직장 ∪ 과거경력 → orgKey → dedupe + 공란·비조직(NON_ORG_KEYS) 제거
     const affiliationKeys = [
-      ...new Set([company, ...pastOrgs].map(orgKey).filter(Boolean)),
+      ...new Set(
+        [company, ...pastOrgs]
+          .map(orgKey)
+          .filter((k) => k && !NON_ORG_KEYS.has(k))
+      ),
     ];
 
     return {

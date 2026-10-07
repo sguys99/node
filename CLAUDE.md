@@ -4,7 +4,7 @@
 
 ## 프로젝트 개요
 
-**NODE (Network Of Domain Experts)** — AI 도메인 전문가 50명(확장 가능)의 소셜 네트워크를, 운영자 **유광명**을 중심 허브로 한 **인터랙티브 3D 지식그래프(3d-force-graph/Three.js)**로 시각화하는 **제로빌드 정적 웹 대시보드**.
+**NODE (Network Of Domain Experts)** — AI 도메인 전문가 51명(확장 가능)의 소셜 네트워크를, 운영자 **유광명**을 중심 허브로 한 **인터랙티브 3D 지식그래프(3d-force-graph/Three.js)**로 시각화하는 **제로빌드 정적 웹 대시보드**.
 
 - 운영자가 구글시트만 수정하면 런타임 CSV fetch로 대시보드에 즉시 반영된다.
 - 빌드 도구·백엔드·DB 없이 `index.html`을 리포 루트에서 GitHub Pages로 서빙한다.
@@ -80,7 +80,7 @@ fetch(SHEET_CSV_URL) ──실패──▶ fetch(data/snapshot.csv)
 - **중심 허브**: 유광명 노드 `isHub=true`, `fx=fy=fz=0`으로 3D 정중앙 고정.
 - **엣지 추론**(`js/graph.js`, PRD §7.4):
   - (A) `hub`: 유광명↔전원, `weight = 2026 - 협업시점`.
-  - (B) `affiliation`: 소속 공유(현직장 ∪ 과거경력, 교차 일치 포함) — **항상 생성**(노드-노드 간).
+  - (B) `affiliation`: 소속 공유(현직장 ∪ 과거경력, 교차 일치 포함) — **항상 생성**(노드-노드 간). 자영업 등 비조직 값(`NON_ORG_KEYS`)은 매칭 제외.
   - (C) `interest`: 표준 태그 `INTEREST_THRESHOLD = 2` 이상 중첩 시만(헤어볼 방지).
   - `dedupe(links)`로 동일 쌍은 type별 1개로 정리.
 - **3D 인터랙티브 렌더**(`js/render.js`):
@@ -88,7 +88,7 @@ fetch(SHEET_CSV_URL) ──실패──▶ fetch(data/snapshot.csv)
   - 드래그 회전 + 관성(trackball damping). **자동 회전 없음**(과한 애니메이션 회피).
   - 입체 구체 노드(라이팅 음영 + 은은한 bloom), **CSS2D HTML 고정크기 라벨**(줌 무관 일정 px, 우측 토글), 허브 이름 기본 노출.
 - **엣지 시각**: 허브 = 가는 흰색 점선(굵기 일정, weight 무관 — 거슬리지 않게 물러남). 노드-노드(소속/관심사) = 녹색 튜브로 강조. flow 파티클은 **소속(녹색) 엣지에만**(허브는 제거). 노드 선택 시 노드-노드 incident만 강조·나머지 dim. 우측 `Edges` 토글로 type별 표시.
-- **확장성**: `SYNONYM_MAP`·관계 추론 임계값·기준 연도(2026)는 상수/객체로 분리해 갱신 가능하게 유지.
+- **확장성**: `SYNONYM_MAP`·`NON_ORG_KEYS`·관계 추론 임계값·기준 연도(2026)는 상수/객체로 분리해 갱신 가능하게 유지.
 - **관계 검증 군집**(소속 엣지로 나타나야 함): 지아이비타 · 마키나락스 · PwC · 포스코이엔씨 · 한국전력공사.
 
 ## 작업 흐름
@@ -99,7 +99,7 @@ fetch(SHEET_CSV_URL) ──실패──▶ fetch(data/snapshot.csv)
 ## 검증 / 실행
 
 - **로컬 실행**: 정적 서버로 루트를 서빙(예: `python3 -m http.server`) 후 브라우저로 `index.html` 확인. `file://` 직접 열기는 ES Module/fetch에서 CORS 문제가 날 수 있음.
-- **수동 검증**: 콘솔 에러 없이 CDN 로드, 51노드 3D 렌더, 허브 중심 고정, 출처 배지, 라벨/엣지 토글 반영.
+- **수동 검증**: 콘솔 에러 없이 CDN 로드, 52노드 3D 렌더, 허브 중심 고정, 출처 배지, 라벨/엣지 토글 반영.
 - **E2E**: Playwright(MCP)로 로드 → 렌더 → 드래그 회전 → 노드 클릭 → 상세(경력) → 라벨/엣지 토글 → Reset view 플로우 확인. (헤드리스 WebGL은 `--use-angle=swiftshader` 플래그 필요.)
 - **성능 목표**: 인터랙션 60fps, 초기 렌더(폴백 포함) 3초 이내.
 
