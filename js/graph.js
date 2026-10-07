@@ -218,3 +218,69 @@ export function dedupe(links) {
 export function buildGraph(members) {
   return { nodes: buildNodes(members), links: buildLinks(members) };
 }
+
+// 대표 조직명 산정에서 제외할 고용 형태(normalize.NON_ORG_KEYS의 표시값).
+const NON_ORG_DISPLAY = new Set(["자영업", "프리랜서"]);
+
+/**
+ * 클러스터 = 소속·협업 엣지로 이어진 연결요소(허브 제외, 2명 이상).
+ * 크기 내림차순(동률은 최소 멤버 id 오름차순)으로 id를 0부터 부여하고,
+ * 구성원 표시 조직의 최빈값을 클러스터 이름으로 쓴다.
+ * @param {{nodes: GraphNode[], links: GraphLink[]}} graph
+ * @returns {{ list: {id:number, name:string, size:number, memberIds:number[]}[],
+ *             byNode: Map<number, {id:number, name:string, size:number}> }}
+ */
+export function findClusters(graph) {
+  const id = (e) => (typeof e === "object" && e !== null ? e.id : e);
+  const hubIds = new Set(graph.nodes.filter((n) => n.isHub).map((n) => n.id));
+
+  // union-find(루트 = 작은 id)
+  const parent = new Map(graph.nodes.map((n) => [n.id, n.id]));
+  const find = (x) => {
+    while (parent.get(x) !== x) x = parent.get(x);
+    return x;
+  };
+  for (const l of graph.links) {
+    if (l.type !== "affiliation" && l.type !== "collaboration") continue;
+    const s = id(l.source);
+    const t = id(l.target);
+    if (hubIds.has(s) || hubIds.has(t)) continue;
+    const rs = find(s);
+    const rt = find(t);
+    if (rs !== rt) parent.set(Math.max(rs, rt), Math.min(rs, rt));
+  }
+
+  const groups = new Map();
+  for (const n of graph.nodes) {
+    if (hubIds.has(n.id)) continue;
+    const r = find(n.id);
+    if (!groups.has(r)) groups.set(r, []);
+    groups.get(r).push(n);
+  }
+
+  const list = [...groups.values()]
+    .filter((g) => g.length > 1)
+    .map((g) => g.sort((a, b) => a.id - b.id))
+    .sort((a, b) => b.length - a.length || a[0].id - b[0].id)
+    .map((g, i) => ({ id: i, name: topOrgName(g), size: g.length, memberIds: g.map((n) => n.id) }));
+
+  const byNode = new Map();
+  for (const c of list) {
+    for (const mid of c.memberIds) byNode.set(mid, { id: c.id, name: c.name, size: c.size });
+  }
+  return { list, byNode };
+}
+
+/** 구성원 표시 조직(멤버당 1회) 최빈값. 동률은 이름순. */
+function topOrgName(nodes) {
+  const freq = new Map();
+  for (const n of nodes) {
+    const m = n.member || {};
+    for (const org of new Set([m.company, ...(m.pastOrgs || [])])) {
+      if (!org || NON_ORG_DISPLAY.has(org)) continue;
+      freq.set(org, (freq.get(org) || 0) + 1);
+    }
+  }
+  const top = [...freq.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))[0];
+  return top?.[0] ?? "Cluster";
+}
