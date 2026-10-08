@@ -4,7 +4,7 @@
 
 ## 프로젝트 개요
 
-**NODE (Network Of Domain Experts)** — AI 도메인 전문가 51명(확장 가능)의 소셜 네트워크를, 운영자 **유광명**을 중심 허브로 한 **인터랙티브 3D 지식그래프(3d-force-graph/Three.js)**로 시각화하는 **제로빌드 정적 웹 대시보드**.
+**NODE (Network Of Domain Experts)** — AI 도메인 전문가 52명(확장 가능)의 소셜 네트워크를, 운영자 **유광명**을 중심 허브로 한 **인터랙티브 3D 지식그래프(3d-force-graph/Three.js)**로 시각화하는 **제로빌드 정적 웹 대시보드**.
 
 - 운영자가 구글시트만 수정하면 런타임 CSV fetch로 대시보드에 즉시 반영된다.
 - 빌드 도구·백엔드·DB 없이 `index.html`을 리포 루트에서 GitHub Pages로 서빙한다.
@@ -116,7 +116,7 @@ fetch(SHEET_CSV_URL) ──실패──▶ fetch(data/snapshot.csv)
 
 - **로컬 실행**: 정적 서버로 루트를 서빙(예: `python3 -m http.server`) 후 브라우저로 `index.html` 확인. `file://` 직접 열기는 ES Module/fetch에서 CORS 문제가 날 수 있음.
 - **단위 테스트**: 리포 루트에서 `node --test`(인자 없이 — `tests/*.test.js` 자동 탐색, Node 22+). 순수 모듈(layout/graph/stats/labels/search)만 대상.
-- **수동 검증**: 콘솔 에러 없이 CDN 로드, 52노드 3D 렌더, 허브 중심 고정, 출처 배지, 라벨/관계 토글 반영.
+- **수동 검증**: 콘솔 에러 없이 CDN 로드, 53노드 3D 렌더, 허브 중심 고정, 출처 배지, 라벨/관계 토글 반영.
 - **E2E**: Playwright로 로드(인트로) → 노드 클릭/검색(⌘K) → 상세·fly-to → Connections 클릭 이동 → 라벨/관계 토글 → Reset view 플로우 확인. (헤드리스 WebGL은 `--use-angle=swiftshader` 플래그 필요. Playwright는 리포 밖에 설치 — package.json 재도입 금지.)
 - **성능 목표**: 인터랙션 60fps, 초기 렌더(폴백 포함) 3초 이내.
 
