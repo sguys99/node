@@ -49,7 +49,7 @@ python3 -m http.server 8000
 / (repo root, GitHub Pages 루트)
 ├── index.html          # 풀블리드 그래프 + HUD(헤더 검색·KPI·좌우 패널·상태줄), OG 메타, CDN <script>
 ├── css/
-│   ├── tokens.css      # DESIGN.md 토큰(+HUD 확장) → CSS 변수 매핑
+│   ├── tokens.css      # DESIGN.md 토큰 → CSS 변수 매핑
 │   └── styles.css      # HUD 레이아웃·패널·반응형
 ├── js/
 │   ├── main.js         # 부트스트랩 오케스트레이션 (엔트리)
@@ -73,7 +73,7 @@ python3 -m http.server 8000
 │   └── og/             # 링크 공유 카드(og-image.png + 렌더 소스 og-image.html)
 ├── docs/               # PRD·개발 계획서·리디자인 스펙
 ├── design-preview/     # 디자인 시안·결과 스크린샷 (런타임 미사용)
-└── DESIGN.md           # 디자인 시스템(토큰) + Command HUD 확장
+└── DESIGN.md           # 디자인 시스템(Command HUD 토큰·컴포넌트·3D 그래프 시각)
 ```
 
 ## 테스트

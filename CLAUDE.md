@@ -15,9 +15,9 @@
 - **제로빌드**: 빌드 스텝 없음. 프레임워크 없음. HTML5 + CSS + 바닐라 JS(ES Modules) + CDN 라이브러리만 사용한다. Next.js/npm 보일러플레이트는 제거됨 — 재도입 금지.
 - **백엔드/DB 없음**: 모든 처리는 클라이언트에서. API 키·시크릿 없음. 모든 리소스 HTTPS.
 - **단일 진실 원천(SSOT)**: 데이터는 공개 구글시트. 폴백은 `data/snapshot.csv`(동일 스키마, 수동 갱신).
-- **디자인 토큰만 사용**: 색/타이포/스페이싱은 [DESIGN.md](DESIGN.md) 토큰(+ 하단 "Command HUD 확장" 절)을 `css/tokens.css`의 CSS 변수로 매핑해 참조. JS의 그래프 색도 CSS 변수를 read. **인라인 hex 신규 도입 금지, 라이트 모드 없음, 드롭섀도 금지(프레임 선+글로우만), 액센트 그린(`--color-primary`)은 본문 금지**(로고/Live 배지/허브 노드/활성 토글/코너 브래킷 전용). 저채도 녹회색 HUD 잉크(`--hud-ink`·`--hud-dim`)는 본문 허용.
+- **디자인 토큰만 사용**: 색/타이포/스페이싱은 [DESIGN.md](DESIGN.md)(NODE Command HUD 디자인 시스템) 토큰을 `css/tokens.css`의 CSS 변수로 매핑해 참조. JS의 그래프 색도 CSS 변수를 read. **인라인 hex 신규 도입 금지, 라이트 모드 없음, 드롭섀도 금지(프레임 선+글로우만), 액센트 그린(`--color-primary`)은 본문 금지**(로고/Live 배지/허브 노드/활성 토글/코너 브래킷 등 DESIGN.md "액센트" 표의 자리 전용). 저채도 녹회색 HUD 잉크(`--hud-ink`·`--hud-dim`)는 본문 허용.
   - **화면(Command HUD)**: 그래프가 뷰포트 전체를 채우고 헤더(검색)·KPI 스트립·좌측 요약/상세·우측 설정·하단 상태줄을 오버레이. 패널은 `--radius-hud`(2px) + 블러 + 코너 브래킷, 전체 미세 스캔라인.
-  - **중앙 3D 그래프 색**: 배경 = `--hud-canvas`(+`--hud-canvas-glow`), 레이더 = `--hud-grid`/`--hud-grid-soft`. 노드: 허브 = `--color-primary` 구체(+로고 오빗), 일반 = `--hud-blip` **Blip**(링+점 평면 마커, **발광 금지** — "지나치게 반짝인다" 피드백), 선택 노드 = `--hud-ink`. 엣지: 허브 = `--hud-dim` 옅은 점선(가이드), 소속 = `--color-primary`, 관심사 = `--color-primary-soft`, 협업 = `--graph-collaboration`(골드). 가산 혼합 없음, 블룸은 허브 후광에만. (비녹색 다색 팔레트는 "촌스럽다" 피드백 이력 — 도입 금지.)
+  - **중앙 3D 그래프 색**: 배경 = `--hud-canvas`(+`--hud-canvas-glow`), 레이더 = `--hud-grid`/`--hud-grid-soft`. 노드: 허브 = `--color-primary` 구체(+로고 오빗), 일반 = `--hud-blip` **Blip**(링+점 평면 마커, **발광 금지** — "지나치게 반짝인다" 피드백), 선택 노드 = `--hud-ink`. 엣지: 허브 = `--hud-dim` 옅은 점선(가이드), 소속 = `--color-primary`, 관심사 = `--color-primary-soft`, 협업 = `--graph-collaboration`(골드). 노드·엣지는 가산 혼합 없음(가산은 허브 후광·레이더 스윕만), 블룸은 허브 후광에만. (비녹색 다색 팔레트는 "촌스럽다" 피드백 이력 — 도입 금지.)
   - **폰트**: UI 크롬은 **JetBrains Mono**(`--font-hud`), 한글은 **Noto Sans KR**로 폴스루, 한글 위주 본문은 `--font-sans`. 우측 설정 패널 항목은 영어 표기.
 
 ## 파일 구조 (리포 루트 배포)
@@ -25,7 +25,7 @@
 ```
 index.html          # 풀블리드 #graph + HUD 오버레이(헤더 검색·KPI·좌측 상세·우측 설정·상태줄), OG/Twitter 메타, CDN <script>
 css/
-  tokens.css        # DESIGN.md 토큰(+HUD 확장) → CSS 변수 매핑
+  tokens.css        # DESIGN.md 토큰 → CSS 변수 매핑
   styles.css        # HUD 레이아웃·패널·반응형
 js/
   main.js           # 부트스트랩: 로딩 HUD → load → normalize → buildGraph → 클러스터/통계 → render → panels → 인트로
@@ -53,7 +53,7 @@ assets/
   og/               # 링크 공유 미리보기(Open Graph)
     og-image.png        # 공유 카드 썸네일(1200×630, 서빙용)
     og-image.html       # og-image.png 렌더 소스(chromium 캡처로 재생성, HUD 디자인)
-DESIGN.md           # 디자인 시스템(토큰) + Command HUD 확장 절
+DESIGN.md           # 디자인 시스템(Command HUD 토큰·컴포넌트·3D 그래프 시각)
 docs/
   PRD.md            # 요구사항 원천
   plan.md           # Phase 0~8 작업 계획(체크박스)

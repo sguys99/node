@@ -1,117 +1,120 @@
 ---
-version: alpha
-name: Voltagent-design-analysis
-description: An inspired interpretation of Voltagent's design language — a developer-focused AI agent engineering platform whose surface is an unrelenting near-black canvas broken only by a single electric-green brand accent, code-editor mockups inside the hero, and a precise grid of dark feature cards that read like a documentation site dressed as marketing.
+version: hud-1.0
+name: NODE Command HUD
+description: AI 도메인 전문가 네트워크를 레이더 원반 위 3D 지식그래프로 보여주는 관제(HUD)형 다크 대시보드. 그린 기운의 near-black 캔버스, 저채도 민트·녹회색 HUD 잉크, 단 하나의 일렉트릭 그린 액센트, 2px 각진 프레임과 코너 브래킷, JetBrains Mono 크롬으로 이루어진다. 토큰의 단일 출처는 css/tokens.css.
 
+# 키 → CSS 변수: hud-* → --hud-*, graph-* → --graph-*, 그 외 색 → --color-*
 colors:
+  # 액센트
   primary: "#00d992"
   primary-soft: "#2fd6a1"
-  primary-deep: "#10b981"
   on-primary: "#101010"
-  ink: "#f2f2f2"
+  # HUD 표면
+  hud-canvas: "#070a09"
+  hud-canvas-glow: "#0f1a14"
+  hud-panel: "rgba(5, 10, 8, 0.72)"
+  hud-cell: "rgba(5, 10, 8, 0.95)"
+  hud-veil: "rgba(7, 10, 9, 0.92)"
+  hud-fill: "rgba(0, 217, 146, 0.06)"
+  hud-frame: "rgba(0, 217, 146, 0.22)"
+  hud-frame-strong: "rgba(0, 217, 146, 0.45)"
+  hud-scan: "rgba(255, 255, 255, 0.018)"
+  # HUD 잉크
+  hud-ink: "#d7f5e8"
+  hud-dim: "#4f8f74"
+  hud-faint: "#2f5c49"
   ink-strong: "#ffffff"
+  # 그래프
+  hud-grid: "#1f6b4f"
+  hud-grid-soft: "#123d2e"
+  hud-blip: "#5fcf9f"
+  graph-collaboration: "#ffd65a"
+  # 브랜드 마크 중립색(로고 궤도·위성, 허브 위성)
   body: "#bdbdbd"
   mute: "#8b949e"
-  hairline: "#3d3a39"
-  hairline-soft: "#b8b3b0"
-  canvas: "#101010"
-  canvas-soft: "#1a1a1a"
-  canvas-text-soft: "#f5f6f7"
+
+fonts:
+  hud: '"JetBrains Mono", "Noto Sans KR", ui-monospace, monospace'   # --font-hud
+  sans: '"Inter", "Noto Sans KR", system-ui, -apple-system, sans-serif' # --font-sans
 
 typography:
-  display-xl:
-    fontFamily: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif
-    fontSize: 60px
-    fontWeight: 400
-    lineHeight: 60px
-    letterSpacing: -0.65px
-  display-lg:
-    fontFamily: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif
-    fontSize: 36px
-    fontWeight: 400
-    lineHeight: 40px
-    letterSpacing: -0.9px
-  display-md:
-    fontFamily: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif
-    fontSize: 24px
-    fontWeight: 700
-    lineHeight: 32px
-    letterSpacing: -0.6px
-  display-sm:
-    fontFamily: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif
+  brand:
+    fontFamily: "{fonts.hud}"
     fontSize: 20px
+    fontWeight: 700
+    letterSpacing: 0.3em
+  eyebrow:
+    fontFamily: "{fonts.hud}"
+    fontSize: 11px
     fontWeight: 600
-    lineHeight: 28px
-  eyebrow-mono:
-    fontFamily: Inter, system-ui, -apple-system, sans-serif
-    fontSize: 14px
+    letterSpacing: 0.3em
+    textTransform: uppercase
+  label:
+    fontFamily: "{fonts.hud}"
+    fontSize: 11px
     fontWeight: 600
-    lineHeight: 20px
-    letterSpacing: 2.52px
-  eyebrow-uppercase:
-    fontFamily: Inter, system-ui, -apple-system, sans-serif
+    letterSpacing: 0.2em
+    textTransform: uppercase
+  kpi-key:
+    fontFamily: "{fonts.hud}"
+    fontSize: 9px
+    fontWeight: 400
+    letterSpacing: 0.2em
+  kpi-value:
+    fontFamily: "{fonts.hud}"
     fontSize: 18px
     fontWeight: 600
-    lineHeight: 28px
-    letterSpacing: 0.45px
-  body-lg:
-    fontFamily: Inter, system-ui, -apple-system, sans-serif
-    fontSize: 18px
-    fontWeight: 400
-    lineHeight: 28px
-  body-md:
-    fontFamily: Inter, system-ui, -apple-system, sans-serif
-    fontSize: 16px
-    fontWeight: 400
-    lineHeight: 26px
-  body-md-strong:
-    fontFamily: Inter, system-ui, -apple-system, sans-serif
-    fontSize: 16px
+    lineHeight: 1.2
+  hero:
+    fontFamily: "{fonts.hud}"
+    fontSize: 56px
     fontWeight: 600
-    lineHeight: 24px
-  body-sm:
-    fontFamily: Inter, system-ui, -apple-system, sans-serif
-    fontSize: 14px
+    lineHeight: 0.9
+    letterSpacing: -0.02em
+  body:
+    fontFamily: "{fonts.hud}"
+    fontSize: 12px
     fontWeight: 400
     lineHeight: 20px
-  body-sm-strong:
-    fontFamily: Inter, system-ui, -apple-system, sans-serif
-    fontSize: 14px
-    fontWeight: 600
-    lineHeight: 23px
   caption:
-    fontFamily: Inter, system-ui, -apple-system, sans-serif
-    fontSize: 12px
+    fontFamily: "{fonts.hud}"
+    fontSize: 11px
     fontWeight: 400
-    lineHeight: 16px
-  caption-strong:
-    fontFamily: Inter, system-ui, -apple-system, sans-serif
-    fontSize: 12px
-    fontWeight: 500
-    lineHeight: 16px
-  code:
-    fontFamily: SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, monospace
-    fontSize: 13px
+  mini:
+    fontFamily: "{fonts.hud}"
+    fontSize: 10px
     fontWeight: 400
-    lineHeight: 18px
-  code-strong:
-    fontFamily: SFMono-Regular, Menlo, Monaco, Consolas, monospace
-    fontSize: 13px
-    fontWeight: 550
-    lineHeight: 16px
-  button-md:
-    fontFamily: Inter, system-ui, -apple-system, sans-serif
+    letterSpacing: 0.08em
+  name-lg:
+    fontFamily: "{fonts.sans}"
+    fontSize: 20px
+    fontWeight: 700
+    lineHeight: 28px
+  prose:
+    fontFamily: "{fonts.sans}"
+    fontSize: 14px
+    fontWeight: 400
+    lineHeight: 1.5
+  message:
+    fontFamily: "{fonts.sans}"
     fontSize: 16px
+    fontWeight: 400
+  graph-name:
+    fontFamily: "{fonts.sans}"
+    fontSize: 13px
     fontWeight: 600
-    lineHeight: 24px
+  graph-sub:
+    fontFamily: "{fonts.hud}"
+    fontSize: 11px
+    fontWeight: 400
+  graph-hub:
+    fontFamily: "{fonts.sans}"
+    fontSize: 15px
+    fontWeight: 700
 
 rounded:
-  none: 0px
-  xs: 4px
-  sm: 6px
-  md: 8px
-  pill: 9999px
-  full: 9999px
+  hud: 2px      # 모든 패널·버튼·입력·칩·배지
+  full: 9999px  # 원형 점(출처 배지 점), 모바일 시트 핸들 grip
 
 spacing:
   xxs: 2px
@@ -126,423 +129,528 @@ spacing:
   5xl: 48px
   6xl: 64px
 
+layout:
+  header-h: 64px
+  kpi-top: 64px
+  panel-top: 140px
+  status-h: 32px
+  gutter: 20px
+  panel-left: 300px
+  panel-right: 260px
+  search-w: 420px
+  bracket: 12px
+  handle-h: 44px
+  blur: 10px
+
 components:
-  nav-bar:
-    backgroundColor: "{colors.canvas}"
-    textColor: "{colors.ink}"
-    typography: "{typography.body-sm}"
-    padding: "{spacing.md} {spacing.3xl}"
-  nav-link:
-    textColor: "{colors.body}"
-    typography: "{typography.body-sm}"
-  button-primary:
-    backgroundColor: "{colors.primary}"
-    textColor: "{colors.on-primary}"
-    typography: "{typography.button-md}"
-    rounded: "{rounded.sm}"
-    padding: "{spacing.md} {spacing.lg}"
-  button-outline-on-dark:
-    backgroundColor: "{colors.canvas}"
-    textColor: "{colors.ink}"
-    borderColor: "{colors.hairline}"
-    typography: "{typography.button-md}"
-    rounded: "{rounded.sm}"
-    padding: "{spacing.md} {spacing.lg}"
-  button-ghost-green:
-    backgroundColor: "{colors.canvas}"
-    textColor: "{colors.primary-soft}"
-    typography: "{typography.button-md}"
-    rounded: "{rounded.sm}"
-    padding: "{spacing.md} {spacing.lg}"
-  button-pill-tag:
-    backgroundColor: "{colors.canvas}"
-    textColor: "{colors.ink}"
-    borderColor: "{colors.hairline}"
-    typography: "{typography.body-sm}"
-    rounded: "{rounded.pill}"
+  hud-header:
+    background: "linear-gradient(to bottom, {colors.hud-veil}, transparent)"
+    height: "{layout.header-h}"
+    padding: "0 {spacing.2xl}"
+  source-badge:
+    textColor: "{colors.hud-dim}"
+    borderColor: "{colors.hud-frame}"
+    typography: "{typography.body}"
+    fontWeight: 600
+    rounded: "{rounded.hud}"
     padding: "{spacing.xs} {spacing.md}"
-  text-input:
-    backgroundColor: "{colors.canvas-soft}"
-    textColor: "{colors.ink}"
-    borderColor: "{colors.hairline}"
-    typography: "{typography.body-sm}"
-    rounded: "{rounded.sm}"
-    padding: "{spacing.md} {spacing.lg}"
-  card-feature:
-    backgroundColor: "{colors.canvas}"
-    textColor: "{colors.ink}"
-    borderColor: "{colors.hairline}"
-    typography: "{typography.body-md}"
-    rounded: "{rounded.md}"
-    padding: "{spacing.2xl}"
-  card-feature-emphasized:
-    backgroundColor: "{colors.canvas}"
-    textColor: "{colors.ink}"
-    borderColor: "{colors.hairline}"
-    typography: "{typography.body-md}"
-    rounded: "{rounded.md}"
-    padding: "{spacing.xl}"
-  code-mockup:
-    backgroundColor: "{colors.canvas}"
-    textColor: "{colors.ink}"
-    borderColor: "{colors.hairline}"
-    typography: "{typography.code}"
-    rounded: "{rounded.md}"
-    padding: "{spacing.xl}"
-  code-inline-chip:
-    backgroundColor: "{colors.canvas-soft}"
-    textColor: "{colors.canvas-text-soft}"
-    typography: "{typography.code}"
-    rounded: "{rounded.sm}"
-    padding: "{spacing.xxs} {spacing.sm}"
-  hero-band:
-    backgroundColor: "{colors.canvas}"
-    textColor: "{colors.ink}"
-    typography: "{typography.display-xl}"
-    padding: "{spacing.5xl} {spacing.3xl}"
-  content-band:
-    backgroundColor: "{colors.canvas}"
-    textColor: "{colors.ink}"
-    typography: "{typography.display-lg}"
-    padding: "{spacing.5xl} {spacing.3xl}"
-  green-divider-band:
-    backgroundColor: "{colors.canvas}"
+  source-badge-live:
+    textColor: "{colors.primary}"
+    borderColor: "{colors.hud-frame-strong}"
+    backgroundColor: "{colors.hud-fill}"
+  search-box:
+    backgroundColor: "{colors.hud-panel}"
+    borderColor: "{colors.hud-frame}"
+    focusBorderColor: "{colors.hud-frame-strong}"
+    textColor: "{colors.hud-ink}"
+    placeholderColor: "{colors.hud-dim}"
+    rounded: "{rounded.hud}"
+    width: "{layout.search-w}"
+    height: "{spacing.4xl}"
+  search-list:
+    backgroundColor: "{colors.hud-cell}"
+    borderColor: "{colors.hud-frame}"
+    activeRowBackground: "{colors.hud-fill}"
+  kpi-strip:
+    dividerColor: "{colors.hud-frame}"
+    cellBackground: "{colors.hud-cell}"
+    cellPadding: "{spacing.sm} {spacing.lg}"
+    cellMinWidth: 112px
+  hud-panel:
+    backgroundColor: "{colors.hud-panel}"
+    borderColor: "{colors.hud-frame}"
+    rounded: "{rounded.hud}"
+    backdropFilter: "blur({layout.blur})"
+    bracketColor: "{colors.primary}"
+    bracketSize: "{layout.bracket}"
+    bracketWidth: "{spacing.xxs}"
+  stat-grid:
+    dividerColor: "{colors.hud-frame}"
+    cellBackground: "{colors.hud-cell}"
+    cellPadding: "{spacing.sm} {spacing.md}"
+  bar:
+    trackColor: "{colors.hud-fill}"
+    fillColor: "{colors.primary}"
+    fillPattern: "dash 4px / gap 2px"
+    height: "{spacing.sm}"
+  hist:
+    fillColor: "{colors.primary}"
+    fillPattern: "stripe 2px / gap 2px"
+    maxHeight: "{spacing.6xl}"
+  avatar:
+    size: "{spacing.5xl}"
     borderColor: "{colors.primary}"
-  footer:
-    backgroundColor: "{colors.canvas}"
-    textColor: "{colors.body}"
-    typography: "{typography.body-sm}"
-    padding: "{spacing.4xl} {spacing.3xl}"
-
-  # ─── Examples (illustrative) — auto-derived; resolve any TO_FILL markers below ───
-  ex-pricing-tier:
-    description: "Default Pricing tier card. Re-uses feature-card chrome with brand canvas-soft surface."
-    backgroundColor: "{colors.canvas-soft}"
-    textColor: "{colors.ink}"
-    borderColor: "{colors.hairline}"
-    rounded: "{rounded.md}"
-    padding: "{spacing.2xl}"
-  ex-pricing-tier-featured:
-    description: "Featured/highlighted tier — polarity-flipped surface (dark fill + light text in light mode, light fill + dark text in dark mode)."
-    backgroundColor: "{colors.ink}"
+    backgroundColor: "{colors.hud-fill}"
+    textColor: "{colors.primary}"
+    rounded: "{rounded.hud}"
+  chip:
+    borderColor: "{colors.hud-frame}"
+    textColor: "{colors.hud-ink}"
+    fontFamily: "{fonts.sans}"
+    rounded: "{rounded.hud}"
+    padding: "{spacing.xxs} {spacing.sm}"
+  kv-row:
+    keyTypography: "{typography.caption}"
+    keyColor: "{colors.hud-dim}"
+    valueTypography: "{typography.prose}"
+    valueColor: "{colors.hud-ink}"
+    dividerColor: "{colors.hud-frame}"
+  conn-row:
+    hoverBorderColor: "{colors.hud-frame}"
+    hoverBackground: "{colors.hud-fill}"
+    nameColor: "{colors.hud-ink}"
+    viaColor: "{colors.hud-dim}"
+  seg-btn:
+    backgroundColor: transparent
+    borderColor: "{colors.hud-frame}"
+    textColor: "{colors.hud-dim}"
+    rounded: "{rounded.hud}"
+    padding: "{spacing.xs} {spacing.md}"
+  seg-btn-active:
+    backgroundColor: "{colors.primary}"
+    borderColor: "{colors.primary}"
     textColor: "{colors.on-primary}"
-    rounded: "{rounded.md}"
-    padding: "{spacing.2xl}"
-  ex-product-selector:
-    description: "What's Included summary card — re-purposed for SaaS / B2B verticals (NOT a literal product gallery)."
-    backgroundColor: "{colors.canvas-soft}"
-    rounded: "{rounded.md}"
-    padding: "{spacing.2xl}"
-  ex-cart-drawer:
-    description: "Subscription summary — re-purposed for SaaS / B2B (line items per add-on, not literal cart)."
-    backgroundColor: "{colors.canvas}"
-    rounded: "{rounded.md}"
-    padding: "{spacing.2xl}"
-    item-divider: "{colors.hairline}"
-  ex-app-shell-row:
-    description: "Sidebar nav row inside the App Shell example. Active state uses brand primary as the indicator."
-    backgroundColor: "{colors.canvas}"
-    activeIndicator: "{colors.primary}"
-    rounded: "{rounded.sm}"
-    padding: "{spacing.md} {spacing.lg}"
-  ex-data-table-cell:
-    description: "Default data-table th + td chrome. Header uses mono-caps eyebrow typography; body uses body-sm."
-    headerBackground: "{colors.canvas-soft}"
-    headerTypography: "{typography.caption}"
-    bodyTypography: "{typography.body-sm}"
-    cellPadding: "{spacing.md} {spacing.lg}"
-    rowBorder: "{colors.hairline}"
-  ex-auth-form-card:
-    description: "Sign-in / sign-up card. Re-uses feature-card chrome with text-input primitives inside."
-    backgroundColor: "{colors.canvas-soft}"
-    rounded: "{rounded.md}"
-    padding: "{spacing.2xl}"
-  ex-modal-card:
-    description: "Modal dialog surface — same chrome as feature-card with elevated shadow."
-    backgroundColor: "{colors.canvas}"
-    rounded: "{rounded.md}"
-    padding: "{spacing.2xl}"
-  ex-empty-state-card:
-    description: "Empty-state illustration frame."
-    backgroundColor: "{colors.canvas-soft}"
-    rounded: "{rounded.md}"
+    fontWeight: 600
+  rel-toggle:
+    backgroundColor: transparent
+    borderColor: transparent
+    textColor: "{colors.hud-dim}"
+    padding: "{spacing.sm} {spacing.md}"
+  rel-toggle-active:
+    backgroundColor: "{colors.hud-fill}"
+    borderColor: "{colors.hud-frame}"
+    textColor: "{colors.hud-ink}"
+  legend-swatch:
+    width: "{spacing.xl}"
+    height: "{spacing.xs}"
+  hud-btn:
+    backgroundColor: "{colors.hud-fill}"
+    borderColor: "{colors.hud-frame}"
+    hoverBorderColor: "{colors.hud-frame-strong}"
+    textColor: "{colors.hud-ink}"
+    fontWeight: 600
+    rounded: "{rounded.hud}"
+    padding: "{spacing.sm} 0"
+  hud-btn-primary:
+    backgroundColor: "{colors.primary}"
+    borderColor: "{colors.primary}"
+    textColor: "{colors.on-primary}"
+  status-bar:
+    background: "linear-gradient(to top, {colors.hud-veil}, transparent)"
+    height: "{layout.status-h}"
+    typography: "{typography.mini}"
+    textColor: "{colors.hud-faint}"
+    valueColor: "{colors.hud-dim}"
+  loading-hud:
+    backgroundColor: "{colors.hud-veil}"
+    barTrack: "{colors.hud-fill}"
+    barFill: "{colors.primary}"
+  error-ui:
+    surface: "{components.hud-panel}"
     padding: "{spacing.3xl}"
-    captionTypography: "{typography.body-md}"
-  ex-toast:
-    description: "Toast notification surface — feature-card shape + medium shadow."
-    backgroundColor: "{colors.canvas}"
-    rounded: "{rounded.md}"
-    padding: "{spacing.md} {spacing.lg}"
-    typography: "{typography.body-sm}"
-
+  graph-label:
+    nameColor: "{colors.hud-ink}"
+    subColor: "{colors.hud-dim}"
+    hubColor: "{colors.primary}"
+    halo: "0 0 6px rgba(0, 0, 0, 0.95), 0 0 2px #000"
+  ring-tag:
+    typography: "{typography.mini}"
+    textColor: "{colors.hud-dim}"
+  reticle:
+    color: "{colors.primary}"
+    armLength: "{spacing.md}"
+    thickness: "{spacing.xxs}"
+    padding: 14px
 ---
 
 
-## Overview
+## 개요
 
-Voltagent is an AI agent engineering platform built for developers, and the brand wears that audience proudly: a near-black `{colors.canvas}` (`#101010`) page background that runs edge-to-edge with no light-mode counterpart, a single electric-green accent (`{colors.primary}` `#00d992`) reserved for CTAs, status pills, and the brand lightning glyph, and a typography system that pairs sentence-case Inter with SF Mono for inline code and command snippets. The whole page reads like polished documentation that decided to also sell something.
+NODE는 **관제실 레이더**를 메타포로 삼는다. 운영자 유광명(허브)이 화면 정중앙에 고정되고, 전문가 52명은 기울어진 원반 위에 레이더 blip처럼 놓인다. 인연이 오래될수록 허브에 가깝다. 그래프가 뷰포트 전체를 채우고, 헤더·KPI·패널·상태줄은 모두 그 위에 떠 있는 반투명 HUD 크롬이다.
 
-The decorative system is restrained. There is no gradient mesh, no atmospheric backdrop, no illustration suite. Instead, the brand uses small typographic moments — a green code chip (`npx voltagent ...`), a 3-px outlined feature card sitting against the same near-black canvas, a green hairline divider between section bands — to mark its identity. The result is a page that feels engineered: every card has a hairline border, every snippet has a copy-to-clipboard button, every metric is rendered in a numeric monospace.
+디자인 목표는 **세련되고 화려하되 반짝이지 않는 것**이다. 노드는 빛나지 않는 평면 마커이고, 장식은 레이더 그리드·느린 스윕·코너 브래킷·미세 스캔라인 정도로 절제한다. 크롬 문자는 거의 전부 JetBrains Mono라서 화면이 계기판처럼 읽힌다.
 
-Type stays calm. Hero display sits at 60 px in regular weight with `-0.65 px` tracking — not a billboard headline, more like a documentation H1. Section headings step down to 36 px / 24 px in similar weights. Body copy is 16 px Inter at line-height 1.65 for the kind of legibility long-form devs expect. Uppercase eyebrows are common — `EVERYTHING YOU NEED` style mono-cap labels above section headlines — and they use Inter at weight 600 with wide positive tracking (`2.52 px` at 14 px).
+**핵심 특징**
+- **그린 기운의 near-black 캔버스**(`--hud-canvas` `#070a09`) 한 가지 표면. 라이트 모드는 없다.
+- **단일 액센트** 일렉트릭 그린(`--color-primary` `#00d992`). 협업 엣지의 골드(`--graph-collaboration`)만이 의도된 유일한 비녹색이다.
+- **HUD 잉크**: 수치·이름은 민트 화이트(`--hud-ink`), 라벨·보조는 녹회색(`--hud-dim`), 힌트는 `--hud-faint`.
+- **각진 프레임**: 모든 패널·버튼·칩이 2px 라운드(`--radius-hud`)에 1px 그린 프레임. 패널에는 좌상·우하 코너 브래킷이 붙는다. 드롭섀도는 쓰지 않는다.
+- **모노 크롬 + 한글 산세리프 본문**: UI는 JetBrains Mono, 사람 이름·조직명·상세 본문은 Inter → Noto Sans KR.
+- **영문 대문자 eyebrow**: `// NETWORK`, `// DISPLAY`처럼 그린 `//` 접두와 넓은 자간.
 
-**Key Characteristics:**
-- A single electric-green accent `{colors.primary}` (`#00d992`) carries every CTA, every status pill, and the brand's lightning logo. No second accent.
-- Dark canvas (`{colors.canvas}` `#101010`) is the only page surface — there is no light-mode rhythm; the entire site reads as one continuous dark surface broken by feature-card boundaries.
-- Hairline-bordered feature cards (`{colors.hairline}` `#3d3a39`, 1 px solid) are the brand's primary chrome — no shadows, no fills, just precise hairline rectangles.
-- A signature dashed-border accent (`1px dashed rgba(79, 93, 117, 0.4)`) appears between sections as a quiet rhythm cue — the brand's only ornamental line.
-- Inter + SF Mono pair carries every typographic role. SF Mono is reserved for code blocks, inline command snippets, and metric counters.
-- Buttons are tight 6 px rounded rectangles (not pills); only inline status tags use the 9999 px full pill.
+## 색
 
-## Colors
+토큰은 모두 `css/tokens.css`에 정의돼 있다. CSS는 `var(--…)`로, JS(그래프)는 `getComputedStyle`로 같은 변수를 읽는다. CSS·JS에 hex를 새로 적지 않는다.
 
-### Brand & Accent
-- **Electric Green** (`{colors.primary}` — `#00d992`): The single brand accent. Every primary CTA, every status pill, every "live" indicator, the brand's lightning glyph itself. Reserved.
-- **Primary Soft** (`{colors.primary-soft}` — `#2fd6a1`): A slightly more muted green used inside button-ghost variants and tooltip / focus indicators.
-- **Primary Deep** (`{colors.primary-deep}` — `#10b981`): The darker green used for inline link colour in body copy.
+### 액센트
 
-### Surface
-- **Canvas** (`{colors.canvas}` — `#101010`): The default near-black page background. The only surface mode in the brand's marketing system.
-- **Canvas Soft** (`{colors.canvas-soft}` — `#1a1a1a`): A slightly lighter dark fill used inside code blocks and form inputs to mark them visually distinct against the canvas.
-- **Hairline** (`{colors.hairline}` — `#3d3a39`): 1 px solid borders — feature cards, buttons, dividers between rows. The brand's universal "edge" colour.
-- **Hairline Soft** (`{colors.hairline-soft}` — `#b8b3b0`): A lighter divider tint used in rare on-light secondary contexts.
-
-### Text
-- **Ink** (`{colors.ink}` — `#f2f2f2`): Default text colour on the dark canvas — slightly off-white to reduce contrast strain.
-- **Ink Strong** (`{colors.ink-strong}` — `#ffffff`): Pure-white text for hero headlines and high-emphasis copy.
-- **Body** (`{colors.body}` — `#bdbdbd`): Secondary text — supporting copy, body paragraphs in long-form sections.
-- **Mute** (`{colors.mute}` — `#8b949e`): Lowest-priority on-dark text — captions, fine print, footer secondary lines.
-- **Canvas Text Soft** (`{colors.canvas-text-soft}` — `#f5f6f7`): Used inside code mockups to keep code colour just slightly cooler than the surrounding body text.
-
-### Semantic
-The brand doesn't surface a separate error / warning palette in its public marketing pages — the underlying Docusaurus default semantic palette exists in the design system but is reserved for in-product / docs contexts. Validation cues on the marketing surface use the primary green for success and a muted body grey for missing states.
-
-## Typography
-
-### Font Family
-Two faces carry the system:
-1. **Inter** for every display, body, button, and link role. Weights 400 / 500 / 600 / 700 are the working set. Used with OpenType features `"calt"` and `"rlig"` enabled across the page so the geometric Inter ligatures and contextual alternates render correctly.
-2. **SF Mono** (`SFMono-Regular` with Menlo / Monaco / Consolas / Liberation Mono fallbacks) for inline code, command snippets, terminal mockups, and the brand's numeric counters. Weights 400 / 549 / 550 / 700 are present — the unusual 549 / 550 sub-bold weight gives the mono a "slightly heavier than regular" voice for emphasis.
-
-### Hierarchy
-
-| Token | Size | Weight | Line Height | Letter Spacing | Use |
-|---|---|---|---|---|---|
-| `{typography.display-xl}` | 60px | 400 | 60px | -0.65px | Hero headline ("AI Agent Engineering Platform"). |
-| `{typography.display-lg}` | 36px | 400 | 40px | -0.9px | Section headlines. |
-| `{typography.display-md}` | 24px | 700 | 32px | -0.6px | Sub-section / card-title displays. |
-| `{typography.display-sm}` | 20px | 600 | 28px | 0 | Card titles in dense grids. |
-| `{typography.eyebrow-mono}` | 14px | 600 | 20px | 2.52px | UPPERCASE eyebrow tags ("EVERYTHING YOU NEED"). |
-| `{typography.eyebrow-uppercase}` | 18px | 600 | 28px | 0.45px | Larger uppercase eyebrows above hero subsections. |
-| `{typography.body-lg}` | 18px | 400 | 28px | 0 | Lead paragraphs. |
-| `{typography.body-md}` | 16px | 400 | 26px | 0 | Default body paragraph. |
-| `{typography.body-md-strong}` | 16px | 600 | 24px | 0 | Bolded inline body. |
-| `{typography.body-sm}` | 14px | 400 | 20px | 0 | Secondary body. |
-| `{typography.body-sm-strong}` | 14px | 600 | 23px | 0 | Bold caption / pill-tag labels. |
-| `{typography.caption}` | 12px | 400 | 16px | 0 | Fine print. |
-| `{typography.caption-strong}` | 12px | 500 | 16px | 0 | Bold caption. |
-| `{typography.code}` | 13px | 400 | 18px | 0 | Code blocks, inline command snippets. |
-| `{typography.code-strong}` | 13px | 550 | 16px | 0 | Emphasised inline code (the SF Mono "almost-bold" weight). |
-| `{typography.button-md}` | 16px | 600 | 24px | 0 | Button labels. |
-
-### Principles
-- **Inter regular at 60 px display** is the brand's calming counter to AI marketing's tendency to shout. The light tracking and modest weight read like documentation.
-- **Two-face contrast carries the technical voice.** Inter for narrative; SF Mono for anything that could be typed at a terminal.
-- **Uppercase eyebrow with tracking is the brand's signature label style.** `2.52 px` at 14 px is the documented value.
-
-### Note on Font Substitutes
-- **Sans** — *Inter* is the brand's actual face; substitute is the brand itself when self-hosting is not available.
-- **Mono** — *SF Mono* is Apple-system; *JetBrains Mono* or *Geist Mono* are the best free substitutes.
-
-## Layout
-
-### Spacing System
-- **Base unit**: 4 px; small 5 / 6.4 px values appear inside code-mockup line-height compensation.
-- **Tokens**: `{spacing.xxs}` 2 px · `{spacing.xs}` 4 px · `{spacing.sm}` 8 px · `{spacing.md}` 12 px · `{spacing.lg}` 16 px · `{spacing.xl}` 20 px · `{spacing.2xl}` 24 px · `{spacing.3xl}` 32 px · `{spacing.4xl}` 40 px · `{spacing.5xl}` 48 px · `{spacing.6xl}` 64 px.
-- **Section padding**: hero + content bands use `{spacing.5xl}` 48 px top/bottom.
-- **Card interior padding**: feature cards sit at `{spacing.2xl}` 24 px.
-
-### Grid & Container
-- Marketing container centres at roughly 1200 – 1400 px; content stays edge-to-edge in colour with horizontal gutters of `{spacing.3xl}` on desktop.
-- Feature-card grids: 2-up to 3-up at desktop, 1-up at mobile.
-
-### Responsive Strategy
-
-#### Breakpoints
-
-| Name | Width | Key Changes |
+| 토큰 | 값 | 쓰는 곳 |
 |---|---|---|
-| Mobile | < 768px | Hero 60→32 px; cards 1-up; nav hamburger. |
-| Tablet | 768–1023px | Cards 2-up; nav stays horizontal. |
-| Desktop | ≥ 1024px | Full 3-up card grids. |
+| `--color-primary` | `#00d992` | 로고 허브 점, Live 배지, 허브 노드·라벨·오빗, 활성 세그먼트 토글, 패널 코너 브래킷, 선택 레티클, eyebrow `//`·상태줄 `>` 글리프, 아바타 테두리·이니셜, 요약 막대·히스토그램 채움, 로딩 바, 주 버튼(재시도), 소속 엣지, 레이더 스윕 |
+| `--color-primary-soft` | `#2fd6a1` | 관심사 엣지, 관심사 범례 스와치(60% 불투명) |
+| `--color-on-primary` | `#101010` | primary 배경 위 글자(활성 토글, 주 버튼) |
 
-#### Touch Targets
-Buttons render at ~44 px tall (12 px vertical padding + 24 px line-height). Meet WCAG AAA at all breakpoints.
+액센트 그린은 **본문(문장·값 텍스트)에 쓰지 않는다**. 위 표에 적힌 자리에서만 쓴다.
 
-#### Collapsing Strategy
-Nav collapses to hamburger at mobile; the menu overlay keeps the same green CTA pinned at the bottom. Feature-card grids drop to 1-up; hero typography scales fluidly.
+### HUD 표면
 
-#### Image Behavior
-Code-editor mockups render as image-like cards with copy-to-clipboard affordances. No photography in the brand's marketing surface.
-
-## Elevation & Depth
-
-| Level | Treatment | Use |
+| 토큰 | 값 | 쓰는 곳 |
 |---|---|---|
-| Level 0 — Flat | No shadow, no border. | Full-bleed bands. |
-| Level 1 — Hairline | 1 px solid `{colors.hairline}` border on `{colors.canvas}`. | Default for every feature card and button. |
-| Level 2 — Inset Glow | `0 0 15px rgba(92, 88, 85, 0.2)` subtle outer glow. | Hovering / featured cards. |
-| Level 3 — Modal Stack | `0 20px 60px rgba(0,0,0,0.7), 0 0 0 1px rgba(148,163,184,0.1) inset` heavy drop + inset ring. | Modal / dialog surfaces in-product. |
+| `--hud-canvas` | `#070a09` | 페이지·그래프 배경 |
+| `--hud-canvas-glow` | `#0f1a14` | 그래프 배경 중심부 방사형 글로우 |
+| `--hud-panel` | `rgba(5,10,8,.72)` | 반투명 패널·검색 입력 배경(+블러) |
+| `--hud-cell` | `rgba(5,10,8,.95)` | KPI·스탯 셀, 검색 드롭다운, 모바일 시트 핸들 |
+| `--hud-veil` | `rgba(7,10,9,.92)` | 헤더·상태줄 그라디언트, 로딩 오버레이 |
+| `--hud-fill` | `rgba(0,217,146,.06)` | 호버·활성 채움, 막대 트랙, 아바타·버튼 바탕 |
+| `--hud-frame` | `rgba(0,217,146,.22)` | 1px 프레임 선, 셀 사이 구분선 |
+| `--hud-frame-strong` | `rgba(0,217,146,.45)` | 포커스·호버 프레임, Live 배지 테두리, `:focus-visible` 외곽선 |
+| `--hud-scan` | `rgba(255,255,255,.018)` | 전체 화면 스캔라인(1px 선 / 3px 주기) |
 
-### Decorative Depth
-- Hairline cards on dark canvas — the brand's only true elevation mode.
-- A 2 px solid `{colors.primary}` green border occasionally marks "featured" or "active" status on a card.
-- A 1 px dashed `rgba(79, 93, 117, 0.4)` divider sits between section bands as a quiet rhythm cue.
+### HUD 잉크(텍스트)
 
-## Shapes
-
-### Border Radius Scale
-
-| Token | Value | Use |
+| 토큰 | 값 | 쓰는 곳 |
 |---|---|---|
-| `{rounded.none}` | 0px | Full-bleed bands. |
-| `{rounded.xs}` | 4px | Smallest inline pills, code inline chips. |
-| `{rounded.sm}` | 6px | Default button and input radius. |
-| `{rounded.md}` | 8px | Card chrome, code-block chrome. |
-| `{rounded.pill}` | 9999px | Inline status tags ("Live", "Beta"). |
-| `{rounded.full}` | 9999px | Circular icon containers. |
+| `--color-ink-strong` | `#ffffff` | 로고 워드마크 `NODE`, 상세 패널 이름 |
+| `--hud-ink` | `#d7f5e8` | 기본 텍스트, 수치(KPI·스탯·히어로), 이름, 활성 토글 글자, 선택 노드 Blip |
+| `--hud-dim` | `#4f8f74` | eyebrow·라벨·키, 보조 텍스트, 비활성 토글, 플레이스홀더, 라벨 보조 줄, 링 눈금, 허브 엣지 |
+| `--hud-faint` | `#2f5c49` | 상태줄 키, 로딩 보조 문구, 스크롤바 thumb, 모바일 핸들 grip |
 
-## Components
-
-### Buttons
-
-**`button-primary`** — the electric-green CTA.
-- Background `{colors.primary}`, text `{colors.on-primary}` (near-black), label `{typography.button-md}`, padding `{spacing.md} {spacing.lg}`, shape `{rounded.sm}` 6 px.
-
-**`button-outline-on-dark`** — the hairline-on-dark secondary button.
-- Background `{colors.canvas}`, text `{colors.ink}`, 1 px solid `{colors.hairline}` border, same typography / padding / shape.
-
-**`button-ghost-green`** — text-only with green label, for tertiary actions.
-- Background `{colors.canvas}`, text `{colors.primary-soft}`, no border.
-
-**`button-pill-tag`** — the inline pill for category tags / status labels.
-- Background `{colors.canvas}`, text `{colors.ink}`, hairline border, body in `{typography.body-sm}`, padding `{spacing.xs} {spacing.md}`, shape `{rounded.pill}` 9999 px.
-
-### Cards & Containers
-
-**`card-feature`** — the default feature card.
-- Background `{colors.canvas}`, text `{colors.ink}`, 1 px solid `{colors.hairline}` border, padding `{spacing.2xl}`, shape `{rounded.md}` 8 px. The brand's most-repeated card chrome.
-
-**`card-feature-emphasized`** — the same card with a 3 px hairline border for emphasis.
-- Same chrome as `card-feature` with 3 px solid `{colors.hairline}`.
-
-**`code-mockup`** — the dark code-editor card with copy-to-clipboard affordance.
-- Background `{colors.canvas}`, text `{colors.ink}`, 1 px solid `{colors.hairline}`, body in `{typography.code}` (SF Mono 13 px), padding `{spacing.xl}`, shape `{rounded.md}`.
-
-**`code-inline-chip`** — the inline command snippet pill.
-- Background `{colors.canvas-soft}`, text `{colors.canvas-text-soft}`, body in `{typography.code}`, padding `{spacing.xxs} {spacing.sm}`, shape `{rounded.sm}`.
-
-### Inputs & Forms
-
-**`text-input`** — the standard text input on dark.
-- Background `{colors.canvas-soft}`, text `{colors.ink}`, 1 px solid `{colors.hairline}`, body in `{typography.body-sm}`, padding `{spacing.md} {spacing.lg}`, shape `{rounded.sm}` 6 px.
-
-### Navigation
-
-**`nav-bar`** — the sticky top nav on dark.
-- Background `{colors.canvas}`, text `{colors.ink}`, padding `{spacing.md} {spacing.3xl}`.
-
-**`nav-link`** — link items in nav.
-- Text `{colors.body}`, set in `{typography.body-sm}`.
-
-**`footer`** — the dark footer band.
-- Background `{colors.canvas}`, text `{colors.body}`, padding `{spacing.4xl} {spacing.3xl}`. Body in `{typography.body-sm}`.
-
-### Signature Components
-
-**`hero-band`** — the dark hero band with the 60-px Inter headline.
-- Background `{colors.canvas}`, text `{colors.ink}` (with the headline at `{colors.ink-strong}` white), padding `{spacing.5xl} {spacing.3xl}`. Headline in `{typography.display-xl}` (60 px / weight 400 / `-0.65 px` tracking). Eyebrow above headline in `{typography.eyebrow-mono}` (uppercase, tracked).
-
-**`content-band`** — the standard content band hosting feature grids.
-- Background `{colors.canvas}`, text `{colors.ink}`, padding `{spacing.5xl} {spacing.3xl}`. Section headline in `{typography.display-lg}`.
-
-**`green-divider-band`** — a thin green-glow band that occasionally separates major sections.
-- Background `{colors.canvas}`, 2 px solid `{colors.primary}` top/bottom border. The brand's only chromatic divider.
-
-### Examples (illustrative)
-
-> Auto-derived kit-mirror demonstration surfaces (`scripts/derive-examples-block.mjs`). Each `ex-*` entry references brand-native primitives so downstream consumers (`/preview-design`, `/generate-kit`) re-skin the same 10 surfaces consistently. `TO_FILL` markers indicate missing primitives — resolve in the LLM judgment pass.
-
-**`ex-pricing-tier`** — Default Pricing tier card. Re-uses feature-card chrome with brand canvas-soft surface.
-- Properties: `backgroundColor`, `textColor`, `borderColor`, `rounded`, `padding`
-
-**`ex-pricing-tier-featured`** — Featured/highlighted tier — polarity-flipped surface (dark fill + light text in light mode, light fill + dark text in dark mode).
-- Properties: `backgroundColor`, `textColor`, `rounded`, `padding`
-
-**`ex-product-selector`** — What's Included summary card — re-purposed for SaaS / B2B verticals (NOT a literal product gallery).
-- Properties: `backgroundColor`, `rounded`, `padding`
-
-**`ex-cart-drawer`** — Subscription summary — re-purposed for SaaS / B2B (line items per add-on, not literal cart).
-- Properties: `backgroundColor`, `rounded`, `padding`, `item-divider`
-
-**`ex-app-shell-row`** — Sidebar nav row inside the App Shell example. Active state uses brand primary as the indicator.
-- Properties: `backgroundColor`, `activeIndicator`, `rounded`, `padding`
-
-**`ex-data-table-cell`** — Default data-table th + td chrome. Header uses mono-caps eyebrow typography; body uses body-sm.
-- Properties: `headerBackground`, `headerTypography`, `bodyTypography`, `cellPadding`, `rowBorder`
-
-**`ex-auth-form-card`** — Sign-in / sign-up card. Re-uses feature-card chrome with text-input primitives inside.
-- Properties: `backgroundColor`, `rounded`, `padding`
-
-**`ex-modal-card`** — Modal dialog surface — same chrome as feature-card with elevated shadow.
-- Properties: `backgroundColor`, `rounded`, `padding`
-
-**`ex-empty-state-card`** — Empty-state illustration frame.
-- Properties: `backgroundColor`, `rounded`, `padding`, `captionTypography`
-
-**`ex-toast`** — Toast notification surface — feature-card shape + medium shadow.
-- Properties: `backgroundColor`, `rounded`, `padding`, `typography`
-
-
-## Do's and Don'ts
-
-### Do
-- Reserve `{colors.primary}` (`#00d992`) for every primary CTA, the lightning logo glyph, and live-status indicators. The green is the brand's centre of gravity.
-- Use the dark `{colors.canvas}` (`#101010`) as the only page surface. There is no light-mode rhythm.
-- Build cards with 1 px `{colors.hairline}` borders, not shadows. Hairlines on dark IS the brand's elevation system.
-- Pair Inter (sentence-case) with SF Mono (inline code, command snippets). Every uppercase moment uses Inter at weight 600 with `2.52 px` tracking — not a separate mono.
-- Use `{rounded.sm}` 6 px for buttons, `{rounded.md}` 8 px for cards, `{rounded.pill}` 9999 px only for inline status tags.
-
-### Don't
-- Don't introduce a light-mode counterpart. The brand is dark-canvas only.
-- Don't use the primary green as a body-text fill. It's CTA-only.
-- Don't drop a soft drop-shadow on cards. The brand uses hairlines + occasional glow, never material shadows.
-- Don't render the hero headline in heavy weight (700+). The brand's display is intentionally calm at weight 400.
-- Don't replace Inter or SF Mono with a different family — both faces are part of the brand's voice and pairing.
-
-
-## NODE Command HUD 확장 (2026-10)
-
-NODE 대시보드는 위 디자인 언어를 기반으로 **관제(HUD) 확장**을 적용한다. 토큰은 `css/tokens.css`의 `--hud-*` 블록이 단일 출처다. 위 Do's/Don'ts와 다른 점만 적는다.
-
-### 색
-- `--hud-canvas` `#070a09` — 그래프·페이지 배경(그린 기운의 near-black). `--hud-canvas-glow` `#0f1a14` — 중심부 글로우.
-- `--hud-ink` `#d7f5e8` — 수치·이름(민트 화이트). `--hud-dim` `#4f8f74` — 라벨·eyebrow. `--hud-faint` `#2f5c49` — 힌트.
-- `--hud-grid` `#1f6b4f` / `--hud-grid-soft` `#123d2e` — 레이더 그리드. `--hud-blip` `#5fcf9f` — 일반 노드.
-- `--hud-frame` — 패널 프레임 선(primary 22%). `--graph-collaboration` `#ffd65a` — 협업 엣지.
-- **본문 그린 규칙 완화:** 액센트 `{colors.primary}`는 여전히 본문 금지(로고·Live·허브·활성 토글·코너 브래킷 전용). 저채도 녹회색 HUD 잉크(`--hud-ink`·`--hud-dim`)는 본문 허용.
-
-### 타이포
-- UI 크롬(eyebrow·KPI·버튼·토글·라벨 보조 줄·숫자)은 **JetBrains Mono**(`--font-hud`), 한글은 Noto Sans KR로 폴스루.
-- 이름·조직명·상세 본문 등 한글 위주 텍스트는 `--font-sans`(Inter → Noto Sans KR).
-- 한글 eyebrow에 넓은 자간을 쓰지 않는다 — eyebrow는 영문 대문자(`// NETWORK`).
-
-### 형태·깊이
-- HUD 패널·버튼·칩은 `--radius-hud` 2px(각진 형태). pill은 쓰지 않는다.
-- 패널: 반투명 배경 + 블러 + 1px 프레임 + 좌상·우하 코너 브래킷(primary). 드롭섀도 금지는 유지.
-- 전체 화면에 미세 스캔라인(`--hud-scan`).
+녹회색 HUD 잉크(`--hud-ink`·`--hud-dim`)는 본문에 써도 된다. 액센트 그린 금지 규칙과는 별개다.
 
 ### 그래프
-- 노드는 발광하지 않는다: 일반 = Blip(링+점 평면 마커), 허브 = 그린 구체 + 로고 오빗 모티프. 블룸은 허브 후광에만.
-- 엣지: 소속 = primary, 협업 = `--graph-collaboration`, 관심사 = primary-soft, 허브 = `--hud-dim` 옅은 점선. 가산 혼합 없음.
-- flow 파티클은 선택 노드의 소속·협업 엣지에만. 애니메이션은 레이더 스윕·허브 위성·인트로뿐이며 `prefers-reduced-motion`에서 모두 생략.
+
+| 토큰 | 값 | 쓰는 곳 |
+|---|---|---|
+| `--hud-grid` | `#1f6b4f` | 연차 링(불투명도 0.55) |
+| `--hud-grid-soft` | `#123d2e` | 극좌표 그리드 12섹터 + 외곽 원(불투명도 0.7) |
+| `--hud-blip` | `#5fcf9f` | 일반 노드 Blip 마커 |
+| `--graph-collaboration` | `#ffd65a` | 협업 엣지·범례 스와치·파티클(골드) |
+| `--color-body` | `#bdbdbd` | 허브 오빗의 위성 점, 로고 위성 |
+| `--color-mute` | `#8b949e` | 로고 궤도 링 |
+
+### 레거시 토큰(현재 미사용)
+
+`tokens.css`에는 남아 있지만 현재 화면 어디에서도 참조하지 않는 토큰이다. 새로 쓰지 않는다.
+
+- 색: `--color-primary-deep`, `--color-canvas`, `--color-canvas-soft`, `--color-hairline`, `--color-hairline-soft`, `--color-ink`, `--label-career`·`--label-nickname`·`--label-interest`·`--label-affiliation`(라벨 보조 줄은 이제 단색 `--hud-dim`)
+- 타이포: `--font-mono`, `--text-display-md-size/line/tracking`, `--text-display-sm-weight`, `--text-eyebrow-size/line/tracking`, `--text-body-md-weight/line`, `--text-caption-*`
+- 형태·깊이: `--radius-xs`·`--radius-sm`·`--radius-md`, `--border-hairline`, `--glow-hover`
+
+## 타이포그래피
+
+### 폰트 패밀리
+
+Google Fonts로 세 서체를 불러온다(Inter 400/500/600/700 · JetBrains Mono 400/500/700 · Noto Sans KR 400/500/700).
+
+1. **`--font-hud`** = JetBrains Mono → Noto Sans KR → ui-monospace. `body` 기본값이다. eyebrow·KPI·버튼·토글·배지·상태줄·숫자·라벨 보조 줄 등 UI 크롬 전반에 쓴다. 한글은 Noto Sans KR로 넘어간다.
+2. **`--font-sans`** = Inter → Noto Sans KR. 한글 위주 텍스트에만 쓴다: 그래프 라벨 이름, 상세 패널 이름·Now/Past 값, Focus·Wish 칩, Connections 이름, 에러 메시지.
+
+### 위계
+
+| 역할 | 서체 | 크기 / 굵기 / 행간 | 자간 | 쓰는 곳 |
+|---|---|---|---|---|
+| `hero` | hud | 56px / 600 / 0.9 | -0.02em | 요약 패널 멤버 수 |
+| `brand` | hud | 20px / 700 | 0.3em | 헤더 `NODE` 워드마크(`--color-ink-strong`) |
+| `name-lg` | sans | 20px / 700 / 28px | 0 | 상세 패널 이름(`--color-ink-strong`) |
+| `kpi-value` | hud | 18px / 600 / 1.2 | 0 | KPI 값, 스탯 셀 값 |
+| `message` | sans | 16px / 400 | 0 | 에러 메시지 |
+| `graph-hub` | sans | 15px / 700 | 0 | 허브 라벨(`--color-primary`) |
+| `prose` | sans | 14px / 400 / 1.5 | 0 | 상세 Now/Past 값 |
+| `graph-name` | sans | 13px / 600 | 0 | 그래프 노드 이름 |
+| `body` | hud | 12px / 400 / 20px | 0 | 기본 본문, 배지, 노드 수, 토글, 검색 |
+| `eyebrow` | hud | 11px / 600 | 0.3em, 대문자 | `// NETWORK`, `// DISPLAY`, 로딩 제목, 핸들 라벨 |
+| `label` | hud | 11px / 600 | 0.2em, 대문자 | 그룹 라벨(`LABELS`, `TOP ORGANIZATIONS`, `CONNECTIONS`) |
+| `caption` | hud | 11px / 400 | 0 | 태그라인, 패널 각주, 관계 개수, 클러스터 태그, Now/Past 키(0.2em 대문자) |
+| `graph-sub` | hud | 11px / 400 | 0 | 라벨 보조 줄(조직·경력·닉네임·관심사) |
+| `mini` | hud | 10px / 400 | 0.08em | 상태줄, 레이더 링 눈금(`02Y`), 히스토그램 축 |
+| `kpi-key` | hud | 9px / 400 | 0.2em | KPI 키(`MEMBERS` 등) |
+
+### 원칙
+
+- **숫자는 모노.** KPI·스탯·연차·개수는 모두 JetBrains Mono라 자릿수가 맞는다.
+- **eyebrow는 영문 대문자**로만 쓴다. 한글에 넓은 자간(0.2em 이상)을 주지 않는다.
+- **굵기는 400 / 600 / 700 세 단계.** 600은 값·활성 상태, 700은 이름·워드마크에 쓴다.
+- **우측 설정 패널 문구는 영어**(Labels·Relations·Reset view 등). 한글은 사용자 데이터와 에러 문구에만 나온다.
+
+## 레이아웃
+
+### 화면 구성(데스크톱 ≥1024px)
+
+```
++--------------------------------------------------------------------------+
+| (o) NODE  Network Of...     [ Search experts...   ^K ]   *Live  N nodes  |  header 64px
+|                +-------+--------+-------+-------+-------+-------+        |
+|                |MEMBERS|CLUSTERS| AFFIL |COLLAB |  AVG  |LONGEST|        |  KPI strip
+|                +-------+--------+-------+-------+-------+-------+        |
+| +--------------+                                       +-------------+   |  panels top 140px
+| | // NETWORK   |                                       | // DISPLAY  |   |
+| |              |        RADAR DISK + 3D GRAPH          | Labels      |   |
+| | LEFT 300px   |        (full-bleed viewport)          | Relations   |   |
+| |              |                                       | RIGHT 260px |   |
+| +--------------+                                       +-------------+   |
+| SRC Google Sheet  OWNER ...  SYNC 14:05        > Drag to rotate ...      |  status bar 32px
++--------------------------------------------------------------------------+
+```
+
+- **그래프**(`#graph`): `position: fixed; inset: 0`. 커서는 `grab` → 드래그 중 `grabbing`, 노드 위 `pointer`.
+- **헤더**: `grid 1fr auto 1fr`. 좌 = 로고(마크 24px + 워드마크 + 태그라인), 중앙 = 검색, 우 = 출처 배지 · 노드 수 · GitHub 아이콘. 배경은 위에서 아래로 사라지는 `--hud-veil` 그라디언트다.
+- **KPI 스트립**: 헤더 바로 아래 가운데 정렬. 6개 셀을 1px 간격 그리드로 두고 바탕을 `--hud-frame`으로 칠해 셀 사이가 프레임 선처럼 보이게 한다.
+- **좌측 패널**(300px): 미선택이면 네트워크 요약, 선택하면 인력 상세.
+- **우측 패널**(260px): Display 설정(Labels · Relations · Reset view).
+- **상태줄**: 하단 32px. 아래에서 위로 사라지는 `--hud-veil` 그라디언트.
+- 패널 최대 높이 = `100dvh − panel-top − status-h − gutter`. 넘치면 얇은 스크롤바(`--hud-faint`)가 생긴다.
+
+### 스페이싱
+
+4px 베이스. `--space-xxs` 2 · `xs` 4 · `sm` 8 · `md` 12 · `lg` 16 · `xl` 20 · `2xl` 24 · `3xl` 32 · `4xl` 40 · `5xl` 48 · `6xl` 64. 패널 안쪽 여백은 `xl`(20px), 헤더·상태줄 좌우는 `2xl`(24px), 화면 가장자리 거터는 `--hud-gutter`(20px)다. 크기 값도 이 스케일을 조합해 만든다(예: KPI 셀 최소폭 = `6xl + 5xl` = 112px).
+
+### HUD 치수
+
+| 토큰 | 값 | 의미 |
+|---|---|---|
+| `--hud-header-h` | 64px | 헤더 높이 |
+| `--hud-kpi-top` | 64px | KPI 스트립 top |
+| `--hud-panel-top` | 140px | 좌우 패널 top |
+| `--hud-status-h` | 32px | 상태줄 높이 |
+| `--hud-gutter` | 20px | 패널과 화면 가장자리 간격 |
+| `--panel-width` / `--panel-width-right` | 300px / 260px | 좌 / 우 패널 폭 |
+| `--hud-search-w` | 420px | 검색 입력 폭(높이 40px) |
+| `--hud-bracket` | 12px | 코너 브래킷 길이 |
+| `--handle-height` | 44px | 모바일 시트 핸들(peek) 높이 |
+
+### 레이어(z-index)
+
+그래프 0 → KPI·패널·상태줄 15 → 헤더 20 → 검색 드롭다운 25(모바일 펼침 입력 26) → 스캔라인 30 → 로딩 HUD 40 → 에러 UI 41. 스캔라인은 `pointer-events: none`이라 입력을 막지 않는다.
+
+### 반응형
+
+| 구간 | 변화 |
+|---|---|
+| **≥1024px** | 위 기본 구성. 카메라 홈 시점은 좌우 패널을 뺀 폭에 원반을 맞춘다. |
+| **640–1023px** | 태그라인·조작 힌트 숨김. 검색 폭 `min(420px, 42vw)`. KPI는 4개(`MEMBERS`·`CLUSTERS`·`COLLAB LINKS`·`LONGEST BOND`)로 줄인다. 좌측 패널은 화면 밖에 있다가 노드를 선택하면 슬라이드 드로어로 들어온다. 우측 패널은 제자리(우측 top 140px)에 `DISPLAY` 핸들 버튼으로 접혀 있고 누르면 260px로 펼쳐진다. |
+| **<640px** | 헤더 `auto 1fr auto`, 좌우 16px. 워드마크 16px, 노드 수 숨김. 검색은 40px 아이콘 버튼이고 누르면 헤더 아래에 전체 폭 입력이 펼쳐진다(⌘K 표시 숨김). KPI는 6개 전부 전체 폭 가로 스크롤 1행(값 16px). 좌측 상세는 KPI 아래 전체 폭 드로어. 우측 설정은 하단 시트(44px 핸들 + grip만 보이다가 열면 최대 50dvh). 상태줄 숨김. 그래프 라벨 축소(이름 12 / 보조 10 / 허브 13px). |
+
+## 깊이·프레임
+
+드롭섀도는 쓰지 않는다. 깊이는 아래 네 가지로만 표현한다.
+
+1. **프레임 선**: 1px `--hud-frame`. 호버·포커스·활성일 때 `--hud-frame-strong`.
+2. **반투명 + 블러**: 패널·검색은 `--hud-panel` 배경에 `backdrop-filter: blur(10px)`를 걸어 아래 그래프가 비쳐 보인다.
+3. **코너 브래킷**: `.hud-panel`의 `::before`(좌상)·`::after`(우하)에 12px × 2px `--color-primary` ㄱ자 브래킷을 단다.
+4. **스캔라인**: `body::after` 전체 화면 반복 그라디언트(`--hud-scan` 1px / 3px 주기).
+
+예외 하나: 그래프 라벨에는 배경과 분리되도록 텍스트 후광 `--hud-label-shadow`(`0 0 6px rgba(0,0,0,.95), 0 0 2px #000`)를 준다. 상자 그림자가 아니라 글자 가독성용이다.
+
+## 형태
+
+| 토큰 | 값 | 쓰는 곳 |
+|---|---|---|
+| `--radius-hud` | 2px | 패널·버튼·입력·칩·배지·kbd·스와치·아바타 등 모든 HUD 요소 |
+| `--radius-full` | 9999px | 출처 배지의 상태 점(8px 원) |
+| `--radius-pill` | 9999px | 모바일 시트 핸들 grip(32×4px)에만 |
+
+pill 모양 버튼·태그는 쓰지 않는다. 모서리는 각지게 둔다.
+
+## 컴포넌트
+
+### 헤더
+
+- **브랜드**: 오빗 마크 SVG(24px — 궤도 링 `--color-mute`, 위성 `--color-body`, 허브 `--color-primary`) + `NODE`(`brand`, `--color-ink-strong`) + `Network Of Domain Experts`(11px, `--hud-dim`).
+- **검색 입력**(`.search-box`): 420×40px, `--hud-panel` + 블러, 1px `--hud-frame`(포커스 시 strong). 돋보기 16px · 입력(`--hud-ink`, 플레이스홀더 `Search experts or organizations` `--hud-dim`) · `⌘K` kbd 칩. ⌘K/Ctrl+K 또는 `/`로 포커스.
+- **검색 드롭다운**(`.search-list`): 입력 아래 4px, `--hud-cell` + 블러. 최대 8행. 행 = 이름(600 `--hud-ink`) ↔ 조직(`--hud-dim`, 말줄임). ↑↓로 이동하면 활성 행에 `--hud-fill`. 결과가 없으면 `No match` 행.
+- **출처 배지**(`.source-badge`): 2px 각진 배지 + 8px 상태 점. `Live` = 그린 글자·strong 프레임·`--hud-fill` 바탕. `Snapshot` = `--hud-dim`. 로딩 중(`…`)·`Error`는 점 없이 `--hud-dim`.
+- **노드 수**(`N nodes`, `--hud-dim`) · **GitHub 아이콘**(16px, `--hud-dim` → 호버 시 `--hud-ink`).
+
+### KPI 스트립
+
+`MEMBERS` · `CLUSTERS` · `AFFIL LINKS` · `COLLAB LINKS` · `AVG CAREER` · `LONGEST BOND`. 셀마다 키(`kpi-key`, `--hud-dim`) 위, 값(`kpi-value`, `--hud-ink`) 아래. 연차 값에는 `Y`를 붙인다(`9Y`).
+
+### HUD 패널(공통)
+
+`.hud-panel` = 고정 위치 + `--hud-panel` 배경 + 블러 + 1px `--hud-frame` + 2px 라운드 + 코너 브래킷. 좌우 패널, 에러 UI가 이 크롬을 공유한다. 패널 안 구성 요소:
+
+- **eyebrow**(`.hud-eyebrow`): `eyebrow` 서체, `--hud-dim`, 앞에 그린 `// ` 접두. 패널 제목 역할.
+- **그룹 라벨**(`.hud-label`): `label` 서체, `--hud-dim`. 오른쪽 `<em>` 값은 `--hud-ink`(예: `CONNECTIONS 7`).
+
+### 좌측 패널 — 네트워크 요약(미선택)
+
+1. `// NETWORK`
+2. **히어로**: 멤버 수(`hero` 56px, `--hud-ink`) + `domain experts / around 유광명`(`--hud-dim`).
+3. **스탯 그리드** 2×2(KPI와 같은 1px 프레임 그리드, `--hud-cell` 셀): Clusters · Affiliations · Collabs · Avg career. 값 18px/600 + 단위 `<small>`(`y`).
+4. **TOP ORGANIZATIONS**: 상위 조직 5개 가로 막대. 이름(96px, 말줄임) · 트랙(높이 8px, `--hud-fill`) · 값. 채움은 그린 4px 대시 / 2px 간격 패턴.
+5. **SINCE**: 인연 시작 연대별 세로 히스토그램. 막대 높이 = 비율 × 64px, 그린 2px 줄무늬. 위에 개수(`--hud-ink`), 아래 연대(`mini`).
+6. 각주: `Longest bond · since 2000`(`caption`, `--hud-dim`).
+
+### 좌측 패널 — 인력 상세(선택)
+
+1. **헤드**(`auto 1fr auto` 그리드): 아바타(48px 정사각, 그린 1px 테두리 + `--hud-fill`, 이름 끝 두 글자를 그린 700으로) · 이름(`name-lg`) + 보조 줄(닉네임 `--hud-dim` · `<조직> cluster` 태그 · 허브면 `Hub` 태그) · 닫기 버튼(32px, `✕`).
+2. **스탯 그리드** 2칸: Career(`Ny`) · Since(연도).
+3. **키-값 행**(`.kv`): `NOW` / `PAST` 키(48px 열, 11px 0.2em 대문자 `--hud-dim`) + 값(`prose`, `--hud-ink`). 행 아래 1px `--hud-frame`. Past는 ` · `로 연결.
+4. **FOCUS / WISH 칩**: 하는일·관심사, 희망사항 태그. sans, 2px 라운드, 1px 프레임.
+5. **CONNECTIONS N**: 사람 단위로 병합한 연결 목록. 정렬은 협업 > 소속 > 관심사 순. 각 행은 버튼이다: 관계 스와치(12px) · 이름(sans 600 `--hud-ink`) · 경로(`Collaborated` / 공유 조직 / 공유 관심사, `--hud-dim`, 오른쪽 정렬·말줄임). 호버하면 프레임과 `--hud-fill`이 생기고, 클릭하면 그 노드로 선택·fly-to. 허브는 `Connected to all N experts.`, 연결이 없으면 `No direct relations yet.`
+
+패널 내용이 바뀔 때 0.2s 페이드인한다.
+
+### 우측 패널 — Display
+
+- `// DISPLAY`
+- **LABELS** 세그먼트(`.seg-btn`, 줄바꿈 허용): `Name` · `Org` · `Career` · `Nick` · `Interests`. 기본 = Name + Org 켜짐. 꺼짐 = 투명 바탕·프레임·`--hud-dim`. 켜짐(`aria-pressed="true"`) = 그린 바탕 + `--color-on-primary` 600.
+- **RELATIONS** 토글(`.rel`, 범례 겸용): `[스와치] 이름 개수` 3열 그리드. `Affiliation`·`Collaboration`·`Hub` 기본 켜짐, `Interest` 기본 꺼짐. 켜짐 = 프레임 + `--hud-fill` + `--hud-ink`, 꺼짐 = 테두리 없음 + `--hud-dim`. 개수는 11px `--hud-dim`.
+- **Reset view**(`.hud-btn`): 전체 폭, `--hud-fill` 바탕, 1px 프레임(호버 시 strong), `--hud-ink` 600.
+
+### 관계 스와치
+
+20×4px(연결 목록 안에서는 12px 폭). 그래프 엣지와 같은 색을 쓴다.
+
+| 관계 | 스와치 |
+|---|---|
+| Affiliation | `--color-primary` 실선 |
+| Collaboration | `--graph-collaboration` 실선 |
+| Interest | `--color-primary-soft` 60% |
+| Hub | 1px `--hud-dim` 점선(4px / 4px) |
+
+### 버튼
+
+- **`.hud-btn`** 기본: 위 Reset view 스타일.
+- **`.hud-btn.is-primary`**: 그린 바탕 + `--color-on-primary`. 에러 UI의 `다시 시도`에만 쓴다.
+- **`:focus-visible`**: 모든 포커스 가능 요소에 1px `--hud-frame-strong` 외곽선(오프셋 2px).
+
+### 상태줄
+
+`SRC <Google Sheet|Snapshot>` · `OWNER Kwang Myung Yu` · `SYNC <HH:MM>`. 키는 `--hud-faint`, 값(`<b>`)은 `--hud-dim` 400. 오른쪽 끝 조작 힌트 `Drag to rotate · Scroll to zoom · Click a node` 앞에 그린 `> ` 프롬프트를 붙인다.
+
+### 로딩 HUD
+
+전체 화면 `--hud-veil` 오버레이. 가운데에 `// LINKING SHEET`(`eyebrow`) → 192×2px 트랙(`--hud-fill`) 위로 40% 폭 그린 바가 1.1s 주기로 왕복 → 보조 문구(`mini`, `--hud-faint`: `Fetching Google Sheet…` → `Building graph…`). 인트로 첫 프레임이 그려지면 0.6s 페이드아웃.
+
+### 에러 UI
+
+화면 중앙 `.hud-panel`(안쪽 32px, 가운데 정렬): `// ERROR` → 메시지(`message`, `--hud-ink`: `데이터를 불러오지 못했습니다.` / WebGL 미지원 안내) → `다시 시도` 주 버튼. 에러가 나면 출처 배지는 `Error`.
+
+### 그래프 오버레이(CSS2D)
+
+- **노드 라벨**(`.graph-label`): 노드 바로 위(마커 반경 + 6 월드 단위)에 고정 px 크기로 붙는다. 주 줄 = 이름(`graph-name`, `--hud-ink`), 보조 줄 = 켜진 Labels 필드를 ` · `로 연결(`graph-sub`, `--hud-dim`; 조직·`NY`·닉네임·관심사 최대 2개). 허브는 이름만(`graph-hub`, `--color-primary`). 겹치는 라벨은 숨기는데 우선순위는 허브 > 선택 > 호버 > 이웃 > 크기 > 카메라 근접이고, 숨길 때 opacity 0으로 0.25s 전환한다. 선택 시 비활성 노드 라벨은 숨긴다.
+- **링 눈금**(`.ring-tag`): `02Y`·`06Y`·`16Y`·`26Y`(`mini`, `--hud-dim`). 각 연차 링 위, 카메라 쪽 앞면(0.42π)에 놓인다.
+- **선택 레티클**(`.reticle`): 네 모서리 ㄱ자 브래킷(팔 12px · 두께 2px · `--color-primary`). 한 변 = 화면상 마커 지름 + 14px이고 줌에 따라 매 프레임 갱신된다. 나타날 때 scale 1.6 → 1(0.3s).
+
+## 3D 그래프 시각
+
+렌더는 3d-force-graph(Three.js). 색은 모두 위 CSS 변수에서 읽는다.
+
+### 무대
+
+- **배경**: 캔버스 텍스처. `--hud-canvas` 위에 중심부 `--hud-canvas-glow` 방사형 글로우.
+- **레이더 그리드**: 원반 평면보다 2단위 아래에 `PolarGridHelper` 12섹터 + 외곽 원(`--hud-grid-soft`, 0.7).
+- **연차 링**: 인연 시작 2024 / 2020 / 2010 / 2000년의 궤도 반경에 원(`--hud-grid`, 0.55) + 눈금 `02Y`/`06Y`/`16Y`/`26Y`.
+- **레이더 스윕**: π/7 부채꼴, `--color-primary` 불투명도 0.06(가산), 18초에 1회전.
+- **라이트·블룸**: 보조 방향광 0.6. UnrealBloom은 strength 0.18 · radius 0.25 · threshold 0.85로, 사실상 허브 후광에만 걸린다.
+- **색관리**: `renderer.outputColorSpace = SRGB`. OutputPass가 마지막에 한 번 인코딩한다. Linear로 바꾸면 모든 색이 토큰보다 어둡게 나온다.
+
+### 레이아웃
+
+- 허브는 원점에 고정. 나머지 노드의 허브 거리 = `orbitRadius(yearsKnown)`이고 로그 스케일이다(`R_MIN` 64 ~ `R_MAX` 280, 30년 이상은 최소 반경). **오래 알수록 중심에 가깝다.**
+- `forceY`로 원반을 얇게 누르고, 소속·협업 링크는 짧게(28) 당겨 군집을 만든다. 허브 엣지는 배치에 관여하지 않는다(strength 0).
+- warmup 300틱으로 미리 계산한 뒤 인트로에서 허브로부터 퍼져 나가고, 그다음 정적 고정된다(노드 드래그 없음).
+
+### 노드
+
+| 종류 | 표현 |
+|---|---|
+| **일반 = Blip** | 카메라를 향한 평면 스프라이트: 옅은 내부 채움(10%) + 링 + 중심 점. `--hud-blip` 틴트, 불투명도 0.9, **발광 없음**(Normal 블렌딩). 반경 = ∛val × 4.2, 지름 = 반경 × 2.4. val = √경력 기반. |
+| **허브** | `--color-primary` Lambert 구체(무발광) + 로고 오빗 모티프(반경 × 2.4 궤도 링, 0.35rad 기울기, 0.7 불투명) + `--color-body` 위성 점(약 10.5초 1회 공전) + 아주 약한 후광 스프라이트(가산, 0.22). |
+
+### 엣지
+
+| 관계 | 표현 | 굵기 | 불투명도 | 기본 |
+|---|---|---|---|---|
+| affiliation | `--color-primary` 튜브 | 0.7 | 0.42 | on |
+| collaboration | `--graph-collaboration` 골드 튜브(가장 굵음) | 1.1 | 0.70 | on |
+| interest | `--color-primary-soft` 얇은 튜브 | 0.4 | 0.35 | off |
+| hub | `--hud-dim` 점선 가이드(dash 2.2 / gap 2.6) | 선 | 0.45 | on |
+
+모든 엣지는 Normal 블렌딩이다. flow 파티클(엣지당 2개, 폭 1.4)은 **선택 노드에 닿은 소속·협업 엣지에만** 흐른다.
+
+### 상태
+
+| 상태 | 변화 |
+|---|---|
+| **호버** | 커서 pointer, Blip 1.25배, 라벨 우선 표시 |
+| **선택** | Blip 색 → `--hud-ink`, 레티클 표시, 카메라 fly-to, 좌측 상세. 이웃이 아닌 노드는 불투명도 × 0.025. 선택 노드에 닿은 엣지 0.95, 나머지 0.012, 허브 점선 0.036. |
+| **해제** | 같은 노드 재클릭 또는 배경 클릭. 카메라는 그대로 둔다. |
+
+### 카메라
+
+- **홈 시점**: 원반을 고도 약 37°에서 살짝 옆으로 비껴 내려다본다. 원반 전체 + 라벨 여유 40이 패널을 뺀 가용 폭(모바일 100%, 태블릿 92%)과 세로 75% 안에 들어오게 맞춘다.
+- **조작**: 드래그 회전 + 관성(damping 0.12), 휠 줌. **자동 회전 없음.**
+- **fly-to**: 900ms, 일반 노드 거리 340 / 허브 460. **Reset view**: 홈으로 800ms(선택은 유지).
+
+## 모션
+
+| 대상 | 동작 | 시간 |
+|---|---|---|
+| 인트로 | 노드가 허브에서 최종 위치로 확산(easeOutCubic) + 카메라 1.9배 거리에서 dolly-in | 1.6s |
+| 레이더 스윕 | 부채꼴 회전 | 18s / 1회전 |
+| 허브 위성 | 오빗 공전 | 약 10.5s / 1회전 |
+| fly-to / Reset | 카메라 tween | 0.9s / 0.8s |
+| 로딩 | 바 왕복 / 오버레이 페이드아웃 | 1.1s / 0.6s |
+| 레티클 | scale 1.6 → 1 + 페이드인 | 0.3s |
+| 패널 | 상세 페이드인 / 드로어·시트 슬라이드 | 0.2s / 0.25s |
+| 라벨 | 겹침 숨김 opacity 전환 | 0.25s |
+| 호버 | 프레임·글자색 전환 | 0.15s |
+
+`prefers-reduced-motion: reduce`에서는 위 모션을 모두 끈다. 스윕·위성·인트로는 JS에서 생략하고, fly-to·Reset은 즉시 이동하며, CSS 애니메이션·트랜지션은 `none`이다.
+
+## 브랜드 자산
+
+- **로고**(`assets/logo/`): 오빗 단일 노드 컨셉. 궤도 링(`#8b949e`) + 위성(`#bdbdbd`) + 중심 허브(`#00d992`). `node-mark.svg`(아이콘), `node-horizontal.svg`(가로 락업), `node-stack.svg`(세로 스택), `favicon.svg`(16/32px 단순화). 헤더는 같은 도형을 인라인 SVG로 그리고 색은 CSS 변수로 지정한다.
+- **OG 이미지**(`assets/og/`): `og-image.html`(HUD 디자인 1200×630 소스) → chromium 캡처 → `og-image.png`. 독립 렌더 소스라서 토큰 값을 hex로 직접 적는 유일한 예외 파일이다. 토큰을 바꾸면 이 파일도 같이 고친다.
+
+## Do / Don't
+
+### Do
+- 색·치수는 `css/tokens.css` 변수로만 참조한다. JS 그래프 색도 `getComputedStyle`로 읽는다.
+- 액센트 그린은 위 [액센트](#액센트) 표의 자리에만 쓴다.
+- 패널은 반투명 + 블러 + 1px 프레임 + 코너 브래킷 조합으로 만든다.
+- 모든 HUD 요소에 `--radius-hud`(2px)를 쓴다.
+- 패널 제목은 `// ` 접두 영문 대문자 eyebrow로 쓴다.
+- 숫자·크롬은 `--font-hud`, 한글 이름·본문은 `--font-sans`로 쓴다.
+- Relations 토글의 스와치 색과 그래프 엣지 색을 항상 같게 유지한다(범례 겸용).
+- 새 모션을 추가하면 `prefers-reduced-motion` 분기를 함께 넣는다.
+
+### Don't
+- 라이트 모드를 만들지 않는다.
+- `box-shadow` 드롭섀도를 쓰지 않는다(그래프 라벨 텍스트 후광만 예외).
+- 노드를 발광시키지 않는다. 가산 혼합·블룸은 허브 후광과 레이더 스윕에만 쓴다("지나치게 반짝인다" 피드백 이력).
+- 비녹색 다색 팔레트를 도입하지 않는다. 협업 골드가 유일한 예외다("촌스럽다" 피드백 이력).
+- 액센트 그린으로 본문 문장·값을 쓰지 않는다.
+- pill 버튼·태그, 6~8px 둥근 카드를 만들지 않는다.
+- 한글 eyebrow에 넓은 자간을 주지 않는다.
+- 자동 회전을 넣지 않는다.
+- [레거시 토큰](#레거시-토큰현재-미사용)을 새로 쓰지 않는다.
+
+## 계보
+
+초기 DESIGN.md는 Voltagent 마케팅 사이트 분석(#101010 캔버스 + 일렉트릭 그린 단일 액센트, Inter + SF Mono, 하어라인 카드, 6/8px 라운드)이었다. 2026-10 Command HUD 리디자인([설계 스펙](docs/superpowers/specs/2026-10-07-hud-redesign-design.md))으로 이 문서가 대체됐다.
+
+- **이어받은 것**: 다크 전용, 단일 그린 액센트 `#00d992`, 드롭섀도 금지, 4px 스페이싱 스케일, 본문에 액센트 금지.
+- **바뀐 것**: 캔버스 `#101010` → `#070a09`(그린 기운), 하어라인 `#3d3a39` → 그린 프레임 `rgba(0,217,146,.22)`, 회색 텍스트 → 민트·녹회색 HUD 잉크, 6/8px·pill → 2px 각진 형태, SF Mono → JetBrains Mono 크롬, 회색 구체 노드 → Blip 마커, 라벨 종류별 다색 → 단색 `--hud-dim`.
