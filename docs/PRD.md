@@ -452,7 +452,7 @@ function parseCsv(text) {
 
 ```
 ┌──────────────────────────────────────────────────────────┐
-│ HEADER  ● NODE — Network Of Domain Experts   52 nodes  [Live] │
+│ HEADER  ● NODE - Network Of Domain Experts   52 nodes  [Live] │
 ├───────────────┬──────────────────────────┬───────────────┤
 │ 좌측 상세 패널 │       중앙 구형 그래프      │ 우측 설정 패널 │
 │ (노드 선택 시) │   (반투명 글로브 + 노드망)   │ 라벨 ☑ 이름   │
