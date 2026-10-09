@@ -23,10 +23,10 @@
 ## 파일 구조 (리포 루트 배포)
 
 ```
-index.html          # 헤더 / 3분할 본문(좌측 상세·중앙 #graph·우측 설정) / 푸터, CDN <script>
+index.html          # 풀블리드 #graph + HUD 오버레이(헤더 검색·KPI·좌측 상세·우측 설정·상태줄), OG/Twitter 메타, CDN <script>
 css/
-  tokens.css        # DESIGN.md 토큰 → CSS 변수 매핑
-  styles.css        # 레이아웃·패널·반응형
+  tokens.css        # DESIGN.md 토큰(+HUD 확장) → CSS 변수 매핑
+  styles.css        # HUD 레이아웃·패널·반응형
 js/
   main.js           # 부트스트랩: 로딩 HUD → load → normalize → buildGraph → 클러스터/통계 → render → panels → 인트로
   data.js           # fetchSheet(), 스냅샷 폴백, PapaParse 파싱
@@ -54,7 +54,11 @@ assets/
     og-image.png        # 공유 카드 썸네일(1200×630, 서빙용)
     og-image.html       # og-image.png 렌더 소스(chromium 캡처로 재생성, HUD 디자인)
 DESIGN.md           # 디자인 시스템(토큰) + Command HUD 확장 절
-docs/superpowers/   # 리디자인 설계 스펙·구현 계획
+docs/
+  PRD.md            # 요구사항 원천
+  plan.md           # Phase 0~8 작업 계획(체크박스)
+  superpowers/      # 리디자인 설계 스펙·구현 계획
+design-preview/     # 디자인 시안·결과 스크린샷 PNG(리뷰용, 런타임 미사용 — README 스크린샷이 참조)
 ```
 
 > 구현 상태: Phase 0~8 완료. 중앙 시각화는 **인터랙티브 3D(3d-force-graph) Command HUD**. (변천: 초기 3D 구형 → 2D D3 방사형 → 인터랙티브 3D 방사형 → 색 DESIGN.md 원복+CSS2D 고정크기 라벨 → Phase 8 레이더 원반 + Blip 노드 + HUD 크롬.)
@@ -110,7 +114,7 @@ fetch(SHEET_CSV_URL) ──실패──▶ fetch(data/snapshot.csv)
 ## 작업 흐름
 
 - 작업은 [docs/plan.md](docs/plan.md)의 Phase 0~8 순서를 따른다. 각 Phase 완료 시 plan.md 체크박스(`- [ ]` → `- [x]`)를 갱신한다.
-- Phase 의존성: 0 → {1, 2} → 3 → 4 → (1+4) → 5 → 6 → 7.
+- Phase 의존성: 0 → {1, 2} → 3 → 4 → (1+4) → 5 → 6 → 7 → 8.
 
 ## 검증 / 실행
 
@@ -122,10 +126,12 @@ fetch(SHEET_CSV_URL) ──실패──▶ fetch(data/snapshot.csv)
 
 ## 배포
 
-- GitHub Pages를 **main 브랜치 루트**로 수동 설정(빌드 없음, GitHub Actions 미사용).
-- `data/snapshot.csv`는 주기적으로 시트에서 내보내 수동 커밋.
+- GitHub Pages를 **main 브랜치 루트**로 수동 설정(빌드 없음, GitHub Actions 미사용). 배포 URL: https://sguys99.github.io/node/ (`index.html`의 canonical·`og:url`·`og:image`가 이 URL을 절대경로로 참조 — 도메인 변경 시 함께 수정).
+- `data/snapshot.csv`는 주기적으로 시트에서 내보내 수동 커밋. 멤버 수가 바뀌면 README·CLAUDE.md의 인원수(현재 52명 + 허브 = 53노드)도 함께 갱신.
+- **OG 공유 이미지**: `assets/og/og-image.html`을 수정한 뒤 chromium 캡처로 `og-image.png`를 재생성(명령은 해당 HTML 상단 주석 참조, Playwright는 리포 밖 `npx`). 인원수처럼 변하는 수치는 카드에 넣지 않는다.
 
 ## 컨벤션
 
 - 커밋 메시지는 이모지 + 한글 설명 스타일(예: `:recycle: Phase 0 — ...`).
+- 서비스 정식 표기는 **`NODE - Network Of Domain Experts`**(하이픈). `<title>`·OG/Twitter 제목·README 제목에 동일하게 사용한다(em dash `—` 아님).
 - 응답·주석·문서는 한국어.
